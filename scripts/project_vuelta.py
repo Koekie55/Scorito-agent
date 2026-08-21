@@ -35,6 +35,7 @@ from scorito_agent.pcs.fetcher import (  # noqa: E402
     stage_page_url,
 )
 from scorito_agent.pcs.parse import (
+    is_team_time_trial,
     parse_results,
     parse_rider_page,
     parse_stage_page,
@@ -144,6 +145,13 @@ def _startlist_status(count: int, *, reused: bool = False) -> str:
         status += "; recent-result evidence reused from the preceding projection"
     return status
 PROFILE_TYPES = ("flat", "hilly", "mountain", "itt")
+# A TTT may be a valid *source* profile for evidence even though the Vuelta has
+# no TTT stage to predict, so it is not a target in PROFILE_TYPES.
+SOURCE_PROFILE_TYPES = PROFILE_TYPES + ("ttt",)
+# A team time trial is a team-paced effort, so it carries only weak evidence of
+# individual time-trial ability. Set to 0.08 (the generic cross-profile floor)
+# to discount TTT results entirely.
+TTT_TO_ITT_TRANSFER = 0.25
 RACE_QUALITY_WEIGHTS = {
     "uwt": 1.00,
     "pro": 0.82,
@@ -427,9 +435,14 @@ def _result_profile(
     if "classification" in race.lower():
         return "gc", "classification", "PCS classification result"
 
+    # Guard ahead of the cached course profile: stores built before the TTT
+    # classifier fix label team time trials as individual ones.
+    if is_team_time_trial(race) or is_team_time_trial(str(result.get("event") or "")):
+        return "ttt", "tt", "TTT marker on PCS result"
+
     context = result.get("course_context") or {}
     profile = str(context.get("profile_type") or "")
-    if profile in PROFILE_TYPES:
+    if profile in SOURCE_PROFILE_TYPES:
         return (
             profile,
             str(context.get("finish_type") or "unknown"),
@@ -443,6 +456,8 @@ def _result_profile(
         if key in lookup:
             saved_profile, finish = lookup[key]
             return saved_profile, finish, "matched saved PCS/Scorito stage profile"
+    if "/ttt" in url.lower():
+        return "ttt", "tt", "TTT marker on PCS result"
     if "(itt)" in race.lower() or "/itt" in url.lower():
         return "itt", "tt", "ITT marker on PCS result"
     event = str(result.get("event") or "").lower()
@@ -454,6 +469,8 @@ def _result_profile(
 def _profile_transfer(source: str, target: str) -> float:
     if source == target:
         return 1.0
+    if {source, target} == {"ttt", "itt"}:
+        return TTT_TO_ITT_TRANSFER
     if source == "gc" and target == "mountain":
         return 0.72
     if {source, target} == {"hilly", "mountain"}:

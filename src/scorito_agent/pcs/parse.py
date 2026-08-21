@@ -211,17 +211,31 @@ def _pcs_profile_class(root: Element) -> str | None:
     return None
 
 
+def is_team_time_trial(text: str) -> bool:
+    """Detect a team time trial from PCS wording or the ``(TTT)`` title marker.
+
+    PCS writes the marker parenthesised (``S3 (TTT) Stage 3 - ...``), so a bare
+    ``" ttt"`` substring test misses it.
+    """
+    lowered = text.lower()
+    return "team time trial" in lowered or re.search(r"\bttt\b", lowered) is not None
+
+
 def _infer_profile_type(root: Element) -> str:
     won_how = _detail_value(root, "won how").lower()
+    # Order matters: "Team time trial" contains "time trial", so the team check
+    # must run first or every TTT is misclassified as an individual time trial.
+    if is_team_time_trial(won_how):
+        return "ttt"
     if "time trial" in won_how:
         return "itt"
+    explicit = _class_text(root, "profile-type", "profile")
+    text = f"{explicit} {root.text()}".lower()
+    if is_team_time_trial(text):
+        return "ttt"
     profile_class = _pcs_profile_class(root)
     if profile_class:
         return _PCS_PROFILE_TYPES[profile_class]
-    explicit = _class_text(root, "profile-type", "profile")
-    text = f"{explicit} {root.text()}".lower()
-    if "team time trial" in text or " ttt" in text:
-        return "ttt"
     if "individual time trial" in text or "time trial" in text or " itt" in text:
         return "itt"
     if "mountain" in text or "high mountains" in text:
