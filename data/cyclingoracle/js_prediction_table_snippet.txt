@@ -1,0 +1,77 @@
+image"),l=o.querySelector(".podium-photo"),c=typeof t.winPercentage=="number"&&!Number.isNaN(t.winPercentage)?t.winPercentage.toFixed(1):"–";
+if(a&&(a.textContent=`${c}%`),n){a6({item:t,name:i,image:e,photo:l,config:u});
+return}o6({item:t,name:i,image:e,photo:l,config:u})}
+function a6({item:r,name:A,image:t,photo:n,config:u}){const o=r.team;
+if(!o)return;
+if(A){const a=u.teamBaseUrl?`${u.teamBaseUrl}/${o.slug}`:"#";
+A.innerHTML=`<a class="team-link hyperlink" href="${a}">${o.name}</a>`}t&&(t.src=`${wc}/2026/logo/${o.slug}.jpg`,t.alt=o.name,t.onerror=
+function(){this.onerror=null,this.src=`${wc}/2026/teams/loading_jersey.png`}),n&&(n.classList.remove("podium-photo"),n.classList.add("podium-logo"));
+const i=Uv(o.slug,u);
+n&&(i!=null&&i.value)&&n.classList.add(zv(i.value))}
+function o6({item:r,name:A,image:t,photo:n,config:u}){var e;
+const o=r;
+if(A){const l=(o.fullName||"").split(" ");
+A.textContent=l.slice(1).join(" ")||o.fullName||""}if(t){const l=l6(o.fullName,o.id);
+t.alt=o.fullName||"",t.src=`${wc}/2026/riders/${l}.webp`,t.onerror=
+function(){this.onerror=
+function(){this.onerror=null,this.src=`${wc}/2026/teams/loading_jersey.png`},this.src=`${wc}/2025/riders/${l}.webp`}}const i=(e=o.currentTeam)==null?void 0:e.slug,a=i?Uv(i,u):null;
+n&&(a!=null&&a.value)&&n.classList.add(zv(a.value))}
+function Uv(r,A){var t,n;
+return((n=(t=A.teams)==null?void 0:t.find(u=>u.slug===r))==null?void 0:n.color)||null}
+function zv(r){return r.toLowerCase().replace(/\s+/g,"-")}
+function l6(r,A){const t={ø:"o",Ø:"o",æ:"ae",Æ:"ae",å:"a",Å:"a",ö:"o",Ö:"o",ä:"a",Ä:"a",ü:"u",Ü:"u",ß:"ss"};
+return`${r.split("").map(u=>t[u]||u).join("").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9\s-]/g,"").trim().replace(/\s+/g,"-").replace(/-+/g,"-")}-${A}`}
+function c6(){document.querySelectorAll(".js-prediction-table").forEach(r=>{u6(r)})}
+function u6(r){var u,o,i;
+if(!window.$)return;
+const A=window.$,t=JSON.parse(r.dataset.predictionConfig||"{}"),n=(t.predictions||[]).map(a=>({riderId:a.riderId,winPercentage:a.winPercentage}));
+A(r).DataTable({fixedHeader:!1,responsive:!0,ajax:{url:t.apiUrl,type:"POST",contentType:"application/json",headers:{"x-api-key":t.apiKey},data(){return JSON.stringify({query:`
+            query RiderPredictions($riderPrediction: [GetRiderPredictionDto!]!) {
+              riderPredictions(riderPrediction: $riderPrediction) {
+                id
+                fullName
+                slug
+                winPercentage
+                currentTeam {
+                  id
+                  name
+                  slug
+                }
+              }
+            }
+          `,variables:{riderPrediction:n}})},dataSrc(a){var l;
+const e=((l=a.data)==null?void 0:l.riderPredictions)||[];
+return a.recordsTotal=e.length,a.recordsFiltered=e.length,e}},columns:g6(t),columnDefs:f6(t),processing:!0,serverSide:!0,info:!1,searching:!1,lengthChange:!1,ordering:!1,paginate:!1,dom:"<'row'<'col-sm-12' tr>>",buttons:[],language:{decimal:",",emptyTable:((u=t.language)==null?void 0:u.emptyTable)||"No data available in table",thousands:",",loadingRecords:((o=t.language)==null?void 0:o.loadingRecords)||"Loading...",processing:"",zeroRecords:((i=t.language)==null?void 0:i.zeroRecords)||"No matching records found"}})}
+function g6(r){return r.isTTT?[{name:"currentTeam.name",data:"currentTeam",render(A,t,n,u){return A?`
+            <a class="team-link hyperlink" href="${r.teamsBaseUrl}/${A.slug}">
+              <span class="rider-index">${u.row+1}</span>
+              <span class="symbol symbol-32px me-2">
+                <img
+                  class="team-image"
+                  src="https://cyclingoracle-assets.ams3.cdn.digitaloceanspaces.com/uploads/media/cycling/2026/teams/${A.slug}.png"
+                  onerror="this.onerror=null;
+this.src='https://cyclingoracle-assets.ams3.cdn.digitaloceanspaces.com/uploads/media/cycling/2026/teams/loading_jersey.png'"
+                  alt=""
+                >
+              </span>
+              <span class="team rider-name" title="${A.name}">${A.name}</span>
+            </a>
+          `:""}},Cp(),vp()]:[{name:"fullName",data(A,t,n,u){var o;
+return`
+          <a class="rider-link hyperlink" href="${r.ridersBaseUrl}/${A.slug}">
+            <span class="rider-index">${u.row+1}</span>
+            <span class="symbol symbol-32px me-2">
+              <img
+                class="rider-image"
+                src="https://cyclingoracle-assets.ams3.cdn.digitaloceanspaces.com/uploads/media/cycling/2026/teams/${(o=A.currentTeam)==null?void 0:o.slug}.png"
+                onerror="this.onerror=null;
+this.src='https://cyclingoracle-assets.ams3.cdn.digitaloceanspaces.com/uploads/media/cycling/2026/teams/loading_jersey.png'"
+                alt=""
+              >
+            </span>
+            <span class="rider-name" title="${A.fullName}">${A.fullName}</span>
+          </a>
+        `}},{name:"currentTeam.name",data:"currentTeam",render(A){return A?`<span class="team rider-team" title="${A.name}">${A.name}</span>`:""}},Cp(),vp(r)]}
+function Cp(){return{name:"winPercentage",data:"winPercentage",render(r){return`<span><strong>${r}%</strong></span>`}}}
+function vp(r={}){return{data(A){return!r.ridersBaseUrl||!A.slug?"":`<a href="${r.ridersBaseUrl}/${A.slug}"><i class="fi fi-rr-angle-right"></i></a>`}}}
+function f6(r){retur

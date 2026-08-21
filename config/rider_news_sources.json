@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "la-vuelta-official",
+      "name": "La Vuelta official (Google News index)",
+      "url": "https://news.google.com/rss/search?q=site%3Alavuelta.es%2Fen%2Fnews%20Vuelta&hl=en&gl=US&ceid=US%3Aen",
+      "kind": "google_news",
+      "tier": 1,
+      "language": "en",
+      "official": true,
+      "same_day_tactics": true,
+      "max_items": 60
+    },
+    {
+      "id": "uae-team-emirates",
+      "name": "UAE Team Emirates official",
+      "url": "https://www.uaeteamemirates.com/feed/",
+      "kind": "rss",
+      "tier": 1,
+      "language": "en",
+      "official": true,
+      "same_day_tactics": true,
+      "fetch_articles": true,
+      "allowed_hosts": ["uaeteamemirates.com"],
+      "max_items": 40
+    },
+    {
+      "id": "official-teams",
+      "name": "Official team news (Google News index)",
+      "url": "https://news.google.com/rss/search?q=%28site%3Ateamvismaleaseabike.com%20OR%20site%3Alidltrek.com%20OR%20site%3Amovistarteam.com%20OR%20site%3Adecathlonag2rlamondialeteam.com%20OR%20site%3Aredbullborahansgrohe.com%29%20Vuelta&hl=en&gl=US&ceid=US%3Aen",
+      "kind": "google_news",
+      "tier": 1,
+      "language": "en",
+      "official": true,
+      "same_day_tactics": true,
+      "max_items": 60
+    },
+    {
+      "id": "wielerflits",
+      "name": "WielerFlits (Google News fallback)",
+      "url": "https://news.google.com/rss/search",
+      "kind": "google_news_watchlist",
+      "tier": 2,
+      "language": "nl",
+      "same_day_tactics": true,
+      "site_filter": "wielerflits.nl",
+      "query_terms": ["Vuelta", "voorbeschouwing", "tactiek", "blessure", "vorm", "interview"],
+      "batch_size": 8,
+      "max_items": 30
+    },
+    {
+      "id": "feltet",
+      "name": "Feltet.dk (Google News fallback)",
+      "url": "https://news.google.com/rss/search",
+      "kind": "google_news_watchlist",
+      "tier": 2,
+      "language": "da",
+      "same_day_tactics": true,
+      "site_filter": "feltet.dk",
+      "query_terms": ["Vuelta", "optakt", "taktik", "skade", "form", "interview"],
+      "batch_size": 8,
+      "max_items": 30
+    },
+    {
+      "id": "indeleiderstrui",
+      "name": "In de Leiderstrui",
+      "url": "https://www.indeleiderstrui.nl/sitemap/news.xml",
+      "kind": "news_sitemap",
+      "tier": 2,
+      "language": "nl",
+      "same_day_tactics": true,
+      "fetch_articles": true,
+      "allowed_hosts": ["indeleiderstrui.nl"],
+      "max_items": 80
+    },
+    {
+      "id": "domestique",
+      "name": "Domestique Cycling",
+      "url": "https://www.domestiquecycling.com/en/feed/news.xml",
+      "kind": "atom",
+      "tier": 2,
+      "language": "en",
+      "same_day_tactics": true,
+      "max_items": 60
+    },
+    {
+      "id": "cyclingnews",
+      "name": "Cyclingnews",
+      "url": "https://www.cyclingnews.com/feeds.xml",
+      "kind": "rss",
+      "tier": 2,
+      "language": "en",
+      "same_day_tactics": true,
+      "max_items": 50
+    },
+    {
+      "id": "sporza",
+      "name": "Sporza Wielrennen",
+      "url": "https://sporza.be/nl/categorie/wielrennen.rss.xml",
+      "kind": "rss",
+      "tier": 2,
+      "language": "nl",
+      "same_day_tactics": true,
+      "max_items": 60
+    },
+    {
+      "id": "cycling-up-to-date",
+      "name": "CyclingUpToDate",
+      "url": "https://cyclinguptodate.com/sitemap/news.xml",
+      "kind": "news_sitemap",
+      "tier": 3,
+      "language": "en",
+      "same_day_tactics": true,
+      "fetch_articles": true,
+      "allowed_hosts": ["cyclinguptodate.com"],
+      "max_items": 80
+    },
+    {
+      "id": "cyclingflash",
+      "name": "CyclingFlash",
+      "url": "https://cyclingflash.com/en-rss.xml",
+      "kind": "rss",
+      "tier": 3,
+      "language": "en",
+      "same_day_tactics": true,
+      "max_items": 60
+    },
+    {
+      "id": "cyclism-actu-tv",
+      "name": "Cyclism'Actu TV",
+      "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC3Q2ZsfV82zLFhsf28AeTjQ",
+      "kind": "youtube",
+      "tier": 2,
+      "language": "fr",
+      "same_day_tactics": true,
+      "max_items": 30
+    },
+    {
+      "id": "cycling-pro-net",
+      "name": "Cycling Pro Net",
+      "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCAKkRVGHv4uHTM5S2jSzLDQ",
+      "kind": "youtube",
+      "tier": 2,
+      "language": "en",
+      "same_day_tactics": true,
+      "max_items": 30
+    },
+    {
+      "id": "global-rider-search",
+      "name": "Global critical-rider search (Google News)",
+      "url": "https://news.google.com/rss/search",
+      "kind": "google_news_watchlist",
+      "tier": 3,
+      "language": "en",
+      "same_day_tactics": true,
+      "query_terms": ["Vuelta", "La Vuelta", "injury", "illness", "interview", "tactics", "ambition", "form"],
+      "batch_size": 6,
+      "max_items": 40
+    },
+    {
+      "id": "reddit-peloton",
+      "name": "Reddit r/peloton",
+      "url": "https://www.reddit.com/r/peloton/new/.rss",
+      "kind": "reddit",
+      "tier": 4,
+      "language": "en",
+      "verification_required": true,
+      "max_items": 60
+    }
+  ]
+}

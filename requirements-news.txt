@@ -1,0 +1,5 @@
+# News pipeline runtime support on Windows (IANA timezone database).
+tzdata>=2024.1; platform_system == "Windows"
+
+# Tests
+pytest>=8.2

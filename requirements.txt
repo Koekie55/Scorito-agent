@@ -1,0 +1,18 @@
+# Core
+requests>=2.32
+beautifulsoup4>=4.12
+lxml>=5.2
+python-dotenv>=1.0
+pydantic>=2.7
+
+# Data / optimisation
+pandas>=2.2
+numpy>=1.26
+pulp>=2.8            # ILP solver for the 20-upfront / 9-per-stage optimiser
+
+# Modelling (cyclingoracle replication + stage-similarity)
+scikit-learn>=1.4
+
+# Dev / test
+pytest>=8.2
+ruff>=0.5

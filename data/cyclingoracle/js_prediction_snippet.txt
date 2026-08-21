@@ -1,0 +1,48 @@
+ wc="https://cyclingoracle-assets.ams3.cdn.digitaloceanspaces.com/uploads/media/cycling";
+function i6(){var t;
+const r=document.querySelector(".js-banner");
+if(!r)return;
+const A=JSON.parse(r.dataset.bannerConfig||"{}");
+A.enableSlider&&new Pi("#swiper-banner",{modules:[Rv,Nv,$R,A6,t6],autoHeight:!0,loop:!0,effect:"fade",autoplay:{delay:1e4,disableOnInteraction:!1},pagination:{el:".swiper-pagination",clickable:!0},navigation:{nextEl:".swiper-button-next",prevEl:".swiper-button-prev"},keyboard:{enabled:!0,onlyInViewport:!0}}),(t=A.predictions)==null||t.forEach((n,u)=>{const o=n.prediction||[];
+if(!o.length)return;
+const i=o.map(a=>({riderId:a.riderId,winPercentage:a.winPercentage}));
+fetch(A.apiUrl,{method:"POST",headers:{"Content-Type":"application/json","x-api-key":A.apiKey},body:JSON.stringify({query:`
+          query RiderPredictions($riderPrediction: [GetRiderPredictionDto!]!) {
+            riderPredictions(riderPrediction: $riderPrediction) {
+              id
+              fullName
+              slug
+              winPercentage
+              currentTeam {
+                id
+                name
+                slug
+              }
+            }
+          }
+        `,variables:{riderPrediction:i}})}).then(a=>a.json()).then(a=>{var l;
+const e=((l=a==null?void 0:a.data)==null?void 0:l.riderPredictions)||[];
+s6({riders:e,index:u+1,isTTT:!!n.isTTT,config:A})}).catch(()=>{})})}function s6({riders:r,index:A,isTTT:t,config:n}){r.forEach(i=>{typeof i.winPercentage=="string"&&(i.winPercentage=Number(i.winPercentage.replace(",",".")))});
+let u=r;
+if(t){const i=new Map;
+r.forEach(a=>{const e=a.currentTeam;
+if(!(e!=null&&e.slug))return;
+const l=typeof a.winPercentage=="number"?a.winPercentage:0;
+if(!i.has(e.slug)){i.set(e.slug,{team:{name:e.name,slug:e.slug},winPercentage:l});
+return}const c=i.get(e.slug);
+l>c.winPercentage&&(c.winPercentage=l)}),u=Array.from(i.values())}u.sort((i,a)=>(a.winPercentage||0)-(i.winPercentage||0));
+const o=document.querySelector(`#podium-container-${A}`);
+o&&(vB({podium:o,positionClass:"first",item:u[0],isTTT:t,config:n}),vB({podium:o,positionClass:"second",item:u[1],isTTT:t,config:n}),vB({podium:o,positionClass:"third",item:u[2],isTTT:t,config:n}))}function vB({podium:r,positionClass:A,item:t,isTTT:n,config:u}){const o=r.querySelector(`.${A}`);
+if(!o||!t)return;
+const i=o.querySelector(".rider-name"),a=o.querySelector(".podium-percentage"),e=o.querySelector(".podium-image"),l=o.querySelector(".podium-photo"),c=typeof t.winPercentage=="number"&&!Number.isNaN(t.winPercentage)?t.winPercentage.toFixed(1):"–";
+if(a&&(a.textContent=`${c}%`),n){a6({item:t,name:i,image:e,photo:l,config:u});
+return}o6({item:t,name:i,image:e,photo:l,config:u})}function a6({item:r,name:A,image:t,photo:n,config:u}){const o=r.team;
+if(!o)return;
+if(A){const a=u.teamBaseUrl?`${u.teamBaseUrl}/${o.slug}`:"#";
+A.innerHTML=`<a class="team-link hyperlink" href="${a}">${o.name}</a>`}t&&(t.src=`${wc}/2026/logo/${o.slug}.jpg`,t.alt=o.name,t.onerror=function(){this.onerror=null,this.src=`${wc}/2026/teams/loading_jersey.png`}),n&&(n.classList.remove("podium-photo"),n.classList.add("podium-logo"));
+const i=Uv(o.slug,u);
+n&&(i!=null&&i.value)&&n.classList.add(zv(i.value))}function o6({item:r,name:A,image:t,photo:n,config:u}){var e;
+const o=r;
+if(A){const l=(o.fullName||"").split(" ");
+A.textContent=l.slice(1).join(" ")||o.fullName||""}if(t){const l=l6(o.fullName,o.id);
+t.alt=o.fullName||"",

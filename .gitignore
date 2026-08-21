@@ -1,0 +1,27 @@
+# Secrets — never commit
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tmp-*/
+
+# Cached scrapes / fetched data (may be large; regenerate locally)
+data/**/*.html
+data/**/*.json
+data/**/*.sqlite
+data/**/*.parquet
+data/**/*.csv
+!data/**/.gitkeep
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,65 @@
+"""Evidence-aware expert-chat ingestion and bounded rider priors."""
+
+from .extract import (
+    build_rider_aliases,
+    classify_action,
+    classify_category,
+    classify_evidence_tier,
+    classify_kind,
+    extract_stages,
+    extract_urls,
+    find_riders,
+    is_humour,
+    is_url_only_message,
+    name_key,
+    sentiment_score,
+)
+from .models import (
+    ChatMessage,
+    ClaimAction,
+    ClaimCategory,
+    ClaimLifecycle,
+    EvidenceTier,
+    RiderNote,
+    SpeakerProfile,
+    speaker_profile,
+)
+from .parse import parse_export
+from .store import (
+    CONSUMER_MAX_ADJUSTMENT,
+    MODEL_TIERS,
+    SCHEMA_VERSION,
+    ExpertChatStore,
+    apply_signal,
+    signals_by_rider_stage,
+)
+
+__all__ = [
+    "CONSUMER_MAX_ADJUSTMENT",
+    "MODEL_TIERS",
+    "SCHEMA_VERSION",
+    "ChatMessage",
+    "ClaimAction",
+    "ClaimCategory",
+    "ClaimLifecycle",
+    "EvidenceTier",
+    "ExpertChatStore",
+    "RiderNote",
+    "SpeakerProfile",
+    "apply_signal",
+    "build_rider_aliases",
+    "classify_action",
+    "classify_category",
+    "classify_evidence_tier",
+    "classify_kind",
+    "extract_stages",
+    "extract_urls",
+    "find_riders",
+    "is_humour",
+    "is_url_only_message",
+    "name_key",
+    "parse_export",
+    "sentiment_score",
+    "signals_by_rider_stage",
+    "speaker_profile",
+]
