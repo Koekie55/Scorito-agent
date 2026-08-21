@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "race": "Vuelta a Espana 2026",
+  "exported_at": "2026-08-21T20:17:13.370279+00:00",
+  "status": "forward_projection",
+  "projection_price_status": "synthetic fallback only; live market 310 prices are applied separately",
+  "optimization_price_status": "live Scorito market snapshot",
+  "projection_generated_at": "2026-08-21T06:23:58.516224+00:00",
+  "top20_generated_at": "2026-08-21T13:30:34.252724+00:00",
+  "optimization_generated_at": "2026-08-21T13:31:03.226723+00:00",
+  "market_snapshot_time": "2026-08-21T06:25:39.700086+00:00",
+  "source_input_hashes": {
+    "projection": "58cb2b5270e972ae16669b8c1b7e8c02990639cc52ac914d506d4b95b6b3adad",
+    "expert": "6170a8c5444afb2755c126eb431a2ca1bf20fe510c18fb17fcf9a7f596a744cc",
+    "news": "5c5b26d715477ea237e4e8fb5c317df5ed638d37ee4690c19d9fa55f5c8be828",
+    "forum_opinion": "a1b54db57061dc731887496230fa6ffa1eddfa92cd95c53f959572405260d698"
+  },
+  "counts": {
+    "model_riders": 184,
+    "market_riders": 204,
+    "stages": 21,
+    "rider_stage_rows": 3864,
+    "top20_rows": 420,
+    "objective_optimal_teams": 2
+  },
+  "privacy": {
+    "personal_team_data_included": false,
+    "authenticated_payloads_included": false,
+    "credentials_included": false
+  },
+  "files": [
+    {
+      "name": "market_rider_qualities_raw.json",
+      "bytes": 44370,
+      "sha256": "62bce623a70121ae833df2bee9adff0abbc725fdd9daf19b0763b8131d3289fc",
+      "records": 206
+    },
+    {
+      "name": "market_riders_raw.json",
+      "bytes": 54924,
+      "sha256": "154556c53028df3680b09be2b27922388477cf20d0bee7a963c1c2ae3a6071cc",
+      "records": 204
+    },
+    {
+      "name": "market_stages_raw.json",
+      "bytes": 3439,
+      "sha256": "ae92121d7d6de24941f677bd168715e98106a6e88abeb056a8273713cf54658a",
+      "records": 21
+    },
+    {
+      "name": "objective_optimal_teams.json",
+      "bytes": 29711,
+      "sha256": "f31f249b0d9f4b7aa947b020ea91bbe698a149084393933dca3a888b72818c03",
+      "records": 2
+    },
+    {
+      "name": "projection_full.json",
+      "bytes": 8570397,
+      "sha256": "58cb2b5270e972ae16669b8c1b7e8c02990639cc52ac914d506d4b95b6b3adad",
+      "records": null
+    },
+    {
+      "name": "README.md",
+      "bytes": 1497,
+      "sha256": "713f4e3c36841e7d97840ffa27a7ce96cad15c792259d75f345c79afe870e193",
+      "records": null
+    },
+    {
+      "name": "rider_analytics.csv",
+      "bytes": 2523084,
+      "sha256": "de26f6776954450ce9eab2960cc7aee498948948fa0d95dfaf409f987a9dbf96",
+      "records": 184
+    },
+    {
+      "name": "riders.json",
+      "bytes": 3774873,
+      "sha256": "aac8ef4528ace8280518d0a612d831c87e3e3f83a3f557f77efb2ab8a64f3e6c",
+      "records": 184
+    },
+    {
+      "name": "stage_analytics.csv",
+      "bytes": 3197,
+      "sha256": "0354575dbb51e0ac8c1018a71f64a79c55057628df1d06a2c97c1b2cedde6bf6",
+      "records": 21
+    },
+    {
+      "name": "stage_rider_analytics.csv",
+      "bytes": 1672002,
+      "sha256": "d97be63dcfdd0b4e299d068768aab36b06bb317cd18634bf968b7bc9e47b9011",
+      "records": 3864
+    },
+    {
+      "name": "stages.json",
+      "bytes": 8977,
+      "sha256": "133d709d6b2f43d7e38a8719e59b3368b233352d92a34f67d8e557225f07077b",
+      "records": 21
+    },
+    {
+      "name": "top20_per_stage.csv",
+      "bytes": 221231,
+      "sha256": "16de3dd0403125de73e86abedbb69f74634ecb85154c4f2edcdbc66560802b88",
+      "records": 420
+    },
+    {
+      "name": "top20_per_stage.json",
+      "bytes": 743492,
+      "sha256": "038a5d17fb4a28b08c180fe0fb448175e217d3f2078c77238215e4f8fda3b1b9",
+      "records": 420
+    }
+  ]
+}

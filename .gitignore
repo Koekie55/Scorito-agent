@@ -19,6 +19,7 @@ data/**/*.sqlite
 data/**/*.parquet
 data/**/*.csv
 !data/**/.gitkeep
+!data/public/**
 
 # OS / editor
 .DS_Store

@@ -34,7 +34,7 @@ src/scorito_agent/
   cyclingoracle/  part 2 (scraper + model)
   pcs/            part 3 (scraper + stage-similarity model)
 tests/            mirrors the package tree
-data/             on-disk scrape cache (gitignored)
+data/             private scrape cache plus versioned public snapshots
 ```
 
 ## Setup
@@ -68,6 +68,23 @@ The command writes `data\scorito\vuelta2026\stage_top20_predictions.json` and
 `stage_top20_predictions.csv`. It rebuilds the full PCS evidence projection only
 when provisional participants change. The scheduled rider-news job runs the same
 refresh after every successful news collection.
+
+## Public verification data
+
+The versioned snapshot in `data/public/vuelta2026/` contains the full projected
+top 20 for every stage, both objective optimal-team compositions, all modelled
+rider and rider-stage analytics, and the raw public market inputs used to verify
+live prices, availability, and stage metadata. Its manifest records source
+freshness, record counts, and SHA-256 checksums.
+
+Regenerate the public bundle from the latest local model outputs:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\export_public_vuelta_data.py
+```
+
+Personal team comparisons and authenticated Scorito payloads are deliberately
+excluded from the public bundle.
 
 ## WielerFlits forum opinion
 
