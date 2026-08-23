@@ -14,9 +14,10 @@ qualities. Incompatible stage numbers, distances, or profiles are rejected per
 stage rather than blended. The completed rider-news digest is attached as
 selection evidence but follows its own no-automatic-upgrade policy.
 
-Uncertain teammate bonuses do not drive lineup selection. The CSV reports only
-conditional red-jersey and projected-stage-winner upside, separately from the
-base individual score.
+Probability-weighted teammate points can drive lineup selection when they beat
+the ninth rider's individual projection. The CSV keeps expected classification
+retention and stage-win points separate from full conditional upside; captaincy
+continues to use individual win evidence.
 """
 from __future__ import annotations
 
@@ -45,6 +46,10 @@ from scorito_agent.scorito import (  # noqa: E402
     load_snapshot,
     quality_relevance,
     validated_sprint_assessment_from_serialized,
+)
+from scorito_agent.scorito.team_points import (  # noqa: E402
+    expected_team_points_by_rider,
+    normalized_team_win_probabilities,
 )
 from scorito_agent.scorito.optimizer import SquadPlan, StageLineup  # noqa: E402
 from scorito_agent.forum_opinion import (  # noqa: E402
@@ -616,6 +621,7 @@ def build_live_recommendation() -> dict[str, Any]:
     conditional_team_bonus_points: dict[tuple[int, int], float] = {}
     projected_points: dict[tuple[int, int], float] = {}
     stage_winner_team_ids: dict[int, int] = {}
+    team_win_probabilities_by_stage: dict[int, dict[int, float]] = {}
     uae_team_bonus_by_stage: dict[int, float] = {}
     stage_analysis_weights: dict[int, float] = {}
     stage_analysis_statuses: dict[int, str] = {}
@@ -641,6 +647,21 @@ def build_live_recommendation() -> dict[str, Any]:
             winner_team_id=winner_team_id,
             red_jersey_team_id=uae_team_id,
         )
+        rider_win_scores = {
+            slug_to_id[row["rider_slug"]]: float(row["combined_score"])
+            for row in stage_rows[stage.order]
+        }
+        team_win_probabilities = normalized_team_win_probabilities(
+            snapshot,
+            rider_win_scores,
+        )
+        team_win_probabilities_by_stage[stage.order] = team_win_probabilities
+        expected_team_points = expected_team_points_by_rider(
+            snapshot,
+            stage_order=stage.order,
+            team_win_probabilities=team_win_probabilities,
+        )
+
 
         stage_notes = qk_breakdown.get(str(stage.order), {})
         _stage_weight, analysis_status = _stage_analysis_weight(
@@ -689,9 +710,10 @@ def build_live_recommendation() -> dict[str, Any]:
                 red_jersey_team_id=uae_team_id,
             )
             individual_projected_points[(rider_id, stage.stage_id)] = individual
-            team_bonus_points[(rider_id, stage.stage_id)] = 0.0
+            expected_bonus = expected_team_points[rider_id].total
+            team_bonus_points[(rider_id, stage.stage_id)] = expected_bonus
             conditional_team_bonus_points[(rider_id, stage.stage_id)] = conditional_bonus
-            projected_points[(rider_id, stage.stage_id)] = individual
+            projected_points[(rider_id, stage.stage_id)] = individual + expected_bonus
 
     classification_values_raw = {
         rider_id: float(row["classification_jersey_points"])
@@ -736,7 +758,7 @@ def build_live_recommendation() -> dict[str, Any]:
     live_ids = {rider.rider_id for rider in snapshot.riders}
 
     def points_fn(rider_id: int, stage) -> float:
-        return individual_projected_points[(rider_id, stage.stage_id)]
+        return projected_points[(rider_id, stage.stage_id)]
 
     captain_eligible_by_stage = {
         stage.order: _captain_eligible_ids(
@@ -781,7 +803,7 @@ def build_live_recommendation() -> dict[str, Any]:
         candidate_ids = set(candidate.rider_ids)
         for stage in snapshot.stages:
             stage_points = {
-                rider_id: individual_projected_points[(rider_id, stage.stage_id)]
+                rider_id: projected_points[(rider_id, stage.stage_id)]
                 for rider_id in candidate.rider_ids
             }
             lineup = _objective_stage_lineup(
@@ -819,7 +841,7 @@ def build_live_recommendation() -> dict[str, Any]:
     conditional_team_bonus_total = 0.0
     for stage in snapshot.stages:
         stage_points = {
-            rider_id: individual_projected_points[(rider_id, stage.stage_id)]
+            rider_id: projected_points[(rider_id, stage.stage_id)]
             for rider_id in personal_ids
         }
         lineup = _objective_stage_lineup(
@@ -844,7 +866,14 @@ def build_live_recommendation() -> dict[str, Any]:
         ) + (snapshot.captain_factor - 1) * individual_projected_points[
             (lineup.captain_id, stage.stage_id)
         ]
-        if abs(lineup.total - individual_total) > 1e-6:
+        expected_team_total = sum(
+            team_bonus_points[(rider_id, stage.stage_id)]
+            for rider_id in lineup.rider_ids
+        ) + (snapshot.captain_factor - 1) * team_bonus_points[
+            (lineup.captain_id, stage.stage_id)
+        ]
+        expected_total = individual_total + expected_team_total
+        if abs(lineup.total - expected_total) > 1e-6:
             raise RuntimeError(f"stage {stage.order} lineup total does not reconcile")
         conditional_bonus_total = sum(
             conditional_team_bonus_points[(rider_id, stage.stage_id)]
@@ -852,9 +881,10 @@ def build_live_recommendation() -> dict[str, Any]:
         )
         projected_individual_stage_total += individual_total
         conditional_team_bonus_total += conditional_bonus_total
+        projected_team_bonus_total += expected_team_total
         ideal_ids = sorted(
             (rider.rider_id for rider in snapshot.riders),
-            key=lambda rider_id: individual_projected_points[(rider_id, stage.stage_id)],
+            key=lambda rider_id: projected_points[(rider_id, stage.stage_id)],
             reverse=True,
         )[:LINEUP_SIZE]
         lineups.append(
@@ -865,14 +895,14 @@ def build_live_recommendation() -> dict[str, Any]:
                 "projection": projection_stages[stage.order],
                 "ideal_ids": ideal_ids,
                 "individual_total": individual_total,
-                "team_bonus_total": 0.0,
+                "team_bonus_total": expected_team_total,
                 "conditional_team_bonus_total": conditional_bonus_total,
                 "winner_team_id": stage_winner_team_ids[stage.stage_id],
                 "uae_team_bonus_per_rider": uae_team_bonus_by_stage[stage.stage_id],
             }
         )
 
-    projected_stage_total = projected_individual_stage_total
+    projected_stage_total = projected_individual_stage_total + projected_team_bonus_total
     projected_classification_total = sum(
         classification_values[rider_id] for rider_id in selected_ids
     )
@@ -917,7 +947,13 @@ def build_live_recommendation() -> dict[str, Any]:
         )
         for rider in snapshot.riders
     }
-    team_bonus_potential = {rider.rider_id: 0.0 for rider in snapshot.riders}
+    team_bonus_potential = {
+        rider.rider_id: sum(
+            team_bonus_points[(rider.rider_id, stage.stage_id)]
+            for stage in snapshot.stages
+        )
+        for rider in snapshot.riders
+    }
     conditional_team_bonus_potential = {
         rider.rider_id: sum(
             conditional_team_bonus_points[(rider.rider_id, stage.stage_id)]
@@ -925,7 +961,10 @@ def build_live_recommendation() -> dict[str, Any]:
         )
         for rider in snapshot.riders
     }
-    stage_potential = dict(individual_stage_potential)
+    stage_potential = {
+        rider_id: value + team_bonus_potential[rider_id]
+        for rider_id, value in individual_stage_potential.items()
+    }
     season_values = {
         rider.rider_id: stage_potential[rider.rider_id]
         + classification_values[rider.rider_id]
@@ -996,6 +1035,7 @@ def build_live_recommendation() -> dict[str, Any]:
         "minimum_sprint_options": minimum_sprint_options,
         "expert_weight": qk_weight_cap,
         "stage_analysis_source": qk_source,
+        "team_win_probabilities_by_stage": team_win_probabilities_by_stage,
         "uncovered_riders": uncovered_riders,
         "expert_chat_source": expert_chat_source,
         "expert_chat_signals": expert_chat_signals,
@@ -1030,7 +1070,8 @@ def _common_columns(result: dict[str, Any]) -> dict[str, Any]:
             f"compatible QK stage notes capped at {result['expert_weight'] * 100:.0f}%; "
             f"combined expert-chat/forum opinion capped at {OPINION_MAX_ADJUSTMENT * 100:.0f}%; "
             f"{len(result['uncovered_riders'])} priced riders lack a PCS row and were dropped; "
-            "news is selection evidence only; uncertain teammate bonuses are excluded"
+            "news is selection evidence only; expected teammate points are included; "
+            "scenario-dependent teammate upside is reported separately"
         ),
         "stage_analysis_source": result["stage_analysis_source"],
         "expert_chat_source": result["expert_chat_source"],
@@ -1046,12 +1087,13 @@ def _common_columns(result: dict[str, Any]) -> dict[str, Any]:
         "budget_remaining_m": f"{(snapshot.budget - plan.total_price) / 1_000_000:.2f}",
         "uae_riders": "; ".join(uae_names),
         "uae_team_bonus_assumption": (
-            "Excluded from base lineup ranking. Conditional upside only: +8 if UAE holds red; "
-            "no automatic points/KOM jersey credit; +10 only if the projected teammate wins."
+            "Expected prior-classification retention and stage-win teammate points are included. "
+            "Conditional upside remains separate: +8 if UAE holds red; no automatic "
+            "points/KOM jersey credit; +10 only if the projected teammate wins."
         ),
         "conditional_team_bonus_upside_points": f"{result['conditional_team_bonus_total']:.2f}",
         "projected_individual_stage_points": f"{result['projected_individual_stage_total']:.2f}",
-        "projected_team_bonus_points": "0.00",
+        "projected_team_bonus_points": f"{result['projected_team_bonus_total']:.2f}",
         "projected_enrolled_stage_points": f"{result['projected_stage_total']:.2f}",
         "projected_classification_jersey_points": f"{result['projected_classification_total']:.2f}",
         "projected_objective": f"{plan.value:.2f}",
@@ -1102,7 +1144,7 @@ def _rider_columns(result: dict[str, Any], rider_id: int) -> dict[str, Any]:
         "rating_cobbles": ratings["cobbles"],
         "projected_model_stage_potential": f"{result['model_stage_potential'][rider_id]:.2f}",
         "projected_individual_stage_potential": f"{result['individual_stage_potential'][rider_id]:.2f}",
-        "projected_team_bonus_potential": "0.00",
+        "projected_team_bonus_potential": f"{result['team_bonus_potential'][rider_id]:.2f}",
         "conditional_team_bonus_upside_potential": (
             f"{result['conditional_team_bonus_potential'][rider_id]:.2f}"
         ),
@@ -1218,7 +1260,9 @@ def write_combined_csv(result: dict[str, Any], path: Path = OUTPUT_PATH) -> Path
                     for rider_id in lineup.rider_ids
                 ),
                 "lineup_team_bonus_points": "; ".join(
-                    f"{snapshot.rider(rider_id).name}=0.00" for rider_id in lineup.rider_ids
+                    f"{snapshot.rider(rider_id).name}="
+                    f"{result['team_bonus_points'][(rider_id, stage.stage_id)]:.2f}"
+                    for rider_id in lineup.rider_ids
                 ),
                 "lineup_projected_points": "; ".join(
                     f"{snapshot.rider(rider_id).name}="
@@ -1229,7 +1273,7 @@ def write_combined_csv(result: dict[str, Any], path: Path = OUTPUT_PATH) -> Path
                     snapshot.rider(rider_id).name for rider_id in item["ideal_ids"]
                 ),
                 "projected_individual_stage_points": f"{item['individual_total']:.2f}",
-                "projected_team_bonus_points": "0.00",
+                "projected_team_bonus_points": f"{item['team_bonus_total']:.2f}",
                 "conditional_team_bonus_upside_points": (
                     f"{item['conditional_team_bonus_total']:.2f}"
                 ),
@@ -1237,7 +1281,8 @@ def write_combined_csv(result: dict[str, Any], path: Path = OUTPUT_PATH) -> Path
                 "stage_analysis_weight": f"{result['stage_analysis_weights'][stage.order]:.2f}",
                 "stage_analysis_status": result["stage_analysis_statuses"][stage.order],
                 "uncertainty": (
-                    "Indicative field/course model. Conditional teammate bonus is excluded; "
+                    "Indicative field/course model. Expected teammate points are included; "
+                    "scenario-dependent teammate upside is excluded; "
                     "refresh for startlist, jersey, health, and tactical changes."
                 ),
             }
@@ -1294,7 +1339,7 @@ def print_summary(result: dict[str, Any], output_path: Path = OUTPUT_PATH) -> No
             f"conditional={result['conditional_team_bonus_potential'][rider_id]:>5.1f} "
             f"news={news_flag} forum_risk={forum_uncertainty.get('level', 'none')}"
         )
-    print("Scenarios (uncertain teammate bonuses excluded):")
+    print("Scenarios (expected teammate points included; conditional upside excluded):")
     for scenario in result["scenarios"]:
         print(
             f"  {scenario['scenario']:<32} UAE={scenario['uae_count']} "

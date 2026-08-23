@@ -42,6 +42,12 @@ def _rank_points(rank: int | None) -> float:
     return float(SCORITO_STAGE_POINTS.get(rank or 0, 0.0))
 
 
+def _lineup_sort_key(
+    row: tuple[Any, ...],
+) -> tuple[float, float, int, str]:
+    return (-float(row[1]), -float(row[6]), int(row[2]), str(row[3]))
+
+
 def _personal_ids() -> list[int]:
     payload = json.loads(PERSONAL_PATH.read_text(encoding="utf-8"))
     rider_ids = payload.get("Content", []) if isinstance(payload, dict) else payload
@@ -56,6 +62,13 @@ def analyze() -> dict[str, Any]:
     snapshot = load_snapshot("vuelta2026")
     predictions = json.loads(PREDICTIONS_PATH.read_text(encoding="utf-8"))
     projection = json.loads(PROJECTION_PATH.read_text(encoding="utf-8"))
+    objective_scores_by_stage = {
+        int(stage_no): {
+            name_key(row["rider"]): float(row.get("score") or 0.0)
+            for row in rows
+        }
+        for stage_no, rows in projection.get("stage_rankings", {}).items()
+    }
     rider_ids = _personal_ids()
     riders = [snapshot.rider(rider_id) for rider_id in rider_ids]
     if any(rider is None for rider in riders):
@@ -96,6 +109,9 @@ def analyze() -> dict[str, Any]:
     ideal_individual_ceiling = 0.0
     for stage in predictions["stages"]:
         rows_by_key = {name_key(row["rider"]): row for row in stage["top_20"]}
+        objective_scores = objective_scores_by_stage.get(
+            int(stage["stage_no"]), {}
+        )
         winner = next(
             row for row in stage["top_20"] if int(row["predicted_finish"]) == 1
         )
@@ -126,12 +142,13 @@ def analyze() -> dict[str, Any]:
                     rider.name,
                     key,
                     rider.team_id,
+                    objective_scores.get(key, 0.0),
                 )
             )
-        candidates.sort(key=lambda row: (-row[0], row[1], row[2]))
+        candidates.sort(key=_lineup_sort_key)
         selected = candidates[:LINEUP_SIZE]
         captain = selected[0]
-        if captain[0] <= 0:
+        if captain[1] <= 0:
             raise RuntimeError(f"stage {stage['stage_no']} has no scoring captain candidate")
 
         finish_points = sum(row[1] for row in selected)

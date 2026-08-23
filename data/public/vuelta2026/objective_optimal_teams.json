@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-21T13:31:03.226723+00:00",
-  "prediction_generated_at": "2026-08-21T13:30:34.252724+00:00",
-  "projection_generated_at": "2026-08-21T06:23:58.516224+00:00",
+  "generated_at": "2026-08-23T19:24:54.648760+00:00",
+  "prediction_generated_at": "2026-08-23T19:24:12.133780+00:00",
+  "projection_generated_at": "2026-08-23T19:23:48.539602+00:00",
   "scoring_method": {
     "finish": "Exact Scorito top-20 rank table.",
     "lineup": "Best nine by total projected stage points.",
@@ -67,12 +67,12 @@
       "Ben Turner"
     ],
     "price": 47750000,
-    "finish_points": 5671.0,
+    "finish_points": 5612.0,
     "captain_bonus_points": 1050.0,
     "team_bonus_points": 0.0,
     "red_jersey_team_bonus_points": 0.0,
-    "classification_jersey_points": 321.45,
-    "final_projected_score": 7042.45,
+    "classification_jersey_points": 318.18,
+    "final_projected_score": 6980.18,
     "stages": [
       {
         "stage_no": 1,
@@ -82,19 +82,19 @@
           "Tadej Pogačar",
           "Ethan Hayter",
           "Mattias Skjelmose",
-          "Mads Pedersen",
-          "Matthew Brennan",
           "Christophe Laporte",
+          "Mads Pedersen",
           "Richard Carapaz",
           "Sepp Kuss",
-          "Lorenzo Fortunato"
+          "Lorenzo Fortunato",
+          "Felix Gall"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 127.0,
+        "finish_points": 132.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 177.0
+        "stage_total": 182.0
       },
       {
         "stage_no": 2,
@@ -102,21 +102,21 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
+          "Matthew Brennan",
           "Kaden Groves",
           "Ben Tulett",
-          "Matthew Brennan",
           "Orluis Aular",
           "Andreas Leknessund",
-          "Christophe Laporte",
           "Ben Turner",
+          "Christophe Laporte",
           "Harold Tejada"
         ],
         "captain": "Mads Pedersen",
-        "finish_points": 290.0,
+        "finish_points": 288.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 340.0
+        "stage_total": 338.0
       },
       {
         "stage_no": 3,
@@ -129,16 +129,16 @@
           "Sepp Kuss",
           "Mattias Skjelmose",
           "Matthew Riccitello",
-          "Valentin Paret-Peintre",
           "Lorenzo Fortunato",
-          "Harold Tejada"
+          "Valentin Paret-Peintre",
+          "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 274.0,
+        "finish_points": 266.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 324.0
+        "stage_total": 316.0
       },
       {
         "stage_no": 4,
@@ -156,11 +156,11 @@
           "Harold Tejada"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 276.0,
+        "finish_points": 270.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 326.0
+        "stage_total": 320.0
       },
       {
         "stage_no": 5,
@@ -168,14 +168,14 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
-          "Ben Tulett",
           "Matthew Brennan",
+          "Ben Tulett",
           "Orluis Aular",
           "Raúl García Pierna",
           "Andreas Leknessund",
           "Christophe Laporte",
-          "Ben Turner",
-          "Jordi Meeus"
+          "Jordi Meeus",
+          "Ben Turner"
         ],
         "captain": "Mads Pedersen",
         "finish_points": 310.0,
@@ -190,14 +190,14 @@
         "winner": "Tadej Pogačar",
         "lineup": [
           "Tadej Pogačar",
-          "Mads Pedersen",
           "Richard Carapaz",
+          "Mads Pedersen",
           "Felix Gall",
-          "Harold Tejada",
           "Sepp Kuss",
           "Ben Tulett",
-          "Raúl García Pierna",
-          "Andreas Leknessund"
+          "Harold Tejada",
+          "Matthew Brennan",
+          "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
         "finish_points": 296.0,
@@ -217,16 +217,16 @@
           "Sepp Kuss",
           "Mattias Skjelmose",
           "Matthew Riccitello",
-          "Valentin Paret-Peintre",
           "Lorenzo Fortunato",
-          "Harold Tejada"
+          "Valentin Paret-Peintre",
+          "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 272.0,
+        "finish_points": 268.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 322.0
+        "stage_total": 318.0
       },
       {
         "stage_no": 8,
@@ -234,8 +234,8 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
-          "Ben Tulett",
           "Matthew Brennan",
+          "Ben Tulett",
           "Orluis Aular",
           "Raúl García Pierna",
           "Andreas Leknessund",
@@ -263,14 +263,14 @@
           "Matthew Riccitello",
           "Lorenzo Fortunato",
           "Valentin Paret-Peintre",
-          "Harold Tejada"
+          "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 274.0,
+        "finish_points": 268.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 324.0
+        "stage_total": 318.0
       },
       {
         "stage_no": 10,
@@ -278,8 +278,8 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
-          "Ben Tulett",
           "Matthew Brennan",
+          "Ben Tulett",
           "Orluis Aular",
           "Raúl García Pierna",
           "Andreas Leknessund",
@@ -288,11 +288,11 @@
           "Harold Tejada"
         ],
         "captain": "Mads Pedersen",
-        "finish_points": 300.0,
+        "finish_points": 294.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 350.0
+        "stage_total": 344.0
       },
       {
         "stage_no": 11,
@@ -300,14 +300,14 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
-          "Ben Tulett",
           "Matthew Brennan",
+          "Ben Tulett",
           "Orluis Aular",
           "Andreas Leknessund",
           "Raúl García Pierna",
-          "Christophe Laporte",
           "Ben Turner",
-          "Jordi Meeus"
+          "Jordi Meeus",
+          "Christophe Laporte"
         ],
         "captain": "Mads Pedersen",
         "finish_points": 310.0,
@@ -332,11 +332,11 @@
           "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 274.0,
+        "finish_points": 272.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 324.0
+        "stage_total": 322.0
       },
       {
         "stage_no": 13,
@@ -346,12 +346,12 @@
           "Tadej Pogačar",
           "Richard Carapaz",
           "Felix Gall",
+          "Ben Tulett",
           "Sepp Kuss",
           "Mads Pedersen",
-          "Ben Tulett",
           "Harold Tejada",
           "Mattias Skjelmose",
-          "Raúl García Pierna"
+          "Matthew Brennan"
         ],
         "captain": "Tadej Pogačar",
         "finish_points": 292.0,
@@ -373,14 +373,14 @@
           "Matthew Riccitello",
           "Lorenzo Fortunato",
           "Valentin Paret-Peintre",
-          "Harold Tejada"
+          "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 270.0,
+        "finish_points": 268.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 320.0
+        "stage_total": 318.0
       },
       {
         "stage_no": 15,
@@ -388,65 +388,65 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
-          "Ben Tulett",
-          "Orluis Aular",
-          "Raúl García Pierna",
-          "Andreas Leknessund",
           "Matthew Brennan",
+          "Ben Tulett",
+          "Raúl García Pierna",
+          "Orluis Aular",
+          "Andreas Leknessund",
           "Kaden Groves",
           "Harold Tejada",
-          "Ben Turner"
+          "Valentin Paret-Peintre"
         ],
         "captain": "Mads Pedersen",
-        "finish_points": 290.0,
+        "finish_points": 278.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 340.0
+        "stage_total": 328.0
       },
       {
         "stage_no": 16,
         "profile_type": "flat",
-        "winner": "Mads Pedersen",
+        "winner": "Jordi Meeus",
         "lineup": [
-          "Mads Pedersen",
-          "Matthew Brennan",
           "Jordi Meeus",
+          "Mads Pedersen",
           "Tadej Pogačar",
+          "Matthew Brennan",
           "Kaden Groves",
           "Christophe Laporte",
           "Ben Turner",
           "Orluis Aular",
           "Andreas Leknessund"
         ],
-        "captain": "Mads Pedersen",
-        "finish_points": 270.0,
+        "captain": "Jordi Meeus",
+        "finish_points": 269.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 320.0
+        "stage_total": 319.0
       },
       {
         "stage_no": 17,
         "profile_type": "flat",
-        "winner": "Mads Pedersen",
+        "winner": "Jordi Meeus",
         "lineup": [
-          "Mads Pedersen",
-          "Matthew Brennan",
           "Jordi Meeus",
+          "Mads Pedersen",
           "Tadej Pogačar",
+          "Matthew Brennan",
           "Kaden Groves",
           "Christophe Laporte",
           "Ben Turner",
           "Orluis Aular",
-          "Andreas Leknessund"
+          "Richard Carapaz"
         ],
-        "captain": "Mads Pedersen",
-        "finish_points": 266.0,
+        "captain": "Jordi Meeus",
+        "finish_points": 265.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 316.0
+        "stage_total": 315.0
       },
       {
         "stage_no": 18,
@@ -454,21 +454,21 @@
         "winner": "Tadej Pogačar",
         "lineup": [
           "Tadej Pogačar",
-          "Mattias Skjelmose",
           "Ethan Hayter",
-          "Mads Pedersen",
+          "Mattias Skjelmose",
           "Christophe Laporte",
+          "Mads Pedersen",
           "Richard Carapaz",
           "Sepp Kuss",
           "Lorenzo Fortunato",
           "Felix Gall"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 114.0,
+        "finish_points": 118.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 164.0
+        "stage_total": 168.0
       },
       {
         "stage_no": 19,
@@ -478,12 +478,12 @@
           "Tadej Pogačar",
           "Richard Carapaz",
           "Felix Gall",
-          "Sepp Kuss",
           "Ben Tulett",
+          "Sepp Kuss",
           "Harold Tejada",
           "Mads Pedersen",
           "Mattias Skjelmose",
-          "Raúl García Pierna"
+          "Matthew Brennan"
         ],
         "captain": "Tadej Pogačar",
         "finish_points": 292.0,
@@ -505,14 +505,14 @@
           "Matthew Riccitello",
           "Lorenzo Fortunato",
           "Valentin Paret-Peintre",
-          "Harold Tejada"
+          "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 274.0,
+        "finish_points": 268.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 324.0
+        "stage_total": 318.0
       },
       {
         "stage_no": 21,
@@ -520,21 +520,21 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
-          "Ben Tulett",
-          "Raúl García Pierna",
-          "Orluis Aular",
-          "Andreas Leknessund",
           "Matthew Brennan",
+          "Ben Tulett",
+          "Orluis Aular",
+          "Raúl García Pierna",
+          "Andreas Leknessund",
           "Kaden Groves",
           "Harold Tejada",
           "Ben Turner"
         ],
         "captain": "Mads Pedersen",
-        "finish_points": 298.0,
+        "finish_points": 286.0,
         "team_bonus_points": 0.0,
         "red_jersey_team_bonus_points": 0.0,
         "captain_bonus_points": 50.0,
-        "stage_total": 348.0
+        "stage_total": 336.0
       }
     ]
   },
@@ -548,18 +548,18 @@
       8364,
       7023,
       5386,
-      6957,
       6378,
       6432,
       6520,
       1199,
       7505,
-      261,
       5323,
       7599,
       7177,
+      8554,
       6513,
-      7531
+      7531,
+      7749
     ],
     "riders": [
       "Felix Gall",
@@ -570,26 +570,26 @@
       "Matthew Brennan",
       "Ben Tulett",
       "João Almeida",
-      "Harold Tejada",
       "Lorenzo Fortunato",
       "Tadej Pogačar",
       "Andreas Leknessund",
       "Richard Carapaz",
       "Valentin Paret-Peintre",
-      "Christophe Laporte",
       "Sepp Kuss",
       "Orluis Aular",
       "Jordi Meeus",
+      "Callum Thornley",
       "Kaden Groves",
-      "Ben Turner"
+      "Ben Turner",
+      "Joshua Tarling"
     ],
-    "price": 48000000,
-    "finish_points": 5543.0,
+    "price": 47750000,
+    "finish_points": 5394.0,
     "captain_bonus_points": 1356.0,
-    "team_bonus_points": 300.0,
-    "red_jersey_team_bonus_points": 208.0,
-    "classification_jersey_points": 362.83,
-    "final_projected_score": 7769.83,
+    "team_bonus_points": 340.0,
+    "red_jersey_team_bonus_points": 256.0,
+    "classification_jersey_points": 355.03,
+    "final_projected_score": 7701.03,
     "stages": [
       {
         "stage_no": 1,
@@ -598,20 +598,20 @@
         "lineup": [
           "Tadej Pogačar",
           "Ethan Hayter",
+          "Joshua Tarling",
           "João Almeida",
+          "Callum Thornley",
           "Mads Pedersen",
-          "Pablo Castrillo",
-          "Matthew Brennan",
-          "Christophe Laporte",
           "Richard Carapaz",
-          "Sepp Kuss"
+          "Sepp Kuss",
+          "Lorenzo Fortunato"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 125.0,
+        "finish_points": 176.0,
         "team_bonus_points": 20.0,
         "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 68.0,
-        "stage_total": 229.0
+        "stage_total": 280.0
       },
       {
         "stage_no": 2,
@@ -619,21 +619,21 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
+          "Matthew Brennan",
           "Kaden Groves",
           "Ben Tulett",
-          "Matthew Brennan",
           "Orluis Aular",
           "Andreas Leknessund",
-          "Christophe Laporte",
           "Ben Turner",
-          "Harold Tejada"
+          "Jordi Meeus",
+          "Raúl García Pierna"
         ],
         "captain": "Mads Pedersen",
-        "finish_points": 290.0,
+        "finish_points": 276.0,
         "team_bonus_points": 10.0,
         "red_jersey_team_bonus_points": 0,
         "captain_bonus_points": 60.0,
-        "stage_total": 360.0
+        "stage_total": 346.0
       },
       {
         "stage_no": 3,
@@ -645,17 +645,17 @@
           "Felix Gall",
           "Richard Carapaz",
           "Sepp Kuss",
-          "Valentin Paret-Peintre",
           "Lorenzo Fortunato",
+          "Valentin Paret-Peintre",
           "Pablo Castrillo",
-          "Harold Tejada"
+          "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 260.0,
+        "finish_points": 254.0,
         "team_bonus_points": 20.0,
         "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 68.0,
-        "stage_total": 364.0
+        "stage_total": 358.0
       },
       {
         "stage_no": 4,
@@ -670,14 +670,14 @@
           "Lorenzo Fortunato",
           "Valentin Paret-Peintre",
           "Pablo Castrillo",
-          "Harold Tejada"
+          "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 262.0,
+        "finish_points": 256.0,
         "team_bonus_points": 20.0,
         "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 68.0,
-        "stage_total": 366.0
+        "stage_total": 360.0
       },
       {
         "stage_no": 5,
@@ -685,21 +685,21 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
-          "Ben Tulett",
           "Matthew Brennan",
+          "Ben Tulett",
           "Orluis Aular",
           "Raúl García Pierna",
           "Andreas Leknessund",
-          "Christophe Laporte",
+          "Jordi Meeus",
           "Ben Turner",
-          "Jordi Meeus"
+          "Kaden Groves"
         ],
         "captain": "Mads Pedersen",
-        "finish_points": 310.0,
+        "finish_points": 302.0,
         "team_bonus_points": 10.0,
         "red_jersey_team_bonus_points": 0,
         "captain_bonus_points": 60.0,
-        "stage_total": 380.0
+        "stage_total": 372.0
       },
       {
         "stage_no": 6,
@@ -707,21 +707,21 @@
         "winner": "Tadej Pogačar",
         "lineup": [
           "Tadej Pogačar",
-          "Mads Pedersen",
           "Richard Carapaz",
+          "Mads Pedersen",
           "Felix Gall",
-          "Harold Tejada",
           "Sepp Kuss",
           "Ben Tulett",
+          "Matthew Brennan",
           "Raúl García Pierna",
           "Andreas Leknessund"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 296.0,
+        "finish_points": 290.0,
         "team_bonus_points": 10.0,
         "red_jersey_team_bonus_points": 8.0,
         "captain_bonus_points": 68.0,
-        "stage_total": 382.0
+        "stage_total": 376.0
       },
       {
         "stage_no": 7,
@@ -733,17 +733,17 @@
           "Felix Gall",
           "Richard Carapaz",
           "Sepp Kuss",
-          "Valentin Paret-Peintre",
           "Lorenzo Fortunato",
+          "Valentin Paret-Peintre",
           "Pablo Castrillo",
-          "Harold Tejada"
+          "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 258.0,
+        "finish_points": 252.0,
         "team_bonus_points": 20.0,
         "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 68.0,
-        "stage_total": 362.0
+        "stage_total": 356.0
       },
       {
         "stage_no": 8,
@@ -751,21 +751,21 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
-          "Ben Tulett",
           "Matthew Brennan",
+          "Ben Tulett",
           "Orluis Aular",
           "Raúl García Pierna",
           "Andreas Leknessund",
           "Ben Turner",
           "Kaden Groves",
-          "Harold Tejada"
+          "João Almeida"
         ],
         "captain": "Mads Pedersen",
-        "finish_points": 302.0,
+        "finish_points": 286.0,
         "team_bonus_points": 10.0,
-        "red_jersey_team_bonus_points": 0,
+        "red_jersey_team_bonus_points": 8.0,
         "captain_bonus_points": 60.0,
-        "stage_total": 372.0
+        "stage_total": 364.0
       },
       {
         "stage_no": 9,
@@ -780,14 +780,14 @@
           "Lorenzo Fortunato",
           "Valentin Paret-Peintre",
           "Pablo Castrillo",
-          "Harold Tejada"
+          "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 260.0,
+        "finish_points": 252.0,
         "team_bonus_points": 20.0,
         "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 68.0,
-        "stage_total": 364.0
+        "stage_total": 356.0
       },
       {
         "stage_no": 10,
@@ -795,21 +795,21 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
-          "Ben Tulett",
           "Matthew Brennan",
+          "Ben Tulett",
           "Orluis Aular",
           "Raúl García Pierna",
           "Andreas Leknessund",
           "Ben Turner",
           "Kaden Groves",
-          "Harold Tejada"
+          "João Almeida"
         ],
         "captain": "Mads Pedersen",
-        "finish_points": 300.0,
+        "finish_points": 282.0,
         "team_bonus_points": 10.0,
-        "red_jersey_team_bonus_points": 0,
+        "red_jersey_team_bonus_points": 8.0,
         "captain_bonus_points": 60.0,
-        "stage_total": 370.0
+        "stage_total": 360.0
       },
       {
         "stage_no": 11,
@@ -817,21 +817,21 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
-          "Ben Tulett",
           "Matthew Brennan",
+          "Ben Tulett",
           "Orluis Aular",
           "Andreas Leknessund",
           "Raúl García Pierna",
-          "Christophe Laporte",
           "Ben Turner",
-          "Jordi Meeus"
+          "Jordi Meeus",
+          "Kaden Groves"
         ],
         "captain": "Mads Pedersen",
-        "finish_points": 310.0,
+        "finish_points": 306.0,
         "team_bonus_points": 10.0,
         "red_jersey_team_bonus_points": 0,
         "captain_bonus_points": 60.0,
-        "stage_total": 380.0
+        "stage_total": 376.0
       },
       {
         "stage_no": 12,
@@ -839,8 +839,8 @@
         "winner": "Tadej Pogačar",
         "lineup": [
           "Tadej Pogačar",
-          "João Almeida",
           "Felix Gall",
+          "João Almeida",
           "Richard Carapaz",
           "Sepp Kuss",
           "Valentin Paret-Peintre",
@@ -849,11 +849,11 @@
           "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 260.0,
+        "finish_points": 256.0,
         "team_bonus_points": 20.0,
         "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 68.0,
-        "stage_total": 364.0
+        "stage_total": 360.0
       },
       {
         "stage_no": 13,
@@ -863,19 +863,19 @@
           "Tadej Pogačar",
           "Richard Carapaz",
           "Felix Gall",
+          "Ben Tulett",
           "Sepp Kuss",
           "Mads Pedersen",
-          "Ben Tulett",
-          "Harold Tejada",
+          "Matthew Brennan",
           "Raúl García Pierna",
-          "Andreas Leknessund"
+          "João Almeida"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 288.0,
-        "team_bonus_points": 10.0,
-        "red_jersey_team_bonus_points": 8.0,
+        "finish_points": 262.0,
+        "team_bonus_points": 20.0,
+        "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 68.0,
-        "stage_total": 374.0
+        "stage_total": 366.0
       },
       {
         "stage_no": 14,
@@ -890,14 +890,14 @@
           "Lorenzo Fortunato",
           "Valentin Paret-Peintre",
           "Pablo Castrillo",
-          "Harold Tejada"
+          "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 256.0,
+        "finish_points": 252.0,
         "team_bonus_points": 20.0,
         "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 68.0,
-        "stage_total": 360.0
+        "stage_total": 356.0
       },
       {
         "stage_no": 15,
@@ -905,65 +905,65 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
-          "Ben Tulett",
-          "Orluis Aular",
-          "Raúl García Pierna",
-          "Andreas Leknessund",
           "Matthew Brennan",
+          "Ben Tulett",
+          "Raúl García Pierna",
+          "Orluis Aular",
+          "Andreas Leknessund",
           "Kaden Groves",
-          "Harold Tejada",
-          "João Almeida"
+          "João Almeida",
+          "Tadej Pogačar"
         ],
         "captain": "Mads Pedersen",
-        "finish_points": 284.0,
+        "finish_points": 256.0,
         "team_bonus_points": 10.0,
-        "red_jersey_team_bonus_points": 8.0,
+        "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 60.0,
-        "stage_total": 362.0
+        "stage_total": 342.0
       },
       {
         "stage_no": 16,
         "profile_type": "flat",
-        "winner": "Mads Pedersen",
+        "winner": "Jordi Meeus",
         "lineup": [
-          "Mads Pedersen",
-          "Matthew Brennan",
-          "Tadej Pogačar",
           "Jordi Meeus",
+          "Mads Pedersen",
+          "Tadej Pogačar",
+          "Matthew Brennan",
           "Kaden Groves",
-          "Christophe Laporte",
           "Ben Turner",
           "Orluis Aular",
+          "Callum Thornley",
           "João Almeida"
         ],
-        "captain": "Mads Pedersen",
-        "finish_points": 266.0,
-        "team_bonus_points": 10.0,
+        "captain": "Jordi Meeus",
+        "finish_points": 240.0,
+        "team_bonus_points": 20.0,
         "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 60.0,
-        "stage_total": 352.0
+        "stage_total": 336.0
       },
       {
         "stage_no": 17,
         "profile_type": "flat",
-        "winner": "Mads Pedersen",
+        "winner": "Jordi Meeus",
         "lineup": [
-          "Mads Pedersen",
-          "Matthew Brennan",
-          "Tadej Pogačar",
           "Jordi Meeus",
+          "Mads Pedersen",
+          "Tadej Pogačar",
+          "Matthew Brennan",
           "Kaden Groves",
-          "Christophe Laporte",
           "Ben Turner",
           "Orluis Aular",
+          "Callum Thornley",
           "João Almeida"
         ],
-        "captain": "Mads Pedersen",
-        "finish_points": 262.0,
-        "team_bonus_points": 10.0,
+        "captain": "Jordi Meeus",
+        "finish_points": 236.0,
+        "team_bonus_points": 20.0,
         "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 60.0,
-        "stage_total": 348.0
+        "stage_total": 332.0
       },
       {
         "stage_no": 18,
@@ -971,21 +971,21 @@
         "winner": "Tadej Pogačar",
         "lineup": [
           "Tadej Pogačar",
-          "João Almeida",
+          "Joshua Tarling",
           "Ethan Hayter",
+          "João Almeida",
+          "Callum Thornley",
           "Pablo Castrillo",
           "Mads Pedersen",
-          "Christophe Laporte",
           "Richard Carapaz",
-          "Sepp Kuss",
-          "Lorenzo Fortunato"
+          "Sepp Kuss"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 108.0,
+        "finish_points": 178.0,
         "team_bonus_points": 20.0,
         "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 68.0,
-        "stage_total": 212.0
+        "stage_total": 282.0
       },
       {
         "stage_no": 19,
@@ -995,19 +995,19 @@
           "Tadej Pogačar",
           "Richard Carapaz",
           "Felix Gall",
-          "Sepp Kuss",
           "Ben Tulett",
-          "Harold Tejada",
+          "Sepp Kuss",
           "Mads Pedersen",
+          "Matthew Brennan",
           "Raúl García Pierna",
-          "Andreas Leknessund"
+          "João Almeida"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 288.0,
-        "team_bonus_points": 10.0,
-        "red_jersey_team_bonus_points": 8.0,
+        "finish_points": 260.0,
+        "team_bonus_points": 20.0,
+        "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 68.0,
-        "stage_total": 374.0
+        "stage_total": 364.0
       },
       {
         "stage_no": 20,
@@ -1022,14 +1022,14 @@
           "Lorenzo Fortunato",
           "Valentin Paret-Peintre",
           "Pablo Castrillo",
-          "Harold Tejada"
+          "Raúl García Pierna"
         ],
         "captain": "Tadej Pogačar",
-        "finish_points": 260.0,
+        "finish_points": 252.0,
         "team_bonus_points": 20.0,
         "red_jersey_team_bonus_points": 16.0,
         "captain_bonus_points": 68.0,
-        "stage_total": 364.0
+        "stage_total": 356.0
       },
       {
         "stage_no": 21,
@@ -1037,21 +1037,21 @@
         "winner": "Mads Pedersen",
         "lineup": [
           "Mads Pedersen",
-          "Ben Tulett",
-          "Raúl García Pierna",
-          "Orluis Aular",
-          "Andreas Leknessund",
           "Matthew Brennan",
+          "Ben Tulett",
+          "Orluis Aular",
+          "Raúl García Pierna",
+          "Andreas Leknessund",
           "Kaden Groves",
-          "Harold Tejada",
-          "Ben Turner"
+          "Ben Turner",
+          "João Almeida"
         ],
         "captain": "Mads Pedersen",
-        "finish_points": 298.0,
+        "finish_points": 270.0,
         "team_bonus_points": 10.0,
-        "red_jersey_team_bonus_points": 0,
+        "red_jersey_team_bonus_points": 8.0,
         "captain_bonus_points": 60.0,
-        "stage_total": 368.0
+        "stage_total": 348.0
       }
     ]
   },

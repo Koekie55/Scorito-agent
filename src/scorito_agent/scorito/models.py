@@ -134,6 +134,11 @@ class Snapshot:
     stages: list[Stage]
     # (market_round_id, rider_id) -> summed stage points (ground truth)
     stage_points: dict[tuple[int, int], float] = field(default_factory=dict)
+    # (market_round_id, rider_id) -> {points_type: points}. Preserves the
+    # Scorito scoring routes used to build ``stage_points``.
+    stage_point_components: dict[tuple[int, int], dict[int, float]] = field(
+        default_factory=dict
+    )
     # rider_id -> market-wide total points (leaderboard)
     market_totals: dict[int, float] = field(default_factory=dict)
     # rider_id -> end-of-race classification/jersey bonus points.
@@ -157,6 +162,12 @@ class Snapshot:
     def actual_points(self, rider_id: int, stage: Stage) -> float:
         """Real Scorito points a rider scored on a stage (0 if none)."""
         return self.stage_points.get((stage.market_round_id, rider_id), 0.0)
+
+    def actual_point_components(self, rider_id: int, stage: Stage) -> dict[int, float]:
+        """Scorito point-type components a rider scored on a stage."""
+        return dict(
+            self.stage_point_components.get((stage.market_round_id, rider_id), {})
+        )
 
     def stage_total(self, rider_id: int) -> float:
         """Sum of a rider's real per-stage points over all loaded stages."""

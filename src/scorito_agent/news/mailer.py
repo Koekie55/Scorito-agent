@@ -176,3 +176,34 @@ def send_digest(
         if config.username:
             smtp.login(config.username, config.password or "")
         smtp.send_message(message)
+
+
+def send_message(
+    config: SMTPConfig,
+    *,
+    subject: str,
+    plain_body: str,
+    html_body: str | None = None,
+) -> None:
+    message = EmailMessage()
+    message["From"] = config.sender
+    message["To"] = ", ".join(config.recipients)
+    message["Subject"] = subject
+    message.set_content(plain_body)
+    if html_body:
+        message.add_alternative(html_body, subtype="html")
+
+    context = ssl.create_default_context()
+    if config.use_ssl:
+        with smtplib.SMTP_SSL(config.host, config.port, timeout=30, context=context) as smtp:
+            if config.username:
+                smtp.login(config.username, config.password or "")
+            smtp.send_message(message)
+        return
+    with smtplib.SMTP(config.host, config.port, timeout=30) as smtp:
+        smtp.ehlo()
+        if config.starttls:
+            smtp.starttls(context=context)
+            smtp.ehlo()
+        if config.username:
+            smtp.login(config.username, config.password or "")

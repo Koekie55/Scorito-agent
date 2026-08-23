@@ -120,6 +120,69 @@ def test_stage_export_has_21_sets_of_20_unique_pcs_participants() -> None:
         50, 44, 40, 36, 32, 30, 28, 26, 24, 22,
         20, 18, 16, 14, 12, 10, 8, 6, 4, 1,
     ]
+
+
+def test_corroborated_negative_mention_cannot_automatically_penalize_rider() -> None:
+    news = {
+        "selection_impacts": [
+            {
+                "rider_slug": "rider-1",
+                "impact": "negative",
+                "verification": "corroborated_reports",
+                "decision_hint": "review_selection_and_lineup",
+                "title": "Another rider will meet Rider 1 later this season",
+                "url": "https://example.test/incidental-mention",
+                "published_at": "2026-08-18T00:30:00+00:00",
+                "score": 99,
+            }
+        ]
+    }
+
+    report = build_stage_top20(_projection(), {"stage_breakdown": {}}, news)
+
+    rider = next(
+        row
+        for row in report["stages"][0]["top_20"]
+        if row["rider_slug"] == "rider-1"
+    )
+    assert rider["news"]["verification"] == "corroborated_reports"
+    assert rider["news_multiplier"] == 1.0
+
+
+def test_chat_adjustment_cannot_change_objective_order(monkeypatch) -> None:
+    projection = _projection()
+    for rider in projection["riders"]:
+        rider["model_qualities"] = {
+            "gc": 5.0,
+            "climb": 5.0,
+            "time_trial": 5.0,
+            "sprint": 5.0,
+            "punch": 5.0,
+            "hill": 5.0,
+        }
+    for rows in projection["stage_rankings"].values():
+        rows[0]["score"] = 100.0
+        rows[1]["score"] = 99.0
+
+    module_globals = build_stage_top20.__globals__
+    monkeypatch.setitem(
+        module_globals,
+        "_expert_chat_by_key",
+        lambda: {
+            module_globals["_name_key"]("Rider 1"): {"signal": -1.0},
+            module_globals["_name_key"]("Rider 2"): {"signal": 1.0},
+        },
+    )
+    monkeypatch.setitem(module_globals, "load_forum_opinion", lambda _path: {})
+
+    report = build_stage_top20(projection, {"stage_breakdown": {}}, {})
+    first, second = report["stages"][0]["top_20"][:2]
+
+    assert [first["rider_slug"], second["rider_slug"]] == ["rider-1", "rider-2"]
+    assert first["objective_score"] > second["objective_score"]
+    assert first["adjusted_score"] < second["adjusted_score"]
+
+
 def test_selective_hilly_stage_rewards_durable_sprinter() -> None:
     stage = {
         "profile_type": "hilly",

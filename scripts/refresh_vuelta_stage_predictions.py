@@ -42,7 +42,7 @@ OUTPUT_JSON = DATA_DIR / "stage_top20_predictions.json"
 OUTPUT_CSV = DATA_DIR / "stage_top20_predictions.csv"
 TOP_N = 20
 EXPERT_WEIGHT_CAP = 0.15
-OPINION_MAX_ADJUSTMENT = 0.16
+OPINION_MAX_ADJUSTMENT = 0.12
 SCORITO_STAGE_POINTS = {
     1: 50,
     2: 44,
@@ -723,21 +723,23 @@ def build_stage_top20(
             if news_row and (
                 news_row.get("decision_hint") == "review_selection_and_lineup"
                 and news_row.get("impact") == "negative"
+                and news_row.get("verification")
+                in {"official_source", "direct_interview"}
             ):
                 news_multiplier = 0.10
-            combined = (
+            objective_score = (
                 pre_survival_score
                 * survival_factor
                 * mountain_factor
                 * hilly_attrition_factor
                 * conversion_factor
-                * chat_multiplier
-                * stage_expert_multiplier
                 * news_multiplier
             )
+            adjusted_score = objective_score * chat_multiplier
             scored.append(
                 (
-                    combined,
+                    objective_score,
+                    adjusted_score,
                     row,
                     news_row,
                     survival,
@@ -754,11 +756,12 @@ def build_stage_top20(
                     news_multiplier,
                 )
             )
-        scored.sort(key=lambda item: (-item[0], str(item[1].get("rider", ""))))
+        scored.sort(key=lambda item: (-item[0], str(item[2].get("rider", ""))))
 
         predictions = []
         for rank, (
-            combined,
+            objective_score,
+            adjusted_score,
             row,
             news_row,
             survival,
@@ -782,7 +785,10 @@ def build_stage_top20(
                     "rider": row["rider"],
                     "rider_slug": row["rider_slug"],
                     "team": riders[str(row["rider_slug"])].get("team"),
-                    "combined_score": round(combined, 6),
+                    "combined_score": round(objective_score, 6),
+                    "objective_score": round(objective_score, 6),
+                    "pre_chat_score": round(objective_score, 6),
+                    "adjusted_score": round(adjusted_score, 6),
                     "pcs_model_rank": int(row["rank"]),
                     "stage_selectivity": selectivity,
                     "sprint_survival_score": survival,
@@ -845,8 +851,10 @@ def build_stage_top20(
         "method": (
             "PCS comparable performances, specialty rankings, form and exact course evidence; "
             "mountain stages require PCS GC/climb signals or recent mountain top-20 evidence; "
-            "corrected handwritten analysis is bounded; expert chat and WielerFlits forum opinion are blended 70/30 inside one 16% cap; verified negative news "
-            "can reduce availability. Scorito rider ratings are excluded from ordering."
+            "corrected handwritten analysis is bounded; expert chat and WielerFlits forum opinion are blended 70/30 into a separate 12% adjusted score "
+            "that cannot change the objective rank, lineup, or captain; negative news "
+            "from an official source or direct interview can reduce projections. "
+            "Scorito rider ratings are excluded from ordering."
         ),
         "uncertainty": (
             "The PCS startlist is provisional and incomplete. Predicted places are model estimates, "

@@ -97,6 +97,25 @@ def _parse_stage_points(raw: list[dict]) -> dict[tuple[int, int], float]:
     return out
 
 
+def _parse_stage_point_components(
+    raw: list[dict],
+) -> dict[tuple[int, int], dict[int, float]]:
+    """(market_round_id, rider_id) -> points keyed by Scorito PointsType."""
+    out: dict[tuple[int, int], dict[int, float]] = {}
+    for elem in raw:
+        market_round_id = int(elem["MarketRoundId"])
+        collection = elem.get("RiderPointsCollection") or {}
+        for entry in collection.get("RiderPointsCollection") or []:
+            key = (market_round_id, int(entry["RiderId"]))
+            components = out.setdefault(key, {})
+            for point in entry.get("PointsCollection") or []:
+                points_type = int(point["PointsType"])
+                components[points_type] = components.get(points_type, 0.0) + float(
+                    point.get("Points", 0)
+                )
+    return out
+
+
 def _parse_market_totals(raw: list[dict]) -> dict[int, float]:
     return {int(e["RiderId"]): float(e.get("Points", 0)) for e in raw}
 
@@ -134,8 +153,11 @@ def load_snapshot(dir_or_slug: str | Path) -> Snapshot:
 
     stage_points: dict[tuple[int, int], float] = {}
     tp_path = d / "points_totalpoints.json"
+    stage_point_components: dict[tuple[int, int], dict[int, float]] = {}
     if tp_path.exists():
-        stage_points = _parse_stage_points(_read(tp_path))
+        raw_stage_points = _read(tp_path)
+        stage_points = _parse_stage_points(raw_stage_points)
+        stage_point_components = _parse_stage_point_components(raw_stage_points)
 
     market_totals: dict[int, float] = {}
     mp_path = d / "marketpoints.json"
@@ -169,6 +191,7 @@ def load_snapshot(dir_or_slug: str | Path) -> Snapshot:
         riders=riders,
         stages=stages,
         stage_points=stage_points,
+        stage_point_components=stage_point_components,
         market_totals=market_totals,
         classification_points=classification_points,
     )

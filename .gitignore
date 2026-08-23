@@ -18,11 +18,14 @@ data/**/*.json
 data/**/*.sqlite
 data/**/*.parquet
 data/**/*.csv
+data/**/*.xlsx
+data/**/*.log
 !data/**/.gitkeep
 !data/public/**
 
 # OS / editor
 .DS_Store
 Thumbs.db
+~$*.xlsx
 .vscode/
 .idea/

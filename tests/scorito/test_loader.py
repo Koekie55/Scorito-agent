@@ -73,6 +73,16 @@ def test_actual_points_double_nested_parse(snap) -> None:
     assert snap.actual_points(POGACAR_ID, snap.stages[0]) == pytest.approx(
         POGACAR_STAGE1_POINTS
     )
+
+def test_actual_point_components_reconcile_to_stage_total(snap) -> None:
+    components = snap.actual_point_components(POGACAR_ID, snap.stages[0])
+
+    assert components == {3: 28.0, 101: 6.0, 103: 8.0}
+    assert sum(components.values()) == snap.actual_points(
+        POGACAR_ID, snap.stages[0]
+    )
+
+
     stage_total = sum(snap.actual_points(POGACAR_ID, s) for s in snap.stages)
     assert stage_total == pytest.approx(POGACAR_STAGE_TOTAL)
     assert snap.stage_total(POGACAR_ID) == pytest.approx(POGACAR_STAGE_TOTAL)

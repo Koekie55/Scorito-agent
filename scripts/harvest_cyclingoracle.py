@@ -15,6 +15,7 @@ Output:
 
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -28,8 +29,12 @@ RACE_SLUG = "tour-de-france-2026"
 OUT_PATH = Path("data/cyclingoracle/tdf2026_predictions.jsonl")
 
 
-def main() -> int:
-    posts = list_stages(RACE_SLUG)
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--race-slug", default=RACE_SLUG)
+    parser.add_argument("--output", type=Path, default=OUT_PATH)
+    args = parser.parse_args(argv)
+    posts = list_stages(args.race_slug, cache=False)
     # Men's race only: drop the women's "Tour de France Femmes" posts, keep
     # only per-stage prediction posts (not race-overall or data-list posts).
     stage_posts = [
@@ -39,7 +44,7 @@ def main() -> int:
         and "femmes" not in (p.get("slug") or "").lower()
     ]
 
-    print(f"Found {len(posts)} blog posts for {RACE_SLUG!r}; "
+    print(f"Found {len(posts)} blog posts for {args.race_slug!r}; "
           f"{len(stage_posts)} are men's stage predictions.")
 
     rows: list[dict] = []
@@ -48,7 +53,7 @@ def main() -> int:
         url = post["url"]
         stage_number = post.get("stage_number")
         try:
-            preds = stage_predictions(url, enrich=True, cache=True)
+            preds = stage_predictions(url, enrich=True, cache=False)
         except Exception as exc:  # noqa: BLE001 — keep harvesting other stages
             print(f"  [skip] stage {stage_number} {url}: {exc}")
             continue
@@ -68,10 +73,10 @@ def main() -> int:
             f"({top.get('win_probability_pct')}%)"
         )
 
-    write_jsonl(OUT_PATH, rows)
+    write_jsonl(args.output, rows)
     print(
         f"\nWrote {len(rows)} rows across {len(seen_stage_numbers)} stages "
-        f"to {OUT_PATH}"
+        f"to {args.output}"
     )
     print(f"Stages harvested: {sorted(n for n in seen_stage_numbers if n is not None)}")
     return 0
