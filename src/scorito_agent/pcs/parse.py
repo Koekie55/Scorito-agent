@@ -221,7 +221,7 @@ def is_team_time_trial(text: str) -> bool:
     return "team time trial" in lowered or re.search(r"\bttt\b", lowered) is not None
 
 
-def _infer_profile_type(root: Element) -> str:
+def _infer_profile_type(root: Element, stage_title: str) -> str:
     won_how = _detail_value(root, "won how").lower()
     # Order matters: "Team time trial" contains "time trial", so the team check
     # must run first or every TTT is misclassified as an individual time trial.
@@ -230,7 +230,7 @@ def _infer_profile_type(root: Element) -> str:
     if "time trial" in won_how:
         return "itt"
     explicit = _class_text(root, "profile-type", "profile")
-    text = f"{explicit} {root.text()}".lower()
+    text = f"{explicit} {stage_title}".lower()
     if is_team_time_trial(text):
         return "ttt"
     profile_class = _pcs_profile_class(root)
@@ -618,7 +618,7 @@ def parse_stage_page(html: str, *, source_url: str | None = None) -> dict[str, A
     h1 = _first_tag_text(root, "h1")
     race = _class_text(root, "race-name") or _meta_content(root, "og:title") or h1 or title
     stage_no = _parse_stage_no(root)
-    profile_type = _infer_profile_type(root)
+    profile_type = _infer_profile_type(root, race)
     startlist = parse_startlist(html)
     results = parse_results(html)
     startlist_quality, startlist_quality_finish = _parse_startlist_quality(

@@ -149,9 +149,9 @@ PROFILE_TYPES = ("flat", "hilly", "mountain", "itt")
 # no TTT stage to predict, so it is not a target in PROFILE_TYPES.
 SOURCE_PROFILE_TYPES = PROFILE_TYPES + ("ttt",)
 # A team time trial is a team-paced effort, so it carries only weak evidence of
-# individual time-trial ability. Set to 0.08 (the generic cross-profile floor)
-# to discount TTT results entirely.
-TTT_TO_ITT_TRANSFER = 0.25
+# individual time-trial ability. Use the generic cross-profile floor until the
+# transfer can be calibrated against subsequent individual time trials.
+TTT_TO_ITT_TRANSFER = 0.08
 RACE_QUALITY_WEIGHTS = {
     "uwt": 1.00,
     "pro": 0.82,
@@ -437,7 +437,7 @@ def _result_profile(
 
     # Guard ahead of the cached course profile: stores built before the TTT
     # classifier fix label team time trials as individual ones.
-    if is_team_time_trial(race) or is_team_time_trial(str(result.get("event") or "")):
+    if is_team_time_trial(race):
         return "ttt", "tt", "TTT marker on PCS result"
 
     context = result.get("course_context") or {}

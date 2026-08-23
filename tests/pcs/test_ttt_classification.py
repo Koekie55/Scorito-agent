@@ -37,6 +37,17 @@ ITT_PAGE = TTT_PAGE.replace(
     "S1 (ITT) Stage 1 (ITT) - Monaco &gt; Monaco",
 ).replace("Team time trial", "Time trial")
 
+NORMAL_STAGE_WITH_TTT_NAVIGATION = """
+<html><body>
+<div class="page-title"><h1>Stage 4 - Vichy &gt; La Loge des Gardes</h1></div>
+<div class="profile-type">Hilly</div>
+<select class="stage-navigation"><option>Stage 3 (TTT) - Perreux &gt; Perreux</option></select>
+<ul class="infolist">
+    <li><div class="title">Won how:</div><div class="value">Sprint of a small group</div></li>
+</ul>
+</body></html>
+"""
+
 
 @pytest.mark.parametrize(
     ("text", "expected"),
@@ -65,6 +76,11 @@ def test_itt_stage_page_still_itt() -> None:
     assert stage["profile_type"] == "itt"
 
 
+def test_ttt_in_stage_navigation_does_not_classify_current_stage_as_ttt() -> None:
+    stage = parse_stage_page(NORMAL_STAGE_WITH_TTT_NAVIGATION)
+    assert stage["profile_type"] == "hilly"
+
+
 def test_result_profile_rejects_stale_itt_context_for_ttt() -> None:
     """A cache built before the fix says 'itt'; the title guard must override."""
     stale = {
@@ -81,4 +97,4 @@ def test_result_profile_rejects_stale_itt_context_for_ttt() -> None:
 
 def test_ttt_transfers_weakly_to_itt() -> None:
     assert _profile_transfer("itt", "itt") == 1.0
-    assert _profile_transfer("ttt", "itt") < 0.5
+    assert _profile_transfer("ttt", "itt") == 0.08
