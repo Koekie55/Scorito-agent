@@ -1,5 +1,6 @@
 from scripts.refresh_vuelta_stage_predictions import (
     TOP_N,
+    _conversion_factor,
     _hilly_attrition_factor,
     _mountain_finish_factor,
     _stage_selectivity,
@@ -230,3 +231,106 @@ def test_hilly_attrition_penalizes_only_low_survival_sprinters() -> None:
     assert _hilly_attrition_factor(stage, gc_finish, 0.26) == 0.25
     assert _hilly_attrition_factor(stage, gc_finish, 0.50) == 1.0
 
+
+
+def _reduced_sprint_stage() -> dict:
+    return {
+        "profile_type": "hilly",
+        "finish_type": "uphill",
+        "vertical_meters": 3028,
+        "gradient_final_km": 3.6,
+    }
+
+
+def _reduced_sprint_notes() -> dict:
+    return {"type": "Sprint / Hilly", "rider_signals": {}}
+
+
+def test_conversion_factor_reports_reason_for_every_branch() -> None:
+    stage = _reduced_sprint_stage()
+    notes = _reduced_sprint_notes()
+
+    gc_rider = {"signals": {"gc": 0.95, "sprint": 0.0, "classic": 0.0}}
+    factor, reason = _conversion_factor(stage, notes, gc_rider, 0.0)
+    assert factor == 0.08
+    assert reason == "reduced_sprint_gc_rider_without_sprint_signal"
+
+    unsupported = {"signals": {"gc": 0.10, "sprint": 0.0, "classic": 0.0}}
+    factor, reason = _conversion_factor(stage, notes, unsupported, 0.0)
+    assert factor == 0.25
+    assert reason == "reduced_sprint_unsupported_finisher"
+
+    sprinter = {"signals": {"gc": 0.0, "sprint": 0.20, "classic": 0.10}}
+    factor, reason = _conversion_factor(stage, notes, sprinter, 0.0)
+    assert factor == 1.0
+    assert reason == "none"
+
+    flat_stage = {"profile_type": "flat", "finish_type": "sprint", "vertical_meters": 900}
+    non_sprinter = {
+        "signals": {"sprint": 0.0},
+        "recent_evidence": {"profile_strength": {"flat": 0.10}},
+    }
+    factor, reason = _conversion_factor(flat_stage, {"type": "Sprint"}, non_sprinter, 0.0)
+    assert factor == 0.18
+    assert reason == "flat_no_sprint_signal_weak_flat_evidence"
+
+    mountain_stage = {"profile_type": "mountain", "finish_type": "summit", "vertical_meters": 4500}
+    factor, reason = _conversion_factor(mountain_stage, {"type": "GC / Mountain"}, gc_rider, 0.0)
+    assert factor == 1.0
+    assert reason == "none"
+
+
+def test_expert_signal_changes_the_reason_but_not_the_penalty_without_results() -> None:
+    """Pins down a non-obvious interaction that the reason label makes visible.
+
+    A strong stage-level expert signal (>= 0.50) is accepted as a substitute for a
+    sprint or classic signal, so the rider clears the `supported_fast_finisher`
+    check. But a rider with no qualifying result history then falls straight into
+    the thin-selective-results branch, which applies the *same* 0.25 multiplier.
+    So the expert signal alone buys such a rider nothing; it only helps riders who
+    also carry selective results. Before this change both paths were
+    indistinguishable in the output, because only the 0.25 was ever visible.
+    """
+    stage = _reduced_sprint_stage()
+    notes = _reduced_sprint_notes()
+    rider = {"signals": {"gc": 0.0, "sprint": 0.0, "classic": 0.0}}
+
+    unsupported_factor, unsupported_reason = _conversion_factor(stage, notes, rider, 0.0)
+    supported_factor, supported_reason = _conversion_factor(stage, notes, rider, 0.60)
+
+    assert unsupported_reason == "reduced_sprint_unsupported_finisher"
+    assert supported_reason == "reduced_sprint_thin_selective_results"
+    assert supported_factor == unsupported_factor == 0.25
+    assert supported_reason != unsupported_reason
+
+
+def test_conversion_factor_and_reason_are_published_per_rider() -> None:
+    """The multiplier is often the largest single term in combined_score, so it
+    must be visible in the output rather than only implied by the final score."""
+    expert = {
+        "weight_applied": 0.15,
+        "generated_at": "2026-08-18T00:00:00+00:00",
+        "stage_breakdown": {
+            "1": {"type": "ITT", "distance_km": 9},
+            "2": {"type": "Sprint"},
+            **{str(stage_no): {"type": "GC / Mountain"} for stage_no in range(3, 22)},
+        },
+    }
+    news = {"generated_at": "2026-08-18T01:00:00+00:00", "market_snapshot": None, "selection_impacts": []}
+
+    report = build_stage_top20(_projection(), expert, news)
+
+    for stage in report["stages"]:
+        for row in stage["top_20"]:
+            assert "conversion_factor" in row
+            assert "conversion_reason" in row
+            assert 0.0 < row["conversion_factor"] <= 1.0
+            assert isinstance(row["conversion_reason"], str) and row["conversion_reason"]
+            # the recorded reason must explain the recorded value
+            if row["conversion_factor"] == 1.0:
+                assert row["conversion_reason"] == "none"
+            else:
+                assert row["conversion_reason"] != "none"
+
+    flat_stage = next(stage for stage in report["stages"] if stage["stage_no"] == 2)
+    assert any(row["conversion_factor"] < 1.0 for row in flat_stage["top_20"])

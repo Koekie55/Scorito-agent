@@ -424,6 +424,66 @@ def _is_reduced_sprint_stage(stage: dict[str, Any], notes: dict[str, Any]) -> bo
     )
 
 
+def _conversion_factor(
+    stage: dict[str, Any],
+    notes: dict[str, Any],
+    rider: dict[str, Any],
+    stage_expert_signal: float,
+) -> tuple[float, str]:
+    """Return the finish-conversion multiplier and the rule that produced it.
+
+    This multiplier is applied to the combined stage score and is frequently the
+    single largest term in it: on a reduced bunch sprint a GC rider without a
+    sprint signal is cut by 92%, which is enough on its own to move a rider from
+    the top of the field to outside the published top 20.
+
+    The returned reason string is a stable identifier for the branch taken, so
+    the published output records *why* a rider was up- or down-weighted rather
+    than only the final score. Behaviour is unchanged from the inline version
+    this replaced; only the reason label is new.
+    """
+    profile = str(stage.get("profile_type", "")).lower()
+    signals = rider.get("signals", {})
+    pcs_sprint = float(signals.get("sprint", 0.0))
+
+    if profile == "flat":
+        flat_strength = float(
+            rider.get("recent_evidence", {})
+            .get("profile_strength", {})
+            .get("flat", 0.0)
+        )
+        if pcs_sprint <= 0.0 and flat_strength < 0.35:
+            return 0.18, "flat_no_sprint_signal_weak_flat_evidence"
+        if pcs_sprint < 0.02 and flat_strength < 0.55:
+            return 0.55, "flat_marginal_sprint_signal"
+        return 1.0, "none"
+
+    if _is_reduced_sprint_stage(stage, notes):
+        pcs_gc = float(signals.get("gc", 0.0))
+        pcs_classic = float(signals.get("classic", 0.0))
+        fast_finish = _fast_finish_score(stage, rider)
+        supported_fast_finisher = (
+            pcs_sprint >= 0.02 or pcs_classic >= 0.05 or stage_expert_signal >= 0.50
+        )
+        if pcs_gc >= 0.20 and pcs_sprint < 0.02:
+            return 0.08, "reduced_sprint_gc_rider_without_sprint_signal"
+        if not supported_fast_finisher:
+            if pcs_gc >= 0.08 or fast_finish < 0.70:
+                return 0.25, "reduced_sprint_unsupported_finisher"
+            return 0.55, "reduced_sprint_unsupported_but_fast_finish_evidence"
+        if (
+            pcs_sprint <= 0.0
+            and pcs_classic < 0.05
+            and _selective_result_score(rider) < 0.35
+        ):
+            return 0.25, "reduced_sprint_thin_selective_results"
+        if pcs_sprint < 0.02 and _selective_result_score(rider) < 0.50:
+            return 0.55, "reduced_sprint_marginal_selective_results"
+        return 1.0, "none"
+
+    return 1.0, "none"
+
+
 def _pcs_outcome_score(
     stage: dict[str, Any],
     rider: dict[str, Any],
@@ -637,46 +697,12 @@ def build_stage_top20(
                 stage, riders[slug]
             )
             hilly_attrition_factor = _hilly_attrition_factor(stage, notes, survival)
-            conversion_factor = 1.0
             stage_expert_signal = float(
                 notes.get("rider_signals", {}).get(slug, 0.0) or 0.0
             )
-            if profile == "flat":
-                pcs_sprint = float(riders[slug].get("signals", {}).get("sprint", 0.0))
-                flat_strength = float(
-                    riders[slug]
-                    .get("recent_evidence", {})
-                    .get("profile_strength", {})
-                    .get("flat", 0.0)
-                )
-                if pcs_sprint <= 0.0 and flat_strength < 0.35:
-                    conversion_factor = 0.18
-                elif pcs_sprint < 0.02 and flat_strength < 0.55:
-                    conversion_factor = 0.55
-            elif _is_reduced_sprint_stage(stage, notes):
-                pcs_sprint = float(riders[slug].get("signals", {}).get("sprint", 0.0))
-                pcs_gc = float(riders[slug].get("signals", {}).get("gc", 0.0))
-                pcs_classic = float(
-                    riders[slug].get("signals", {}).get("classic", 0.0)
-                )
-                fast_finish = _fast_finish_score(stage, riders[slug])
-                supported_fast_finisher = (
-                    pcs_sprint >= 0.02
-                    or pcs_classic >= 0.05
-                    or stage_expert_signal >= 0.50
-                )
-                if pcs_gc >= 0.20 and pcs_sprint < 0.02:
-                    conversion_factor = 0.08
-                elif not supported_fast_finisher:
-                    conversion_factor = 0.25 if pcs_gc >= 0.08 or fast_finish < 0.70 else 0.55
-                elif (
-                    pcs_sprint <= 0.0
-                    and pcs_classic < 0.05
-                    and _selective_result_score(riders[slug]) < 0.35
-                ):
-                    conversion_factor = 0.25
-                elif pcs_sprint < 0.02 and _selective_result_score(riders[slug]) < 0.50:
-                    conversion_factor = 0.55
+            conversion_factor, conversion_reason = _conversion_factor(
+                stage, notes, riders[slug], stage_expert_signal
+            )
             chat = riders[slug].get("_expert_chat", {})
             chat_signal = float(
                 chat.get("stage_signals", {}).get(
@@ -719,6 +745,8 @@ def build_stage_top20(
                     mountain_credibility,
                     mountain_factor,
                     hilly_attrition_factor,
+                    conversion_factor,
+                    conversion_reason,
                     chat_signal,
                     forum_signal,
                     opinion_signal,
@@ -738,6 +766,8 @@ def build_stage_top20(
             mountain_credibility,
             mountain_factor,
             hilly_attrition_factor,
+            conversion_factor,
+            conversion_reason,
             chat_signal,
             forum_signal,
             opinion_signal,
@@ -762,6 +792,8 @@ def build_stage_top20(
                     "mountain_credibility": mountain_credibility,
                     "mountain_finish_factor": mountain_factor,
                     "hilly_attrition_factor": hilly_attrition_factor,
+                    "conversion_factor": round(conversion_factor, 4),
+                    "conversion_reason": conversion_reason,
                     "expert_chat_signal": round(chat_signal, 4),
                     "wielerflits_forum_signal": round(forum_signal, 4),
                     "forum_opinion_share": FORUM_OPINION_SHARE,
@@ -849,7 +881,8 @@ def _write_csv(report: dict[str, Any], path: Path) -> None:
         "vertical_meters", "expert_type", "expert_status", "expert_weight",
         "predicted_finish", "scorito_stage_points", "rider", "rider_slug", "team", "combined_score",
         "pcs_model_rank", "mountain_credibility", "mountain_finish_factor",
-        "hilly_attrition_factor", "expert_chat_signal", "wielerflits_forum_signal",
+        "hilly_attrition_factor", "conversion_factor", "conversion_reason",
+        "expert_chat_signal", "wielerflits_forum_signal",
         "forum_opinion_share", "blended_opinion_signal", "expected_finish_band", "confidence", "uncertainty",
         "role_assumption", "news_decision", "news_verification", "news_title", "evidence",
     ]
@@ -882,6 +915,8 @@ def _write_csv(report: dict[str, Any], path: Path) -> None:
                         "mountain_credibility": prediction["mountain_credibility"],
                         "mountain_finish_factor": prediction["mountain_finish_factor"],
                         "hilly_attrition_factor": prediction["hilly_attrition_factor"],
+                        "conversion_factor": prediction["conversion_factor"],
+                        "conversion_reason": prediction["conversion_reason"],
                         "expert_chat_signal": prediction["expert_chat_signal"],
                         "wielerflits_forum_signal": prediction["wielerflits_forum_signal"],
                         "forum_opinion_share": prediction["forum_opinion_share"],
