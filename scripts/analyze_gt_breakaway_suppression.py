@@ -33,6 +33,7 @@ def load_records(path: Path = LABELS_PATH) -> list[dict[str, Any]]:
         row["breakaway_win"] = int(row["breakaway_win"])
         row["vertical_meters"] = int(row["vertical_meters"])
         row["profile_score"] = int(row["profile_score"])
+        row["post_stage_gc_rank"] = int(row["post_stage_gc_rank"])
     return rows
 
 
@@ -133,6 +134,56 @@ def cross_validated_brier(records: list[dict[str, Any]]) -> dict[str, float]:
     }
 
 
+def gc_favourite_selection(records: list[dict[str, Any]]) -> dict[str, Any]:
+    """Mechanism (b): how tightly GC teams control a summit finish they win.
+
+    Distinct from breakaway survival (mechanism a): conditional on the GC group
+    taking the win, an early compressed field lets GC teams ride harder and drop
+    more riders, so the win concentrates on a top-2 GC rider (a proxy for fewer
+    non-GC survivors). Winner post-stage GC rank is the only survivor proxy the
+    cached labels expose.
+    """
+
+    def bucket(rows: list[dict[str, Any]]) -> dict[str, Any]:
+        ranks = [record["post_stage_gc_rank"] for record in rows]
+        top2 = sum(1 for rank in ranks if rank <= 2)
+        return {
+            "gc_group_wins": len(rows),
+            "winner_top2_gc": top2,
+            "top2_share": top2 / len(rows) if rows else None,
+            "mean_winner_gc_rank": sum(ranks) / len(ranks) if ranks else None,
+            "median_winner_gc_rank": (
+                sorted(ranks)[len(ranks) // 2] if ranks else None
+            ),
+        }
+
+    gc_group = [record for record in records if record["breakaway_win"] == 0]
+    early = bucket([r for r in gc_group if r["stage_no"] <= EARLY_STAGE_MAX])
+    later = bucket([r for r in gc_group if r["stage_no"] > EARLY_STAGE_MAX])
+    top2_difference = (
+        early["top2_share"] - later["top2_share"]
+        if early["top2_share"] is not None and later["top2_share"] is not None
+        else None
+    )
+    rank_difference = (
+        early["mean_winner_gc_rank"] - later["mean_winner_gc_rank"]
+        if early["mean_winner_gc_rank"] is not None
+        and later["mean_winner_gc_rank"] is not None
+        else None
+    )
+    return {
+        "definition": (
+            "Among summit stages the GC group wins, share whose winner sits top-2 "
+            "on GC and the mean winner GC rank; lower rank means harder selection "
+            "with fewer non-GC survivors."
+        ),
+        "early": early,
+        "later": later,
+        "top2_share_difference": top2_difference,
+        "mean_winner_gc_rank_difference": rank_difference,
+    }
+
+
 def build_analysis(records: list[dict[str, Any]]) -> dict[str, Any]:
     early = summarize(records, lambda record: record["stage_no"] <= EARLY_STAGE_MAX)
     later = summarize(records, lambda record: record["stage_no"] > EARLY_STAGE_MAX)
@@ -188,6 +239,7 @@ def build_analysis(records: list[dict[str, Any]]) -> dict[str, Any]:
                 unipuerto, other_summits
             ),
         },
+        "gc_selection_mechanism": gc_favourite_selection(records),
         "validation": cross_validated_brier(records),
         "vuelta_2026_stage_3_prior": historical_breakaway_prior(
             records, target_stage
@@ -198,6 +250,7 @@ def build_analysis(records: list[dict[str, Any]]) -> dict[str, Any]:
             "Post-stage GC rank is retained for audit but is not a pre-stage GC-gap control.",
             "Vertical meters is a unipuerto proxy and cannot identify the number or placement of climbs.",
             "Year, race, field, chase incentives and route severity remain partly confounded.",
+            "The GC-selection mechanism rests on 3 early GC-group wins; its direction is suggestive only and is not used as an independent model multiplier.",
             "Associations are predictive priors, not causal estimates of team permission.",
         ],
     }

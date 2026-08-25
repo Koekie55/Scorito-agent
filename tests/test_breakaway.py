@@ -149,3 +149,15 @@ def test_tt_capable_gc_threat_is_not_suppressed_on_compressed_unipuerto() -> Non
     assert result["breakaway_break_dependence"] == pytest.approx(0.0)
     assert result["breakaway_rider_factor"] == pytest.approx(1.0)
 
+
+def test_gc_favourite_selection_mechanism_reports_early_vs_late() -> None:
+    from scripts.analyze_gt_breakaway_suppression import (
+        gc_favourite_selection,
+        load_records,
+    )
+
+    selection = gc_favourite_selection(load_records())
+    assert selection["early"]["gc_group_wins"] == 3
+    assert selection["later"]["gc_group_wins"] == 11
+    # Direction is suggestive (harder early selection) but the sample is tiny.
+    assert selection["early"]["mean_winner_gc_rank"] <= selection["later"]["mean_winner_gc_rank"]
