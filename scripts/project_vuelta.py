@@ -784,6 +784,29 @@ def _value(signals: dict[str, dict[str, float]], key: str, slug: str, default: f
     return signals.get(key, {}).get(slug, default)
 
 
+def _field_percentile(signals: dict[str, dict[str, float]], key: str, slug: str) -> float:
+    """Normalise a rider's raw capability signal to a 0..1 within-field strength.
+
+    The breakaway permission model needs GC and climb strengths on a comparable
+    0..1 scale; the raw capability signals sit near ~0.01, so their bare
+    difference would produce no effect.  Percentile rank against the current
+    field yields the calibrated strength the rider-level factor expects.
+    """
+    values = signals.get(key)
+    if not values:
+        return 0.0
+    own = values.get(slug)
+    if own is None:
+        return 0.0
+    population = list(values.values())
+    total = len(population)
+    if total <= 1:
+        return 1.0
+    below = sum(1 for value in population if value < own)
+    equal = sum(1 for value in population if value == own)
+    return (below + 0.5 * equal) / total
+
+
 def _effective_rankings(
     rankings: dict[str, dict[str, float]],
     capabilities: dict[str, dict[str, Any]],
@@ -881,6 +904,21 @@ def _stage_signal_components(
             {"probability": survival_probability, "global_rate": baseline_probability},
             gc_strength=gc,
             climb_strength=climb,
+        gc_percentile = _field_percentile(signals, "gc", slug)
+        tt_percentile = _field_percentile(signals, "tt", slug)
+        # A rider is only a GC-defence threat teams must control if they can both
+        # climb AND time-trial; a marked pure climber (high climb, weak TT, e.g. a
+        # KOM/mountain-jersey hunter) is not protected in the front group and must
+        # score from the break, so gate the GC signal by the weaker of GC/TT.
+        gc_strength = min(gc_percentile, tt_percentile)
+        climb_strength = _field_percentile(signals, "climb", slug)
+        rider_factor = summit_breakaway_rider_factor(
+            {
+                "probability": survival_probability,
+                "global_rate": baseline_probability,
+            },
+            gc_strength=gc_strength,
+            climb_strength=climb_strength,
         )
         score = base_score * rider_factor["factor"]
         breakaway = {
@@ -893,6 +931,15 @@ def _stage_signal_components(
             "breakaway_break_dependence": rider_factor["break_dependence"],
             "breakaway_kom_entry_factor": rider_factor["entry_attempt_factor"],
             "breakaway_kom_marking_factor": rider_factor["marking_factor"],
+            "breakaway_gc_percentile": gc_percentile,
+            "breakaway_tt_percentile": tt_percentile,
+            "breakaway_gc_strength": gc_strength,
+            "breakaway_climb_strength": climb_strength,
+            "breakaway_space_ratio": rider_factor["space_ratio"],
+            "breakaway_break_dependence": rider_factor["break_dependence"],
+            "breakaway_kom_entry_factor": rider_factor["entry_attempt_factor"],
+            "breakaway_kom_marking_factor": rider_factor["marking_factor"],
+            "breakaway_rider_factor": rider_factor["factor"],
         }
     confidence = min(
         0.92,
