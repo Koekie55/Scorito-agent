@@ -80,14 +80,18 @@ def test_pick_squad_respects_budget_excludes_unaffordable() -> None:
     assert plan.total_price <= snap.budget
 
 
-def test_pick_squad_returns_all_when_fewer_than_squad_size() -> None:
+def test_pick_squad_rejects_fewer_candidates_than_squad_size() -> None:
     riders = [_rider(i, price=1_000_000) for i in range(3)]
     snap = _snapshot(riders, budget=10_000_000)
     values = {i: 1.0 for i in range(3)}
 
-    plan = pick_squad(snap, values, squad_size=20)
+    with pytest.raises(ValueError, match="cannot select 20 riders from 3"):
+        pick_squad(snap, values, squad_size=20)
 
-    assert set(plan.rider_ids) == {0, 1, 2}
+
+def test_snapshot_rejects_duplicate_rider_ids() -> None:
+    with pytest.raises(ValueError, match=r"duplicate rider IDs in snapshot: \[1\]"):
+        _snapshot([_rider(1, 1_000_000), _rider(1, 2_000_000)], budget=3_000_000)
 
 
 def test_best_stage_lineup_applies_captain_factor() -> None:
@@ -103,6 +107,11 @@ def test_best_stage_lineup_applies_captain_factor() -> None:
     # base = 30+10+5 = 45; captain doubles the 30 -> +30 => 75.
     assert lu.total == pytest.approx(75.0)
     assert 4 not in lu.rider_ids
+
+
+def test_best_stage_lineup_rejects_undersized_squad() -> None:
+    with pytest.raises(ValueError, match="cannot select a 9-rider lineup"):
+        best_stage_lineup(Stage(1, 1, 1, 1, 1), [1, 2, 3], {}, lineup_size=9)
 
 
 def _multi_stage_snapshot() -> Snapshot:
@@ -183,6 +192,38 @@ def test_joint_enrolled_squad_includes_selection_only_bonus() -> None:
     assert plan.value == pytest.approx(50.0)
 
 
+def test_joint_enrolled_squad_keeps_exact_lineup_for_all_zero_points() -> None:
+    riders = [_rider(rid, 1_000_000, team_id=rid) for rid in range(1, 5)]
+    snap = _snapshot(riders, budget=10_000_000)
+
+    plan = joint_enrolled_squad(
+        snap,
+        lambda _rider_id, _stage: 0.0,
+        squad_size=3,
+        lineup_size=2,
+    )
+
+    assert plan is not None
+    assert len(plan.rider_ids) == 3
+    assert plan.value == pytest.approx(0.0)
+
+
+def test_joint_enrolled_squad_keeps_exact_lineup_for_negative_points() -> None:
+    riders = [_rider(rid, 1_000_000, team_id=rid) for rid in range(1, 5)]
+    snap = _snapshot(riders, budget=10_000_000)
+
+    plan = joint_enrolled_squad(
+        snap,
+        lambda rider_id, _stage: -float(rider_id),
+        squad_size=3,
+        lineup_size=2,
+    )
+
+    assert plan is not None
+    assert len(plan.rider_ids) == 3
+    assert plan.value == pytest.approx(-4.0)
+
+
 def test_joint_enrolled_squad_returns_none_when_too_few_riders() -> None:
     riders = [_rider(1, price=1_000_000)]
     snap = Snapshot(
@@ -195,7 +236,9 @@ def test_joint_enrolled_squad_returns_none_when_too_few_riders() -> None:
         stage_points={(101, 1): 10.0},
     )
 
-    assert joint_enrolled_squad(snap, snap.actual_points, squad_size=2) is None
+    assert joint_enrolled_squad(
+        snap, snap.actual_points, squad_size=2, lineup_size=1
+    ) is None
 
 
 def test_joint_enrolled_squad_enforces_trade_team_cap() -> None:

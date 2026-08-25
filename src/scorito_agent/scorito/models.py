@@ -191,5 +191,11 @@ class Snapshot:
         return self.budget / 1_000_000
 
     def __post_init__(self) -> None:
+        rider_ids = [rider.rider_id for rider in self.riders]
+        duplicate_ids = sorted(
+            rider_id for rider_id in set(rider_ids) if rider_ids.count(rider_id) > 1
+        )
+        if duplicate_ids:
+            raise ValueError(f"duplicate rider IDs in snapshot: {duplicate_ids}")
         self._by_id: dict[int, Rider] = {r.rider_id: r for r in self.riders}
         self.stages.sort(key=lambda s: s.order)

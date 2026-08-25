@@ -15,6 +15,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "src"), str(ROOT)]
 
 from scorito_agent.scorito import load_snapshot  # noqa: E402
+from scorito_agent.scorito.team_points import (  # noqa: E402
+    TeamPointProjection,
+    expected_team_points_by_rider,
+    normalized_team_win_probabilities,
+)
 from scripts.refresh_vuelta_stage_predictions import SCORITO_STAGE_POINTS  # noqa: E402
 
 DATA_DIR = ROOT / "data" / "scorito" / "vuelta2026"
@@ -66,6 +71,18 @@ def load_saved_squads(data_dir: Path = DATA_DIR) -> list[dict[str, Any]]:
         candidates.append((path.stem, path.name, [name for name in riders if name]))
 
     deduplicated: dict[tuple[tuple[str, ...], ...], dict[str, Any]] = {}
+    canonical_path = data_dir / "hawktuah_team.json"
+    if canonical_path.exists():
+        canonical = json.loads(canonical_path.read_text(encoding="utf-8-sig"))
+        riders = canonical.get("riders")
+        if canonical.get("status") != "locked_canonical_squad":
+            raise RuntimeError("hawktuah_team.json is not marked as the canonical locked squad")
+        if not isinstance(riders, list):
+            raise RuntimeError("hawktuah_team.json riders must be a list")
+        candidates.insert(
+            0, ("Hawktuah / locked AI squad", canonical_path.name, riders)
+        )
+
     for name, source, riders in candidates:
         if len(riders) != SQUAD_SIZE or len(set(map(name_token_key, riders))) != SQUAD_SIZE:
             raise RuntimeError(f"{source}:{name} is not a 20-rider unique squad")
@@ -79,6 +96,36 @@ def load_saved_squads(data_dir: Path = DATA_DIR) -> list[dict[str, Any]]:
 
 def _rank_points(rank: int | None) -> float:
     return float(SCORITO_STAGE_POINTS.get(rank or 0, 0.0))
+
+
+def _team_win_probabilities(
+    stage: dict[str, Any], live_riders: dict[tuple[str, ...], Any], snapshot: Any
+) -> dict[int, float]:
+    oracle_probabilities: dict[int, float] = {}
+    for row in stage["top_20"]:
+        rider = live_riders.get(name_token_key(row["rider"]))
+        probability = float(row.get("cyclingoracle_win_probability_pct") or 0.0) / 100
+        if rider is not None and probability > 0:
+            oracle_probabilities[rider.team_id] = (
+                oracle_probabilities.get(rider.team_id, 0.0) + probability
+            )
+    probability_sum = sum(oracle_probabilities.values())
+    if probability_sum > 1.0:
+        return {
+            team_id: probability / probability_sum
+            for team_id, probability in oracle_probabilities.items()
+        }
+    if oracle_probabilities:
+        return oracle_probabilities
+
+    rider_win_scores = {
+        live_riders[key].rider_id: float(row.get("combined_score") or 0.0)
+        for row in stage["top_20"]
+        if (key := name_token_key(row["rider"])) in live_riders
+    }
+    if not any(score > 0 for score in rider_win_scores.values()):
+        return {}
+    return normalized_team_win_probabilities(snapshot, rider_win_scores)
 
 
 def score_saved_squads(
@@ -105,7 +152,13 @@ def score_saved_squads(
         ideal_points = [_rank_points(rank) for rank in range(1, LINEUP_SIZE + 1)]
         ideal_total = sum(ideal_points) + (snapshot.captain_factor - 1) * ideal_points[0]
         global_stage_ceiling += ideal_total
-        stage_rows.append((stage, rank_by_key, ideal_total))
+        team_win_probabilities = _team_win_probabilities(stage, live_riders, snapshot)
+        expected_team_points = expected_team_points_by_rider(
+            snapshot,
+            stage_order=int(stage["stage_no"]),
+            team_win_probabilities=team_win_probabilities,
+        )
+        stage_rows.append((stage, rank_by_key, ideal_total, expected_team_points))
 
     scored_teams = []
     for squad in squads:
@@ -134,32 +187,133 @@ def score_saved_squads(
         stage_total = 0.0
         top20_appearances = 0
         scoring_rider_stages = 0
-        for stage, rank_by_key, ideal_total in stage_rows:
+        for stage, rank_by_key, ideal_total, expected_team_points in stage_rows:
             candidates = []
             for saved_name, key in zip(squad["riders"], keys, strict=True):
                 rank = rank_by_key.get(key)
-                points = _rank_points(rank)
+                individual_points = _rank_points(rank)
                 canonical = projection_riders.get(key, {}).get("rider", saved_name)
-                candidates.append((points, rank or 999, canonical, key))
+                rider = live_riders.get(key)
+                team_points = (
+                    expected_team_points[rider.rider_id]
+                    if rider is not None
+                    else TeamPointProjection()
+                )
+                candidates.append(
+                    {
+                        "rider": canonical,
+                        "key": key,
+                        "rank": rank,
+                        "individual_points": individual_points,
+                        "classification_team_points": team_points.classification_points,
+                        "stage_win_team_points": team_points.stage_win_points,
+                        "expected_team_points": team_points.total,
+                        "expected_total_points": individual_points + team_points.total,
+                    }
+                )
                 if rank is not None:
                     top20_appearances += 1
-            candidates.sort(key=lambda row: (-row[0], row[1], row[2]))
+            individual_only = sorted(
+                candidates,
+                key=lambda row: (
+                    -row["individual_points"],
+                    row["rank"] or 999,
+                    row["rider"],
+                ),
+            )[:LINEUP_SIZE]
+            candidates.sort(
+                key=lambda row: (
+                    -row["expected_total_points"],
+                    -row["individual_points"],
+                    row["rank"] or 999,
+                    row["rider"],
+                )
+            )
             selected = candidates[:LINEUP_SIZE]
-            captain = selected[0]
-            total = sum(row[0] for row in selected)
-            total += (snapshot.captain_factor - 1) * captain[0]
+            individual_only_keys = {row["key"] for row in individual_only}
+            selected_keys = {row["key"] for row in selected}
+            replacements_in = [
+                row for row in selected if row["key"] not in individual_only_keys
+            ]
+            replacements_out = sorted(
+                (row for row in individual_only if row["key"] not in selected_keys),
+                key=lambda row: (
+                    row["individual_points"],
+                    row["rank"] or 999,
+                    row["rider"],
+                ),
+            )
+            captain = min(
+                selected,
+                key=lambda row: (
+                    -row["individual_points"],
+                    -row["expected_total_points"],
+                    row["rank"] or 999,
+                    row["rider"],
+                ),
+            )
+            individual_total = sum(row["individual_points"] for row in selected)
+            expected_team_total = sum(row["expected_team_points"] for row in selected)
+            captain_multiplier = snapshot.captain_factor - 1
+            individual_total += captain_multiplier * captain["individual_points"]
+            expected_team_total += captain_multiplier * captain["expected_team_points"]
+            total = individual_total + expected_team_total
             stage_total += total
-            scoring_rider_stages += sum(row[0] > 0 for row in selected)
+            scoring_rider_stages += sum(row["expected_total_points"] > 0 for row in selected)
             lineups.append(
                 {
                     "stage_no": int(stage["stage_no"]),
                     "profile_type": stage.get("profile_type"),
-                    "lineup": [row[2] for row in selected],
-                    "captain": captain[2],
-                    "captain_predicted_finish": None if captain[1] == 999 else captain[1],
-                    "scoring_riders": sum(row[0] > 0 for row in selected),
+                    "individual_only_lineup": [row["rider"] for row in individual_only],
+                    "individual_only_rider_points": [
+                        {
+                            key: round(value, 2) if isinstance(value, float) else value
+                            for key, value in row.items()
+                            if key != "key"
+                        }
+                        for row in individual_only
+                    ],
+                    "team_point_replacements": [
+                        {
+                            "in": {
+                                key: round(value, 2) if isinstance(value, float) else value
+                                for key, value in rider_in.items()
+                                if key != "key"
+                            },
+                            "out": {
+                                key: round(value, 2) if isinstance(value, float) else value
+                                for key, value in rider_out.items()
+                                if key != "key"
+                            },
+                        }
+                        for rider_in, rider_out in zip(
+                            replacements_in, replacements_out, strict=True
+                        )
+                    ],
+                    "lineup": [row["rider"] for row in selected],
+                    "captain": captain["rider"],
+                    "captain_predicted_finish": captain["rank"],
+                    "scoring_riders": sum(row["expected_total_points"] > 0 for row in selected),
+                    "projected_individual_points": round(individual_total, 2),
+                    "expected_team_points": round(expected_team_total, 2),
                     "projected_stage_points": round(total, 2),
                     "ideal_field_points": round(ideal_total, 2),
+                    "rider_points": [
+                        {
+                            key: round(value, 2) if isinstance(value, float) else value
+                            for key, value in row.items()
+                            if key != "key"
+                        }
+                        for row in selected
+                    ],
+                    "reserves": [
+                        {
+                            key: round(value, 2) if isinstance(value, float) else value
+                            for key, value in row.items()
+                            if key != "key"
+                        }
+                        for row in candidates[LINEUP_SIZE:]
+                    ],
                 }
             )
 
@@ -200,8 +354,9 @@ def score_saved_squads(
         "market_budget": snapshot.budget,
         "captain_factor": snapshot.captain_factor,
         "scoring_method": (
-            "Predicted top-20 rank mapped through the exact Scorito points table; "
-            "best nine per saved squad; highest projected scorer captained. Riders outside a stage top 20 score zero."
+            "Predicted top-20 rank mapped through the exact Scorito points table, plus "
+            "probability-weighted classification-team and winner-team points; best nine "
+            "per saved squad by expected total; highest individual stage scorer captained."
         ),
         "classification_method": (
             "Separate PCS projection classification/jersey estimate; unmatched prediction riders receive zero."

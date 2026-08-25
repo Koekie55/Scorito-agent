@@ -92,6 +92,54 @@ def test_expected_floor_replaces_weaker_ninth_rider_and_keeps_eligible_captain()
     assert lineup.captain_id == 1
     assert lineup.captain_id in lineup.rider_ids
 
+def test_expected_team_points_can_replace_both_eighth_and_ninth_riders() -> None:
+    snapshot = _snapshot()
+    extra_rider = Rider(
+        rider_id=11,
+        event_rider_id=11,
+        name="Rider 11",
+        team_id=14,
+        price=1_000_000,
+        role=6,
+        nationality="NL",
+        age=30,
+    )
+    snapshot.riders.append(extra_rider)
+    snapshot.__post_init__()
+    individual = {
+        1: 50.0,
+        2: 44.0,
+        3: 40.0,
+        4: 36.0,
+        5: 32.0,
+        6: 30.0,
+        7: 28.0,
+        8: 10.0,
+        9: 8.0,
+        10: 0.0,
+        11: 0.0,
+    }
+    projections = expected_team_points_by_rider(
+        snapshot,
+        stage_order=2,
+        team_win_probabilities={14: 0.2},
+        retention_probabilities={201: 1.0, 202: 1.0},
+    )
+    expected = {
+        rider_id: individual[rider_id] + projections[rider_id].total
+        for rider_id in individual
+    }
+
+    lineup = _objective_stage_lineup(
+        snapshot.stages[1],
+        list(individual),
+        expected,
+        captain_rank_scores=individual,
+        lineup_size=9,
+    )
+
+    assert set(lineup.rider_ids) == {*range(1, 8), 10, 11}
+    assert {8, 9}.isdisjoint(lineup.rider_ids)
 
 def test_expected_floor_does_not_replace_ninth_rider_above_threshold() -> None:
     snapshot = _snapshot()
