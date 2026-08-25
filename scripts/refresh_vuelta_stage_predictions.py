@@ -30,6 +30,10 @@ from scorito_agent.forum_opinion import (  # noqa: E402
     forum_signal_for_stage,
     load_forum_opinion,
 )
+from scorito_agent.tv2_axelgaard import (  # noqa: E402
+    stage_star_signals,
+    validated_weight,
+)
 from scripts.project_vuelta import _course_similarity  # noqa: E402
 
 DATA_DIR = ROOT / "data" / "scorito" / "vuelta2026"
@@ -38,6 +42,9 @@ EXPERT_PATH = DATA_DIR / "qk_expert_opinion.json"
 NEWS_PATH = ROOT / "data" / "rider_news" / "vuelta2026" / "latest.json"
 EXPERT_CHAT_PATH = DATA_DIR / "expert_chat_intel.json"
 FORUM_OPINION_PATH = DATA_DIR / "wielerflits_forum_opinion.json"
+TV2_PREVIEW_DIR = ROOT / "data" / "tv2_axelgaard" / "vuelta2026"
+TV2_VALIDATION_PATH = DATA_DIR / "tv2_axelgaard_validation.json"
+TV2_MAX_STARS = 5.0
 OUTPUT_JSON = DATA_DIR / "stage_top20_predictions.json"
 OUTPUT_CSV = DATA_DIR / "stage_top20_predictions.csv"
 TOP_N = 20
@@ -284,6 +291,50 @@ def _comparable_performance(
         field = max(0.30, float(field))
         values.append(recency * placing * field * similarity)
     return round(min(1.0, sum(sorted(values, reverse=True)[:6]) / 1.35), 4)
+
+
+def _comparable_gt_stages(
+    stage: dict[str, Any], rider: dict[str, Any], notes: dict[str, Any], limit: int = 2
+) -> list[dict[str, Any]]:
+    grand_tours = ("Tour de France", "Giro d'Italia", "Vuelta a España", "Vuelta a Espana")
+    compatible_profiles = {
+        "mountain": {"mountain"},
+        "hilly": {"hilly", "mountain"},
+        "flat": {"flat", "hilly"},
+        "itt": {"itt"},
+    }
+    target_profile = str(stage.get("profile_type") or "unknown")
+    ranked = []
+    for result in _result_rows(rider, str(stage.get("profile_type") or "unknown"), notes):
+        event = str(result.get("event") or "")
+        rank = result.get("rank")
+        year = int(result.get("year") or 0)
+        if not event.startswith(grand_tours) or not isinstance(rank, int) or rank <= 0:
+            continue
+        if year not in {2024, 2025, 2026}:
+            continue
+        if str(result.get("profile_type") or "unknown") not in compatible_profiles.get(
+            target_profile, {target_profile}
+        ):
+            continue
+        context = result.get("course_context") or {}
+        similarity = _course_similarity(result, stage)
+        recency = {2026: 1.0, 2025: 0.58, 2024: 0.32}[year]
+        placing = 1.0 / rank**0.55
+        field = max(0.30, float(result.get("field_strength") or 0.30))
+        ranked.append((similarity * recency * placing * field, {
+            "year": year, "event": event, "stage": result.get("race"),
+            "result_rank": rank,
+            "distance_km": result.get("distance_km") or context.get("distance_km"),
+            "vertical_meters": context.get("vertical_meters"),
+            "profile_score": context.get("profile_score"),
+            "gradient_final_km": context.get("gradient_final_km"),
+            "field_strength": round(field, 4),
+            "course_similarity": round(similarity, 4),
+            "source_url": result.get("source_url"),
+        }))
+    ranked.sort(key=lambda item: item[0], reverse=True)
+    return [row for _, row in ranked[:limit]]
 
 
 def _selective_result_score(rider: dict[str, Any]) -> float:
@@ -631,6 +682,8 @@ def build_stage_top20(
     expert_chat = _expert_chat_by_key()
     forum_opinion = load_forum_opinion(FORUM_OPINION_PATH)
     forum_riders = forum_opinion.get("riders", {})
+    tv2_stars_by_stage = stage_star_signals(TV2_PREVIEW_DIR)
+    tv2_weight, tv2_status = validated_weight(TV2_VALIDATION_PATH)
     for slug, rider in riders.items():
         rider["_expert_chat"] = expert_chat.get(_name_key(rider["rider"]), {})
         rider["_forum_opinion"] = forum_riders.get(slug, {})
@@ -655,6 +708,11 @@ def build_stage_top20(
 
         notes = notes_by_stage.get(str(stage_no), {})
         expert_weight, analysis_status = _stage_analysis_weight(stage, notes, expert_cap)
+        tv2_stars_by_key = tv2_stars_by_stage.get(stage_no, {})
+        tv2_stars_by_slug = {
+            slug: float(tv2_stars_by_key.get(_name_key(riders[slug]["rider"]), 0.0))
+            for slug in riders
+        }
         selectivity = _stage_selectivity(stage, notes)
         survival_scores = {
             slug: _sprint_survival_score(riders[slug]) for slug in riders
@@ -727,6 +785,8 @@ def build_stage_top20(
                 in {"official_source", "direct_interview"}
             ):
                 news_multiplier = 0.10
+            tv2_stars = tv2_stars_by_slug.get(slug, 0.0)
+            tv2_multiplier = 1.0 + tv2_weight * (tv2_stars / TV2_MAX_STARS)
             objective_score = (
                 pre_survival_score
                 * survival_factor
@@ -734,6 +794,7 @@ def build_stage_top20(
                 * hilly_attrition_factor
                 * conversion_factor
                 * news_multiplier
+                * tv2_multiplier
             )
             adjusted_score = objective_score * chat_multiplier
             scored.append(
@@ -814,12 +875,20 @@ def build_stage_top20(
                         1.0 + expert_weight * stage_expert_signal, 4
                     ),
                     "news_multiplier": news_multiplier,
+                    "tv2_axelgaard_stars": tv2_stars_by_slug.get(slug, 0.0),
+                    "tv2_axelgaard_weight": round(tv2_weight, 6),
+                    "tv2_axelgaard_multiplier": round(
+                        1.0 + tv2_weight * (tv2_stars_by_slug.get(slug, 0.0) / TV2_MAX_STARS), 6
+                    ),
                     "pcs_model_score": row.get("score"),
                     "expected_finish_band": row.get("expected_finish_band"),
                     "confidence": row.get("confidence"),
                     "uncertainty": row.get("uncertainty"),
                     "role_assumption": row.get("role_assumption"),
                     "evidence": row.get("evidence"),
+                    "pcs_comparable_gt_stages": _comparable_gt_stages(
+                        stage, riders[slug], notes
+                    ),
                     "news": {
                         key: news_row.get(key)
                         for key in ("impact", "verification", "decision_hint", "title", "url", "published_at")
@@ -836,6 +905,8 @@ def build_stage_top20(
                 "expert_weight": expert_weight,
                 "expert_status": analysis_status,
                 "stage_selectivity": selectivity,
+                "tv2_axelgaard_ranked_riders": int(sum(1 for v in tv2_stars_by_slug.values() if v)),
+                "tv2_axelgaard_status": tv2_status,
                 "top_20": predictions,
             }
         )
@@ -854,6 +925,10 @@ def build_stage_top20(
             "corrected handwritten analysis is bounded; expert chat and WielerFlits forum opinion are blended 70/30 into a separate 12% adjusted score "
             "that cannot change the objective rank, lineup, or captain; negative news "
             "from an official source or direct interview can reduce projections. "
+            "TV 2 Axelgaard star tiers scale the objective score, and so can move rank, "
+            "lineup and captain, but only when the preview predates the stage and the "
+            "bootstrap slope stays positive; the weight is derived from measured skill "
+            "on stages with credited Scorito points, never set by hand. "
             "Scorito rider ratings are excluded from ordering."
         ),
         "uncertainty": (

@@ -1,7 +1,8 @@
 param(
     [string]$ProjectRoot = (Split-Path -Parent $PSScriptRoot),
     [string]$PythonPath = "",
-    [string[]]$Recipients = @("quintenkoe@hotmail.com", "wouterjanson@hotmail.com"),
+    [string[]]$Recipients = @("quintenkoe@hotmail.com", "wouterjanson@gmail.com"),
+    [string]$SubjectPrefix = "",
     [switch]$UseExistingReport
 )
 
@@ -60,7 +61,7 @@ try {
     if (-not $mail.Recipients.ResolveAll()) {
         throw "Outlook could not resolve all email recipients."
     }
-    $mail.Subject = "[Scorito Vuelta] Stage $stageNumber personal and Hawktuah recommendations"
+    $mail.Subject = "$SubjectPrefix[Scorito Vuelta] Stage $stageNumber personal and Hawktuah recommendations"
     $mail.Body = Get-Content -Raw -Encoding UTF8 $markdownPath
     $mail.Send()
     "Email sent to: $($Recipients -join ', ')" | Add-Content -Encoding UTF8 $logPath
