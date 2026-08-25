@@ -23,12 +23,18 @@ DATA_DIR = ROOT / "data" / "scorito" / "vuelta2026"
 NEWS_PATH = ROOT / "data" / "rider_news" / "vuelta2026" / "latest.json"
 PREDICTIONS_PATH = DATA_DIR / "stage_top20_predictions.json"
 PROJECTION_PATH = DATA_DIR / "projected_recommendation.json"
-PERSONAL_PATH = DATA_DIR / "personal" / "teamselection.json"
-HAWKTUAH_PATH = DATA_DIR / "hawktuah_candidate_stage_plan.json"
+PERSONAL_PATH = DATA_DIR / "personal_team.json"
+HAWKTUAH_PATH = DATA_DIR / "hawktuah_team.json"
 CYCLINGORACLE_PATH = ROOT / "data" / "cyclingoracle" / "vuelta2026_predictions.jsonl"
 OUTPUT_JSON = DATA_DIR / "daily_stage_recommendation.json"
 OUTPUT_MARKDOWN = DATA_DIR / "daily_stage_recommendation.md"
-DEFAULT_RECIPIENTS = ("quintenkoe@hotmail.com", "wouterjanson@hotmail.com")
+DEFAULT_RECIPIENTS = ("quintenkoe@hotmail.com", "wouterjanson@gmail.com")
+# The recommendation must still go out if an external source or a report is unavailable.
+NON_BLOCKING_COMMANDS = {
+    "scripts/export_vuelta_race_book.py",
+    "scripts/fetch_tv2_axelgaard.py",
+    "scripts/validate_tv2_axelgaard.py",
+}
 
 
 def _load_json(path: Path) -> Any:
@@ -69,13 +75,20 @@ def _run_refresh_commands() -> None:
             str(CYCLINGORACLE_PATH),
         ],
         [sys.executable, "scripts/rider_news.py", "--force", "--external-data-root", str(ROOT)],
+        [sys.executable, "scripts/fetch_tv2_axelgaard.py"],
+        [sys.executable, "scripts/validate_tv2_axelgaard.py"],
         [sys.executable, "scripts/refresh_vuelta_stage_predictions.py"],
         [sys.executable, "scripts/analyze_my_vuelta_team.py"],
         [sys.executable, "scripts/export_vuelta_race_book.py"],
     )
     for command in commands:
         print(f"Running: {' '.join(command[1:])}")
-        subprocess.run(command, cwd=ROOT, check=True)
+        try:
+            subprocess.run(command, cwd=ROOT, check=True)
+        except subprocess.CalledProcessError:
+            if command[1] not in NON_BLOCKING_COMMANDS:
+                raise
+            print(f"Warning: {command[1]} failed; continuing with the daily recommendation.")
 
 
 def _apply_cyclingoracle_stage(
@@ -106,14 +119,21 @@ def _apply_cyclingoracle_stage(
             continue
         seen.add(key)
         prediction = dict(pcs_by_key.get(key, {}))
+        pcs_evidence = prediction.get("evidence")
+        objective_model_rank = prediction.get("predicted_finish")
+        pcs_model_rank = prediction.get("pcs_model_rank")
         prediction.update(
             {
                 "rider": prediction.get("rider", rider_name),
                 "rider_slug": prediction.get("rider_slug") or oracle_row.get("rider_slug"),
-                "evidence": (
+                "cyclingoracle_evidence": (
                     f"CyclingOracle stage {stage['stage_no']} rank; "
                     f"win probability {float(oracle_row.get('win_probability_pct') or 0):.2f}%."
                 ),
+                "evidence": pcs_evidence or "No PCS top-20 comparable-stage evidence.",
+                "pcs_evidence": pcs_evidence,
+                "objective_model_rank": objective_model_rank,
+                "pcs_model_rank": pcs_model_rank,
                 "confidence": "external_stage_prediction",
                 "uncertainty": "CyclingOracle win probability is a forecast, not a result guarantee.",
                 "prediction_source": "cyclingoracle",
@@ -142,28 +162,30 @@ def _apply_cyclingoracle_stage(
     }
 
 
-def _personal_squad(snapshot: Any) -> list[str]:
-    rider_ids = _content(_load_json(PERSONAL_PATH))
-    if not isinstance(rider_ids, list) or len(rider_ids) != 20 or len(set(rider_ids)) != 20:
-        raise RuntimeError("personal teamselection must contain exactly 20 unique riders")
-    riders = [snapshot.rider(int(rider_id)) for rider_id in rider_ids]
-    if any(rider is None for rider in riders):
-        raise RuntimeError("personal team contains a rider absent from the current market")
-    return [rider.name for rider in riders]
+def _personal_squad(path: Path = PERSONAL_PATH) -> list[str]:
+    riders = _load_json(path).get("riders")
+    if not isinstance(riders, list) or len(riders) != 20 or len(set(riders)) != 20:
+        raise RuntimeError("Personal team must contain exactly 20 unique riders")
+    return [str(name) for name in riders]
 
 
-def _saved_squads(snapshot: Any) -> list[dict[str, Any]]:
-    hawktuah_squad = _load_json(HAWKTUAH_PATH).get("squad")
-    if not isinstance(hawktuah_squad, list) or len(hawktuah_squad) != 20:
-        raise RuntimeError("Hawktuah plan must contain a 20-rider squad")
+def _hawktuah_squad(path: Path = HAWKTUAH_PATH) -> list[str]:
+    riders = _load_json(path).get("riders")
+    if not isinstance(riders, list) or len(riders) != 20 or len(set(riders)) != 20:
+        raise RuntimeError("Hawktuah team must contain exactly 20 unique riders")
+    return [str(name) for name in riders]
+
+
+def _saved_squads() -> list[dict[str, Any]]:
+    hawktuah_squad = _hawktuah_squad()
     return [
         {
             "team": "Personal",
             "sources": [str(PERSONAL_PATH.relative_to(ROOT))],
-            "riders": _personal_squad(snapshot),
+            "riders": _personal_squad(),
         },
         {
-            "team": "Hawktuah comparison (different squad)",
+            "team": "Hawktuah / locked AI squad",
             "sources": [str(HAWKTUAH_PATH.relative_to(ROOT))],
             "riders": [str(name) for name in hawktuah_squad],
         },
@@ -195,19 +217,27 @@ def _team_stage_report(
     team: dict[str, Any], stage: dict[str, Any], lineup: dict[str, Any]
 ) -> dict[str, Any]:
     predictions = {name_token_key(str(row["rider"])): row for row in stage["top_20"]}
-    selected_keys = {name_token_key(name) for name in lineup["lineup"]}
+    lineup_points = {
+        name_token_key(str(row["rider"])): row for row in lineup["rider_points"]
+    }
     riders = []
     for name in lineup["lineup"]:
         row = predictions.get(name_token_key(name))
+        points = lineup_points[name_token_key(name)]
         riders.append(
             {
                 "rider": name,
                 "predicted_finish": int(row["predicted_finish"]) if row else None,
-                "projected_points": int(row["scorito_stage_points"]) if row else 0,
+                "individual_projected_points": points["individual_points"],
+                "classification_team_points": points["classification_team_points"],
+                "stage_win_team_points": points["stage_win_team_points"],
+                "expected_team_points": points["expected_team_points"],
+                "projected_points": points["expected_total_points"],
                 "point_route": (
-                    f"Projected #{row['predicted_finish']} stage finish for "
-                    f"{row['scorito_stage_points']} Scorito points."
-                    if row else "Outside the projected top 20; selected after stronger squad options were exhausted."
+                    f"{points['individual_points']:.0f} finish + "
+                    f"{points['classification_team_points']:.2f} expected classification-team + "
+                    f"{points['stage_win_team_points']:.2f} expected winner-team = "
+                    f"{points['expected_total_points']:.2f} expected points."
                 ),
                 "evidence": _short(row.get("evidence")) if row else "No projected stage placing.",
                 "confidence": row.get("confidence") if row else None,
@@ -216,17 +246,7 @@ def _team_stage_report(
             }
         )
 
-    squad_keys = {name_token_key(name): name for name in team["riders"]}
-    excluded = [
-        {
-            "rider": squad_keys[name_token_key(str(row["rider"]))],
-            "predicted_finish": int(row["predicted_finish"]),
-            "projected_points": int(row["scorito_stage_points"]),
-        }
-        for row in stage["top_20"]
-        if name_token_key(str(row["rider"])) in squad_keys
-        and name_token_key(str(row["rider"])) not in selected_keys
-    ]
+    excluded = lineup["reserves"]
     return {
         "team": team["team"],
         "squad_sources": team["sources"],
@@ -234,11 +254,16 @@ def _team_stage_report(
         "current_price": team["current_price"],
         "budget_remaining": team["budget_remaining"],
         "max_trade_team_count": team["max_trade_team_count"],
+        "individual_only_lineup": lineup["individual_only_lineup"],
+        "individual_only_rider_points": lineup["individual_only_rider_points"],
+        "team_point_replacements": lineup["team_point_replacements"],
         "lineup": lineup["lineup"],
         "captain": lineup["captain"],
+        "projected_individual_points": lineup["projected_individual_points"],
+        "expected_team_points": lineup["expected_team_points"],
         "projected_stage_points": lineup["projected_stage_points"],
         "riders": riders,
-        "captain_rationale": "Highest objective projected stage score among the selected nine.",
+        "captain_rationale": "Highest individual projected stage score among the selected nine.",
         "main_excluded_alternative": excluded[0] if excluded else None,
     }
 
@@ -269,7 +294,7 @@ def build_report(*, archive_prediction: bool = True) -> dict[str, Any]:
             "archived_at": archive["archived_at"],
             "created": created,
         }
-    scored = score_saved_squads(predictions, projection, _saved_squads(snapshot), snapshot)
+    scored = score_saved_squads(predictions, projection, _saved_squads(), snapshot)
     team_reports = []
     for team in scored["teams"]:
         lineup = next(row for row in team["lineups"] if int(row["stage_no"]) == target_stage_no)
@@ -287,6 +312,7 @@ def build_report(*, archive_prediction: bool = True) -> dict[str, Any]:
             "stage_no", "date", "departure", "arrival", "distance_km", "profile_type",
             "finish_type", "vertical_meters", "gradient_final_km", "source_url"
         )},
+        "stage_top_20": stage["top_20"],
         "teams": team_reports,
         "sources": {
             "market_snapshot_time": source_data.get("market_snapshot_time"),
@@ -306,8 +332,8 @@ def build_report(*, archive_prediction: bool = True) -> dict[str, Any]:
         "uncertainty": predictions.get("uncertainty"),
         "data_gaps": [
             "Breakaway composition, late weather, crashes and tactical changes remain uncertain.",
-            "Team bonuses are conditional upside and do not determine the selected nine or captain.",
-            "Hawktuah ownership remains based on the saved plan until authenticated league access is restored.",
+            "Expected team points determine the selected nine; captain choice remains based on individual stage points.",
+            "Both 20-rider squads are fixed ownership records; refreshed predictions only select the daily nine.",
         ],
     }
 
@@ -321,21 +347,74 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"{stage.get('departure')} to {stage.get('arrival')}, {stage.get('distance_km')} km, "
         f"{stage.get('profile_type')} / {stage.get('finish_type')}.",
         f"Completed stages: {', '.join(map(str, report['completed_stages'])) or 'none'}.", "",
+        "## Overall top 20", "",
     ]
+    for prediction in report.get("stage_top_20", []):
+        objective_rank = prediction.get("objective_model_rank")
+        objective_text = (
+            f"objective stage rank {objective_rank}"
+            if objective_rank else "outside objective stage top 20"
+        )
+        pcs_rank = prediction.get("pcs_model_rank")
+        pcs_text = f"PCS source rank {pcs_rank}" if pcs_rank else "no PCS source rank"
+        oracle_probability = prediction.get("cyclingoracle_win_probability_pct")
+        oracle_text = (
+            f"CyclingOracle {float(oracle_probability):.2f}% win"
+            if oracle_probability is not None else "PCS fallback"
+        )
+        lines.append(
+            f"{prediction['predicted_finish']}. **{prediction['rider']}**: "
+            f"{objective_text}; {pcs_text}; {oracle_text}; "
+            f"PCS score {prediction.get('pcs_model_score', 'n/a')}."
+        )
+        for comparable in prediction.get("pcs_comparable_gt_stages", []):
+            lines.append(
+                f"   - PCS comparable: {comparable['year']} {comparable['event']}, "
+                f"{comparable['stage']}, result {comparable['result_rank']}; "
+                f"{comparable.get('distance_km')} km, {comparable.get('vertical_meters')} vm, "
+                f"ProfileScore {comparable.get('profile_score')}, "
+                f"similarity {comparable.get('course_similarity')}."
+            )
+    lines.append("")
     for team in report["teams"]:
         lines.extend([
             f"## {team['team']}", "",
-            f"Captain: **{team['captain']}**. Projected enrolled points: {team['projected_stage_points']:.0f}.",
+            f"Captain: **{team['captain']}**. Projected enrolled points: {team['projected_stage_points']:.2f} "
+            f"({team['projected_individual_points']:.2f} individual + "
+            f"{team['expected_team_points']:.2f} expected team points).",
             f"Legality: {'PASS' if team['legal_current_market'] else 'FAIL'}; price {team['current_price']:,}; "
             f"budget left {team['budget_remaining']:,}; team cap {team['max_trade_team_count']}/4.", "",
+            "### First nine by individual stage prediction", "",
         ])
+        for index, rider in enumerate(team["individual_only_rider_points"], start=1):
+            lines.append(
+                f"{index}. **{rider['rider']}**: "
+                f"{rider['individual_points']:.0f} individual projected points."
+            )
+        lines.extend(["", "### Replacements after expected team points", ""])
+        if team["team_point_replacements"]:
+            for replacement in team["team_point_replacements"]:
+                rider_in = replacement["in"]
+                rider_out = replacement["out"]
+                lines.append(
+                    f"- **IN {rider_in['rider']}**: {rider_in['individual_points']:.0f} individual + "
+                    f"{rider_in['expected_team_points']:.2f} expected team = "
+                    f"{rider_in['expected_total_points']:.2f}; "
+                    f"**OUT {rider_out['rider']}**: {rider_out['individual_points']:.0f} individual + "
+                    f"{rider_out['expected_team_points']:.2f} expected team = "
+                    f"{rider_out['expected_total_points']:.2f}."
+                )
+        else:
+            lines.append("- No replacements. Expected team points do not change the individual-only nine.")
+        lines.extend(["", "### Final nine after expected team points", ""])
         for index, rider in enumerate(team["riders"], start=1):
             captain = " (C)" if rider["rider"] == team["captain"] else ""
             lines.append(f"{index}. **{rider['rider']}**{captain}: {rider['point_route']} {rider['evidence']}")
         alternative = team["main_excluded_alternative"]
         alternative_text = (
-            f"{alternative['rider']} (projected #{alternative['predicted_finish']}, "
-            f"{alternative['projected_points']} points)."
+            f"{alternative['rider']} ({alternative['individual_points']:.0f} individual + "
+            f"{alternative['expected_team_points']:.2f} expected team = "
+            f"{alternative['expected_total_points']:.2f})."
             if alternative else "No squad rider outside the nine has a projected top-20 finish."
         )
         lines.extend(["", f"Main excluded alternative: {alternative_text}", ""])
