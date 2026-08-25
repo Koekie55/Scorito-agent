@@ -94,20 +94,35 @@ def _archive_next_stage(data_dir: Path, current_stage_no: int) -> None:
     )
 
 def _render_message(report: dict[str, Any]) -> str:
-    return "\n".join(
-        (
-            f"{report['race']} stage {report['stage_no']} predictability: "
-            f"{report['predictability_pct']:.2f}%",
-            f"Top-20 matches: {report['matched_riders']}/20 "
-            f"({report['overlap_pct']:.2f}%).",
-            f"Rank accuracy: {report['rank_accuracy_pct']:.2f}% "
-            f"(matched-rider MAE {report['mean_absolute_rank_error_matched']}).",
-            "Formula: 50% top-20 overlap + 50% rank accuracy; each matched rider's "
-            "rank credit is 1 - |predicted rank - actual rank| / 19, and misses score zero.",
-            f"Prediction archived: {report['prediction_archived_at']}",
-            f"Evaluation generated: {report['evaluated_at']}",
+    lines = [
+        f"{report['race']} stage {report['stage_no']} predictability: "
+        f"{report['predictability_pct']:.2f}%",
+        f"Top-20 matches: {report['matched_riders']}/20 "
+        f"({report['overlap_pct']:.2f}%).",
+        f"Rank accuracy: {report['rank_accuracy_pct']:.2f}% "
+        f"(matched-rider MAE {report['mean_absolute_rank_error_matched']}).",
+        "Formula: 50% top-20 overlap + 50% rank accuracy; each matched rider's "
+        "rank credit is 1 - |predicted rank - actual rank| / 19, and misses score zero.",
+    ]
+    misses = report.get("predicted_misses") or []
+    surprises = report.get("unpredicted_finishers") or []
+    if misses:
+        names = ", ".join(
+            f"{row['rider']} (pred #{row['predicted_finish']})" for row in misses
         )
-    )
+        lines.append(f"Predicted but missed top 20 ({len(misses)}): {names}.")
+    if surprises:
+        names = ", ".join(
+            f"{row['rider']} (actual #{row['actual_finish']})" for row in surprises
+        )
+        lines.append(f"Finished top 20 unpredicted ({len(surprises)}): {names}.")
+    if report.get("model_improvement_analysis"):
+        lines.append(f"Where the model fell short: {report['model_improvement_analysis']}")
+    if report.get("pr_status"):
+        lines.append(f"PR status: {report['pr_status']}")
+    lines.append(f"Prediction archived: {report['prediction_archived_at']}")
+    lines.append(f"Evaluation generated: {report['evaluated_at']}")
+    return "\n".join(lines)
 
 
 def main(argv: list[str] | None = None) -> int:

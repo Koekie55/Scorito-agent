@@ -239,6 +239,15 @@ def evaluate_stage_archive(
         ),
         key=lambda row: row["actual_finish"],
     )
+    predicted_ids = {int(row["rider_id"]) for row in archive["top_20"]}
+    actual_ids = {row["rider_id"] for row in actual_top_20}
+    predicted_misses = sorted(
+        (row for row in archive["top_20"] if int(row["rider_id"]) not in actual_ids),
+        key=lambda row: row["predicted_finish"],
+    )
+    unpredicted_finishers = [
+        row for row in actual_top_20 if row["rider_id"] not in predicted_ids
+    ]
     timestamp = evaluated_at or datetime.now().astimezone()
     return {
         "schema_version": 1,
@@ -262,6 +271,8 @@ def evaluate_stage_archive(
         **score,
         "predicted_top_20": archive["top_20"],
         "actual_top_20": actual_top_20,
+        "predicted_misses": predicted_misses,
+        "unpredicted_finishers": unpredicted_finishers,
     }
 
 
