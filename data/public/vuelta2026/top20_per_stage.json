@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "forward_projection",
-  "generated_at": "2026-08-23T19:24:12.133780+00:00",
+  "generated_at": "2026-08-23T20:42:27.024080+00:00",
   "race": "Vuelta a Espana 2026",
   "known_pcs_participants": 184,
   "prediction_count_per_stage": 20,
@@ -34,15 +34,15 @@
     "projection_model_version": "pcs-scorito-evidence-v5",
     "pcs_startlist": "https://www.procyclingstats.com/race/vuelta-a-espana/2026/startlist",
     "expert_generated_at": "2026-08-18T12:00:00+02:00",
-    "news_generated_at": "2026-08-23T18:58:10.660245+00:00",
+    "news_generated_at": "2026-08-23T20:40:15.111568+00:00",
     "forum_generated_at": "2026-08-21T12:00:00+00:00",
     "forum_opinion_share": 0.3,
     "opinion_max_adjustment": 0.12,
-    "market_snapshot_time": "2026-08-23T18:57:56.614022+00:00",
+    "market_snapshot_time": "2026-08-23T20:40:04.340008+00:00",
     "input_hashes": {
       "projection": "808be47b63dd31979f2c6858c84953eb2fc47127f7341ef5bb179c3e9ed95941",
       "expert": "6170a8c5444afb2755c126eb431a2ca1bf20fe510c18fb17fcf9a7f596a744cc",
-      "news": "33c91f953b77e06bb50ae2388178f265e08b11dac7d738e4e9f293a5a3739e39",
+      "news": "7497f0681e350543cd42d6295a502e8ef3c34291a06aebdf433f856aeb514f6f",
       "forum_opinion": "a1b54db57061dc731887496230fa6ffa1eddfa92cd95c53f959572405260d698"
     }
   },
@@ -409,10 +409,10 @@
           "news": {
             "impact": "positive",
             "verification": "corroborated_reports",
-            "decision_hint": "lineup_context_only",
-            "title": "Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 - FloBikes",
-            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOcXJERHNUNmtmeGs0UXNkMHlCVkEzdnJ4RlNXVVlMaE1ucUQ0QXRTT3BpU1lfbG56S1I5ckNJZkVBYU1MMWpRazRqRjFtU3JhVlRLSDU0anJVeVB0MGs3cjkwZG5fN01fQlVGQzVNTnFBWDNyRklmRVYwU3haWEJ1S3hydmlFM3dUTkdzR2d4ZWVJN0c0bzJDOUUtUmdYWFFHbTQtNTdIbXBlZ3hZ?oc=5",
-            "published_at": "2026-08-23T18:06:30+00:00"
+            "decision_hint": "monitor_only_no_automatic_upgrade",
+            "title": "'It was quite planned' - Van Aert plays his part as Visma's plan delivers Brennan Vuelta victory",
+            "url": "https://www.domestiquecycling.com/en/news/van-aert-plays-his-part-as-vismas-plan-delivers-brennan-vuelta-victory/",
+            "published_at": "2026-08-23T16:10:00+00:00"
           },
           "news_rank_adjustment": 0
         },
@@ -1604,10 +1604,10 @@
           "news": {
             "impact": "positive",
             "verification": "corroborated_reports",
-            "decision_hint": "lineup_context_only",
-            "title": "Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 - FloBikes",
-            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOcXJERHNUNmtmeGs0UXNkMHlCVkEzdnJ4RlNXVVlMaE1ucUQ0QXRTT3BpU1lfbG56S1I5ckNJZkVBYU1MMWpRazRqRjFtU3JhVlRLSDU0anJVeVB0MGs3cjkwZG5fN01fQlVGQzVNTnFBWDNyRklmRVYwU3haWEJ1S3hydmlFM3dUTkdzR2d4ZWVJN0c0bzJDOUUtUmdYWFFHbTQtNTdIbXBlZ3hZ?oc=5",
-            "published_at": "2026-08-23T18:06:30+00:00"
+            "decision_hint": "monitor_only_no_automatic_upgrade",
+            "title": "'It was quite planned' - Van Aert plays his part as Visma's plan delivers Brennan Vuelta victory",
+            "url": "https://www.domestiquecycling.com/en/news/van-aert-plays-his-part-as-vismas-plan-delivers-brennan-vuelta-victory/",
+            "published_at": "2026-08-23T16:10:00+00:00"
           },
           "news_rank_adjustment": 0
         },
@@ -4364,10 +4364,10 @@
           "news": {
             "impact": "positive",
             "verification": "corroborated_reports",
-            "decision_hint": "lineup_context_only",
-            "title": "Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 - FloBikes",
-            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOcXJERHNUNmtmeGs0UXNkMHlCVkEzdnJ4RlNXVVlMaE1ucUQ0QXRTT3BpU1lfbG56S1I5ckNJZkVBYU1MMWpRazRqRjFtU3JhVlRLSDU0anJVeVB0MGs3cjkwZG5fN01fQlVGQzVNTnFBWDNyRklmRVYwU3haWEJ1S3hydmlFM3dUTkdzR2d4ZWVJN0c0bzJDOUUtUmdYWFFHbTQtNTdIbXBlZ3hZ?oc=5",
-            "published_at": "2026-08-23T18:06:30+00:00"
+            "decision_hint": "monitor_only_no_automatic_upgrade",
+            "title": "'It was quite planned' - Van Aert plays his part as Visma's plan delivers Brennan Vuelta victory",
+            "url": "https://www.domestiquecycling.com/en/news/van-aert-plays-his-part-as-vismas-plan-delivers-brennan-vuelta-victory/",
+            "published_at": "2026-08-23T16:10:00+00:00"
           },
           "news_rank_adjustment": 0
         },
@@ -6855,10 +6855,10 @@
           "news": {
             "impact": "positive",
             "verification": "corroborated_reports",
-            "decision_hint": "lineup_context_only",
-            "title": "Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 - FloBikes",
-            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOcXJERHNUNmtmeGs0UXNkMHlCVkEzdnJ4RlNXVVlMaE1ucUQ0QXRTT3BpU1lfbG56S1I5ckNJZkVBYU1MMWpRazRqRjFtU3JhVlRLSDU0anJVeVB0MGs3cjkwZG5fN01fQlVGQzVNTnFBWDNyRklmRVYwU3haWEJ1S3hydmlFM3dUTkdzR2d4ZWVJN0c0bzJDOUUtUmdYWFFHbTQtNTdIbXBlZ3hZ?oc=5",
-            "published_at": "2026-08-23T18:06:30+00:00"
+            "decision_hint": "monitor_only_no_automatic_upgrade",
+            "title": "'It was quite planned' - Van Aert plays his part as Visma's plan delivers Brennan Vuelta victory",
+            "url": "https://www.domestiquecycling.com/en/news/van-aert-plays-his-part-as-vismas-plan-delivers-brennan-vuelta-victory/",
+            "published_at": "2026-08-23T16:10:00+00:00"
           },
           "news_rank_adjustment": 0
         },
@@ -8706,10 +8706,10 @@
           "news": {
             "impact": "positive",
             "verification": "corroborated_reports",
-            "decision_hint": "lineup_context_only",
-            "title": "Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 - FloBikes",
-            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOcXJERHNUNmtmeGs0UXNkMHlCVkEzdnJ4RlNXVVlMaE1ucUQ0QXRTT3BpU1lfbG56S1I5ckNJZkVBYU1MMWpRazRqRjFtU3JhVlRLSDU0anJVeVB0MGs3cjkwZG5fN01fQlVGQzVNTnFBWDNyRklmRVYwU3haWEJ1S3hydmlFM3dUTkdzR2d4ZWVJN0c0bzJDOUUtUmdYWFFHbTQtNTdIbXBlZ3hZ?oc=5",
-            "published_at": "2026-08-23T18:06:30+00:00"
+            "decision_hint": "monitor_only_no_automatic_upgrade",
+            "title": "'It was quite planned' - Van Aert plays his part as Visma's plan delivers Brennan Vuelta victory",
+            "url": "https://www.domestiquecycling.com/en/news/van-aert-plays-his-part-as-vismas-plan-delivers-brennan-vuelta-victory/",
+            "published_at": "2026-08-23T16:10:00+00:00"
           },
           "news_rank_adjustment": 0
         },
@@ -9677,10 +9677,10 @@
           "news": {
             "impact": "positive",
             "verification": "corroborated_reports",
-            "decision_hint": "lineup_context_only",
-            "title": "Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 - FloBikes",
-            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOcXJERHNUNmtmeGs0UXNkMHlCVkEzdnJ4RlNXVVlMaE1ucUQ0QXRTT3BpU1lfbG56S1I5ckNJZkVBYU1MMWpRazRqRjFtU3JhVlRLSDU0anJVeVB0MGs3cjkwZG5fN01fQlVGQzVNTnFBWDNyRklmRVYwU3haWEJ1S3hydmlFM3dUTkdzR2d4ZWVJN0c0bzJDOUUtUmdYWFFHbTQtNTdIbXBlZ3hZ?oc=5",
-            "published_at": "2026-08-23T18:06:30+00:00"
+            "decision_hint": "monitor_only_no_automatic_upgrade",
+            "title": "'It was quite planned' - Van Aert plays his part as Visma's plan delivers Brennan Vuelta victory",
+            "url": "https://www.domestiquecycling.com/en/news/van-aert-plays-his-part-as-vismas-plan-delivers-brennan-vuelta-victory/",
+            "published_at": "2026-08-23T16:10:00+00:00"
           },
           "news_rank_adjustment": 0
         },
@@ -13523,10 +13523,10 @@
           "news": {
             "impact": "positive",
             "verification": "corroborated_reports",
-            "decision_hint": "lineup_context_only",
-            "title": "Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 - FloBikes",
-            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOcXJERHNUNmtmeGs0UXNkMHlCVkEzdnJ4RlNXVVlMaE1ucUQ0QXRTT3BpU1lfbG56S1I5ckNJZkVBYU1MMWpRazRqRjFtU3JhVlRLSDU0anJVeVB0MGs3cjkwZG5fN01fQlVGQzVNTnFBWDNyRklmRVYwU3haWEJ1S3hydmlFM3dUTkdzR2d4ZWVJN0c0bzJDOUUtUmdYWFFHbTQtNTdIbXBlZ3hZ?oc=5",
-            "published_at": "2026-08-23T18:06:30+00:00"
+            "decision_hint": "monitor_only_no_automatic_upgrade",
+            "title": "'It was quite planned' - Van Aert plays his part as Visma's plan delivers Brennan Vuelta victory",
+            "url": "https://www.domestiquecycling.com/en/news/van-aert-plays-his-part-as-vismas-plan-delivers-brennan-vuelta-victory/",
+            "published_at": "2026-08-23T16:10:00+00:00"
           },
           "news_rank_adjustment": 0
         },
@@ -14419,10 +14419,10 @@
           "news": {
             "impact": "positive",
             "verification": "corroborated_reports",
-            "decision_hint": "lineup_context_only",
-            "title": "Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 - FloBikes",
-            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOcXJERHNUNmtmeGs0UXNkMHlCVkEzdnJ4RlNXVVlMaE1ucUQ0QXRTT3BpU1lfbG56S1I5ckNJZkVBYU1MMWpRazRqRjFtU3JhVlRLSDU0anJVeVB0MGs3cjkwZG5fN01fQlVGQzVNTnFBWDNyRklmRVYwU3haWEJ1S3hydmlFM3dUTkdzR2d4ZWVJN0c0bzJDOUUtUmdYWFFHbTQtNTdIbXBlZ3hZ?oc=5",
-            "published_at": "2026-08-23T18:06:30+00:00"
+            "decision_hint": "monitor_only_no_automatic_upgrade",
+            "title": "'It was quite planned' - Van Aert plays his part as Visma's plan delivers Brennan Vuelta victory",
+            "url": "https://www.domestiquecycling.com/en/news/van-aert-plays-his-part-as-vismas-plan-delivers-brennan-vuelta-victory/",
+            "published_at": "2026-08-23T16:10:00+00:00"
           },
           "news_rank_adjustment": 0
         },
@@ -15655,10 +15655,10 @@
           "news": {
             "impact": "positive",
             "verification": "corroborated_reports",
-            "decision_hint": "lineup_context_only",
-            "title": "Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 - FloBikes",
-            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOcXJERHNUNmtmeGs0UXNkMHlCVkEzdnJ4RlNXVVlMaE1ucUQ0QXRTT3BpU1lfbG56S1I5ckNJZkVBYU1MMWpRazRqRjFtU3JhVlRLSDU0anJVeVB0MGs3cjkwZG5fN01fQlVGQzVNTnFBWDNyRklmRVYwU3haWEJ1S3hydmlFM3dUTkdzR2d4ZWVJN0c0bzJDOUUtUmdYWFFHbTQtNTdIbXBlZ3hZ?oc=5",
-            "published_at": "2026-08-23T18:06:30+00:00"
+            "decision_hint": "monitor_only_no_automatic_upgrade",
+            "title": "'It was quite planned' - Van Aert plays his part as Visma's plan delivers Brennan Vuelta victory",
+            "url": "https://www.domestiquecycling.com/en/news/van-aert-plays-his-part-as-vismas-plan-delivers-brennan-vuelta-victory/",
+            "published_at": "2026-08-23T16:10:00+00:00"
           },
           "news_rank_adjustment": 0
         },
