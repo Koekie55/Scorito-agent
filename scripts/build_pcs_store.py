@@ -4,8 +4,8 @@ For every finished Scorito stage we have local results for (tdf2026, giro2026),
 build a PCS-style stage record and upsert it into ``data/pcs/stages.json``.
 
 The record maps Scorito enums onto the predictor's tokens so the offline
-similarity model (``scorito_agent.pcs.predict``) can be leave-one-out validated
-without any live ProCyclingStats access:
+similarity model (``scorito_agent.pcs.predict``) can be evaluated with the
+pre-race cross-race holdout without any live ProCyclingStats access:
 
   profile_type  <- terrain_type (1 Flat->"flat", 2 Hilly->"hilly",
                    3 Mountain->"mountain"), overridden to "itt"/"ttt" when the
