@@ -94,20 +94,35 @@ def _archive_next_stage(data_dir: Path, current_stage_no: int) -> None:
     )
 
 def _render_message(report: dict[str, Any]) -> str:
-    return "\n".join(
-        (
-            f"{report['race']} stage {report['stage_no']} predictability: "
-            f"{report['predictability_pct']:.2f}%",
-            f"Top-20 matches: {report['matched_riders']}/20 "
-            f"({report['overlap_pct']:.2f}%).",
-            f"Rank accuracy: {report['rank_accuracy_pct']:.2f}% "
-            f"(matched-rider MAE {report['mean_absolute_rank_error_matched']}).",
-            "Formula: 50% top-20 overlap + 50% rank accuracy; each matched rider's "
-            "rank credit is 1 - |predicted rank - actual rank| / 19, and misses score zero.",
-            f"Prediction archived: {report['prediction_archived_at']}",
-            f"Evaluation generated: {report['evaluated_at']}",
+    lines = [
+        f"{report['race']} stage {report['stage_no']} predictability: "
+        f"{report['predictability_pct']:.2f}%",
+        f"Top-20 matches: {report['matched_riders']}/20 "
+        f"({report['overlap_pct']:.2f}%).",
+        f"Rank accuracy: {report['rank_accuracy_pct']:.2f}% "
+        f"(matched-rider MAE {report['mean_absolute_rank_error_matched']}).",
+        "Formula: 50% top-20 overlap + 50% rank accuracy; each matched rider's "
+        "rank credit is 1 - |predicted rank - actual rank| / 19, and misses score zero.",
+    ]
+    misses = report.get("predicted_misses") or []
+    surprises = report.get("unpredicted_finishers") or []
+    if misses:
+        names = ", ".join(
+            f"{row['rider']} (pred #{row['predicted_finish']})" for row in misses
         )
-    )
+        lines.append(f"Predicted but missed top 20 ({len(misses)}): {names}.")
+    if surprises:
+        names = ", ".join(
+            f"{row['rider']} (actual #{row['actual_finish']})" for row in surprises
+        )
+        lines.append(f"Finished top 20 unpredicted ({len(surprises)}): {names}.")
+    if report.get("model_improvement_analysis"):
+        lines.append(f"Where the model fell short: {report['model_improvement_analysis']}")
+    if report.get("pr_status"):
+        lines.append(f"PR status: {report['pr_status']}")
+    lines.append(f"Prediction archived: {report['prediction_archived_at']}")
+    lines.append(f"Evaluation generated: {report['evaluated_at']}")
+    return "\n".join(lines)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -183,7 +198,12 @@ def main(argv: list[str] | None = None) -> int:
     if not args.send_teams_if_configured:
         return 0
     load_env_file(args.env_file)
-    teams_config = TeamsGraphConfig.from_environment()
+    try:
+        teams_config = TeamsGraphConfig.from_environment()
+    except ValueError as exc:
+        # An incomplete Teams config must not fail an already-successful evaluation.
+        print(f"TEAMS NOT SENT: {exc}; outbox retained.", file=sys.stderr)
+        return 0
     if teams_config is None:
         print(
             "TEAMS NOT SENT: configure SCORITO_TEAMS_ACCESS_TOKEN and "
@@ -194,7 +214,11 @@ def main(argv: list[str] | None = None) -> int:
     if delivery_path.exists():
         print(f"Teams already delivered: {delivery_path}")
         return 0
-    message_id = send_to_teams_self_chat(teams_config, message)
+    try:
+        message_id = send_to_teams_self_chat(teams_config, message)
+    except Exception as exc:  # noqa: BLE001 - any auth/Graph failure must not fail the evaluation
+        print(f"TEAMS NOT SENT: {exc}; outbox retained for the next retry.", file=sys.stderr)
+        return 0
     write_evaluation_once(
         delivery_path,
         {

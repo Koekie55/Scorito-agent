@@ -176,4 +176,35 @@ def test_calendar_gate_and_evaluation_are_auditable(tmp_path) -> None:
     assert len(report["result_source_sha256"]) == 64
     assert created is True
     assert created_again is False
-    assert saved == report
+    assert saved == report
+
+
+def test_evaluation_lists_predicted_misses_and_unpredicted_finishers(tmp_path) -> None:
+    _market_files(tmp_path)
+    predictions_path = _predictions(tmp_path, range(1, 21))
+    archive_path, _, _ = archive_pre_stage_prediction(
+        tmp_path,
+        predictions_path,
+        1,
+        now=datetime(2026, 8, 22, 10, 0),
+    )
+    result_path = tmp_path / "stageresult_rider_2820.json"
+    _write(
+        result_path,
+        {
+            "Content": [
+                {"RiderId": rider_id, "Rank": rank}
+                for rank, rider_id in enumerate([*range(1, 11), *range(21, 31)], start=1)
+            ]
+        },
+    )
+
+    report = evaluate_stage_archive(
+        archive_path,
+        result_path,
+        tmp_path / "eventriderenriched.json",
+        evaluated_at=datetime(2026, 8, 22, 18, 15),
+    )
+
+    assert [row["rider_id"] for row in report["predicted_misses"]] == list(range(11, 21))
+    assert [row["rider_id"] for row in report["unpredicted_finishers"]] == list(range(21, 31))
