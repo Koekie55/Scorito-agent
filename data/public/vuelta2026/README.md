@@ -1,7 +1,7 @@
 # Vuelta 2026 public verification snapshot
 
 This directory is a credential-free export of the model state used on
-2026-08-23T19:24:12.133780+00:00. All values are forward projections, not race results.
+2026-08-23T20:42:27.024080+00:00. All values are forward projections, not race results.
 
 ## Files
 

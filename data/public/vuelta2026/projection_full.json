@@ -2,7 +2,7 @@
   "schema_version": 4,
   "model_version": "pcs-scorito-evidence-v5",
   "status": "evidence_projection",
-  "generated_at": "2026-08-23T19:23:48.539602+00:00",
+  "generated_at": "2026-08-23T20:42:24.127433+00:00",
   "market_id": 310,
   "budget": 45000000,
   "squad_size": 20,
@@ -35,7 +35,7 @@
     "age_trajectory": "modest continuous modifier; never a name or age exclusion",
     "tactics": "provisional-team profile hierarchy only; no declarations available",
     "availability": "no named exclusion; objective unavailable riders require cited evidence",
-    "validation": "42-stage leave-one-out PCS model: macro Spearman 0.5403, top-10 hit rate 0.4333"
+    "validation": "21-stage PCS model (pre-race cross-race holdout; all completed prior Grand Tours; exact rider_slug matching): macro Spearman 0.3224, top-10 hit rate 0.0571"
   },
   "price_overrides": {
     "tadej-pogacar": 8500000,
