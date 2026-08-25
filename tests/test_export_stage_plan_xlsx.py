@@ -47,6 +47,7 @@ def test_export_uses_current_forward_stages_and_totals(tmp_path: Path) -> None:
         "stageresult_rider_2822.json",
     ):
         (tmp_path / name).write_bytes((source_dir / name).read_bytes())
+    _write(tmp_path / "stageresult_rider_2822.json", {"Content": []})
     output = tmp_path / "stage-plan.xlsx"
 
     export_workbook(

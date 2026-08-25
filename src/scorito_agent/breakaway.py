@@ -96,7 +96,7 @@ def summit_breakaway_rider_factor(
 
     Two opposing mechanisms are modelled and reported separately: KOM ambition
     raises break-entry frequency (``entry_attempt_factor`` > 1), while a
-    compressed-GC stage lowers the marked rider''s permission on top of the lower
+    compressed-GC stage lowers the marked rider's permission on top of the lower
     baseline survival (``marking_factor`` < 1, ``space_ratio`` < 1). Only the
     break-dependent share of value is affected, and the net factor is capped at
     1.0 so a summit prior can never inflate a rider.
