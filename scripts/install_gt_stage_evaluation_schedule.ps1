@@ -24,12 +24,18 @@ if (-not (Test-Path $PythonPath)) {
 }
 
 $powerShellPath = (Get-Command powershell.exe -ErrorAction Stop).Source
-$arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$runner`" -ProjectRoot `"$ProjectRoot`" -PythonPath `"$PythonPath`""
-$action = New-ScheduledTaskAction -Execute $powerShellPath -Argument $arguments -WorkingDirectory $ProjectRoot
+$wscriptPath = (Get-Command wscript.exe -ErrorAction Stop).Source
+$hiddenLauncher = Join-Path $ProjectRoot "scripts\run-hidden.vbs"
+if (-not (Test-Path $hiddenLauncher)) {
+    throw "Hidden launcher not found: $hiddenLauncher"
+}
+$psCommand = "`"$powerShellPath`" -NoProfile -ExecutionPolicy Bypass -File `"$runner`" -ProjectRoot `"$ProjectRoot`" -PythonPath `"$PythonPath`""
+$arguments = "`"$hiddenLauncher`" $psCommand"
+$action = New-ScheduledTaskAction -Execute $wscriptPath -Argument $arguments -WorkingDirectory $ProjectRoot
 $trigger = New-ScheduledTaskTrigger -Daily -At "18:15"
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Minutes 45) -RestartCount 4 -RestartInterval (New-TimeSpan -Minutes 15)
 $userId = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 $principal = New-ScheduledTaskPrincipal -UserId $userId -LogonType Interactive -RunLevel Limited
 $task = New-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Description "At 18:15 local time, evaluate saved Grand Tour stages; the Python calendar gate skips rest and non-race days."
 Register-ScheduledTask -TaskName $TaskName -InputObject $task -Force | Out-Null
-Write-Output "Installed '$TaskName' daily at 18:15 local time with four 15-minute result retries."
+Write-Output "Installed '$TaskName' daily at 18:15 local time with four 15-minute result retries."
