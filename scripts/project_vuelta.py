@@ -900,10 +900,6 @@ def _stage_signal_components(
         survival_probability = float(
             stage.get("breakaway_survival_probability") or 0.0
         )
-        rider_factor = summit_breakaway_rider_factor(
-            {"probability": survival_probability, "global_rate": baseline_probability},
-            gc_strength=gc,
-            climb_strength=climb,
         gc_percentile = _field_percentile(signals, "gc", slug)
         tt_percentile = _field_percentile(signals, "tt", slug)
         # A rider is only a GC-defence threat teams must control if they can both
@@ -927,10 +923,6 @@ def _stage_signal_components(
             "breakaway_survival_probability_delta": (
                 survival_probability - baseline_probability
             ),
-            "breakaway_rider_factor": rider_factor["factor"],
-            "breakaway_break_dependence": rider_factor["break_dependence"],
-            "breakaway_kom_entry_factor": rider_factor["entry_attempt_factor"],
-            "breakaway_kom_marking_factor": rider_factor["marking_factor"],
             "breakaway_gc_percentile": gc_percentile,
             "breakaway_tt_percentile": tt_percentile,
             "breakaway_gc_strength": gc_strength,
