@@ -1,7 +1,9 @@
 from pathlib import Path
+import json
 
 import pytest
 
+import scripts.project_vuelta as project_vuelta
 from scorito_agent.expert_chat import apply_signal
 from scripts.recommend_vuelta_live import (
     _blended_quality_ratings,
@@ -18,7 +20,28 @@ from scripts.project_vuelta import (
     _course_similarity,
     _field_strength,
     _gradual_quality_ratings,
+    _validation_summary,
 )
+
+
+
+def test_validation_summary_rejects_filtered_artifact(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    validation_path = tmp_path / "data" / "pcs" / "pcs_validation.json"
+    validation_path.parent.mkdir(parents=True)
+    validation_path.write_text(
+        json.dumps({
+            "race_filter": "tdf2026",
+            "protocol_version": 2,
+            "evaluation_mode": "pre-race cross-race holdout",
+        }),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(project_vuelta, "ROOT", tmp_path)
+
+    with pytest.raises(RuntimeError, match="not the canonical"):
+        _validation_summary()
 
 
 def test_field_strength_uses_exact_field_quality_and_size() -> None:
