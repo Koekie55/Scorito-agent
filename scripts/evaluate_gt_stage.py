@@ -198,7 +198,12 @@ def main(argv: list[str] | None = None) -> int:
     if not args.send_teams_if_configured:
         return 0
     load_env_file(args.env_file)
-    teams_config = TeamsGraphConfig.from_environment()
+    try:
+        teams_config = TeamsGraphConfig.from_environment()
+    except ValueError as exc:
+        # An incomplete Teams config must not fail an already-successful evaluation.
+        print(f"TEAMS NOT SENT: {exc}; outbox retained.", file=sys.stderr)
+        return 0
     if teams_config is None:
         print(
             "TEAMS NOT SENT: configure SCORITO_TEAMS_ACCESS_TOKEN and "
@@ -209,7 +214,11 @@ def main(argv: list[str] | None = None) -> int:
     if delivery_path.exists():
         print(f"Teams already delivered: {delivery_path}")
         return 0
-    message_id = send_to_teams_self_chat(teams_config, message)
+    try:
+        message_id = send_to_teams_self_chat(teams_config, message)
+    except Exception as exc:  # noqa: BLE001 - any auth/Graph failure must not fail the evaluation
+        print(f"TEAMS NOT SENT: {exc}; outbox retained for the next retry.", file=sys.stderr)
+        return 0
     write_evaluation_once(
         delivery_path,
         {
