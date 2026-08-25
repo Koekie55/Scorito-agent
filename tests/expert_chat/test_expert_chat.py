@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from dataclasses import replace
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 
 import pytest
+
+from scripts.ingest_expert_chat import _within_dates
 
 from scorito_agent.expert_chat import (
     ChatMessage,
@@ -104,6 +106,22 @@ def test_parse_structured_export_keeps_colon_lines_in_message_body() -> None:
         "Sprint: Milan\n"
         "Vine: useful on this profile"
     )
+
+
+def test_ingestion_date_window_keeps_historical_race_messages_only() -> None:
+    messages = parse_export(
+        "[27/10/2019, 18:42:11] Analyst: Pinot was strong in the Tour\n"
+        "[13/08/2020, 09:02:43] Analyst: New season advice"
+    )
+
+    selected = _within_dates(
+        messages,
+        from_date=date(2019, 7, 5),
+        through_date=date(2019, 10, 27),
+    )
+
+    assert len(selected) == 1
+    assert selected[0].timestamp == datetime(2019, 10, 27, 18, 42, 11, tzinfo=UTC)
 
 
 def test_parse_structured_export_accepts_empty_decorated_smiley_header() -> None:
@@ -207,6 +225,20 @@ def test_nearby_same_author_url_sets_provenance_and_evidence_tier(tmp_path) -> N
     assert pcs_note.source_message_ids
     assert official_note.evidence_tier is EvidenceTier.T1
     assert official_note.speaker_factor == 1.0
+
+
+def test_scorito_voucher_is_not_provenance_for_adjacent_health_question(tmp_path) -> None:
+    export = """\
+[13/08/2026, 21:14:19] Analyst: Voucher time
+https://mobile.scorito.com/gameinfo/310?voucherId=example
+[13/08/2026, 21:14:56] Analyst: Wat zegt de data over Wout van Aert? Is die weer fit?
+"""
+
+    store = _import(tmp_path, export, now=datetime(2026, 8, 13, 22, tzinfo=UTC))
+    note = store.notes[0]
+
+    assert note.sources == ()
+    assert note.evidence_tier is EvidenceTier.T4
 
 
 def test_correction_supersedes_prior_claim_and_links_provenance(tmp_path) -> None:
