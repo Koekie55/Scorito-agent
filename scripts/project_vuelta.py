@@ -25,7 +25,10 @@ if hasattr(sys.stdout, "reconfigure"):
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from scorito_agent.breakaway import historical_breakaway_prior  # noqa: E402
+from scorito_agent.breakaway import (  # noqa: E402
+    historical_breakaway_prior,
+    summit_breakaway_rider_factor,
+)
 from scorito_agent.pcs.fetcher import (  # noqa: E402
     PCS_BASE_URL,
     fetch_race_startlist,
@@ -874,12 +877,22 @@ def _stage_signal_components(
         survival_probability = float(
             stage.get("breakaway_survival_probability") or 0.0
         )
+        rider_factor = summit_breakaway_rider_factor(
+            {"probability": survival_probability, "global_rate": baseline_probability},
+            gc_strength=gc,
+            climb_strength=climb,
+        )
+        score = base_score * rider_factor["factor"]
         breakaway = {
             "breakaway_survival_baseline_probability": baseline_probability,
             "breakaway_survival_probability": survival_probability,
             "breakaway_survival_probability_delta": (
                 survival_probability - baseline_probability
             ),
+            "breakaway_rider_factor": rider_factor["factor"],
+            "breakaway_break_dependence": rider_factor["break_dependence"],
+            "breakaway_kom_entry_factor": rider_factor["entry_attempt_factor"],
+            "breakaway_kom_marking_factor": rider_factor["marking_factor"],
         }
     confidence = min(
         0.92,
