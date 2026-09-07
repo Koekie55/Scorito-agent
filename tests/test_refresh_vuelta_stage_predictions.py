@@ -8,6 +8,7 @@ from scripts.refresh_vuelta_stage_predictions import (
     _sprint_survival_score,
     _survival_factor,
     build_stage_top20,
+    gc_bunch_credibility,
 )
 
 
@@ -307,6 +308,49 @@ def _reduced_sprint_stage() -> dict:
 
 def _reduced_sprint_notes() -> dict:
     return {"type": "Sprint / Hilly", "rider_signals": {}}
+
+
+def test_gc_leader_survives_the_stage_that_motivated_this_gate() -> None:
+    """Vuelta 2026 stage 2: hilly/uphill, top 25 tied on time, Pogacar 3rd.
+
+    A GC leader with no sprint-survival evidence of their own must clear the
+    stage's survival penalty on gc_bunch_credibility alone, exactly as a real
+    sprint survivor would -- and must not get any such help on a genuine
+    mountain summit or ITT, where the mechanism is not eligible.
+    """
+    stage = _reduced_sprint_stage()
+    gc_leader = {
+        "signals": {"gc": 0.0, "climb": 0.0},
+        "recent_evidence": {"profile_strength": {"hilly": 1.6116}},
+    }
+    selectivity = _stage_selectivity(stage, _reduced_sprint_notes())
+    own_survival = _sprint_survival_score(gc_leader)
+    credibility = gc_bunch_credibility(stage, gc_leader)
+    effective_survival = max(own_survival, credibility)
+
+    assert own_survival < 0.30  # no sprint pedigree of their own
+    assert credibility == 1.0
+    assert _survival_factor(selectivity, effective_survival) == 1.0
+    assert _hilly_attrition_factor(stage, _reduced_sprint_notes(), effective_survival) == 1.0
+    # Without the gate, the same rider would have been suppressed like any sprinter.
+    assert _survival_factor(selectivity, own_survival) < 1.0
+
+
+def test_gc_bunch_credibility_does_not_help_on_a_mountain_summit_or_itt() -> None:
+    gc_leader = {
+        "signals": {"gc": 0.9, "climb": 0.9},
+        "recent_evidence": {"profile_strength": {"hilly": 1.6}},
+    }
+    mountain_summit = {
+        "profile_type": "mountain",
+        "finish_type": "summit",
+        "vertical_meters": 4500,
+        "gradient_final_km": 8.0,
+    }
+    itt = {"profile_type": "itt", "finish_type": "tt", "vertical_meters": 100, "gradient_final_km": 0.0}
+
+    assert gc_bunch_credibility(mountain_summit, gc_leader) == 0.0
+    assert gc_bunch_credibility(itt, gc_leader) == 0.0
 
 
 def test_conversion_factor_reports_reason_for_every_branch() -> None:

@@ -34,6 +34,7 @@ from scorito_agent.tv2_axelgaard import (  # noqa: E402
     stage_star_signals,
     validated_weight,
 )
+from scorito_agent.gc_bunch_mingling import gc_bunch_credibility  # noqa: E402
 from scripts.project_vuelta import _course_similarity  # noqa: E402
 
 DATA_DIR = ROOT / "data" / "scorito" / "vuelta2026"
@@ -750,11 +751,13 @@ def build_stage_top20(
                 + expert_weight * expert_score
             )
             survival = survival_scores[slug]
-            survival_factor = _survival_factor(selectivity, survival)
+            gc_credibility = gc_bunch_credibility(stage, riders[slug])
+            effective_survival = max(survival, gc_credibility)
+            survival_factor = _survival_factor(selectivity, effective_survival)
             mountain_factor, mountain_credibility = _mountain_finish_factor(
                 stage, riders[slug]
             )
-            hilly_attrition_factor = _hilly_attrition_factor(stage, notes, survival)
+            hilly_attrition_factor = _hilly_attrition_factor(stage, notes, effective_survival)
             stage_expert_signal = float(
                 notes.get("rider_signals", {}).get(slug, 0.0) or 0.0
             )
@@ -804,6 +807,7 @@ def build_stage_top20(
                     row,
                     news_row,
                     survival,
+                    gc_credibility,
                     survival_factor,
                     mountain_credibility,
                     mountain_factor,
@@ -826,6 +830,7 @@ def build_stage_top20(
             row,
             news_row,
             survival,
+            gc_credibility,
             survival_factor,
             mountain_credibility,
             mountain_factor,
@@ -856,6 +861,7 @@ def build_stage_top20(
                     "selective_result_score": _selective_result_score(riders[slug]),
                     "fast_finish_score": _fast_finish_score(stage, riders[slug]),
                     "sprint_survival_factor": round(survival_factor, 4),
+                    "gc_bunch_credibility": gc_credibility,
                     "mountain_credibility": mountain_credibility,
                     "mountain_finish_factor": mountain_factor,
                     "hilly_attrition_factor": hilly_attrition_factor,
@@ -929,6 +935,15 @@ def build_stage_top20(
             "lineup and captain, but only when the preview predates the stage and the "
             "bootstrap slope stays positive; the weight is derived from measured skill "
             "on stages with credited Scorito points, never set by hand. "
+            "On a hilly, uphill finish below a 6.0%/km final-km gradient "
+            "and within a 1200-3500m vertical band, a rider whose PCS GC/climb "
+            "ranking or recent hilly-profile strength is stronger than their own "
+            "sprint-survival score is scored with that stronger value instead, "
+            "because pure sprint-survival evidence has no path for a GC leader "
+            "contesting a reduced bunch for bonus seconds; grounded in "
+            "data/historical/gt_hilly_bunch_mingling_labels.csv (53 real "
+            "2024-2026 Grand Tour stages), where stages at or above that "
+            "gradient never kept a front group of 10+ finishers. "
             "Scorito rider ratings are excluded from ordering."
         ),
         "uncertainty": (
