@@ -34,10 +34,14 @@ from scorito_agent.tv2_axelgaard import (  # noqa: E402
     stage_star_signals,
     validated_weight,
 )
+from scorito_agent.gc_bunch_mingling import gc_bunch_credibility  # noqa: E402
 from scripts.project_vuelta import _course_similarity  # noqa: E402
 
 DATA_DIR = ROOT / "data" / "scorito" / "vuelta2026"
 PROJECTION_PATH = DATA_DIR / "projected_recommendation.json"
+DROPOUTS_PATH = DATA_DIR / "dropouts.json"
+MARKET_RIDERS_PATH = DATA_DIR / "eventriderenriched.json"
+ROUND_STAGE_PATH = DATA_DIR / "marketroundstage.json"
 EXPERT_PATH = DATA_DIR / "qk_expert_opinion.json"
 NEWS_PATH = ROOT / "data" / "rider_news" / "vuelta2026" / "latest.json"
 EXPERT_CHAT_PATH = DATA_DIR / "expert_chat_intel.json"
@@ -92,6 +96,49 @@ def _sha256(path: Path) -> str | None:
     if not path.exists():
         return None
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _market_content(payload: Any) -> Any:
+    return payload.get("Content", payload) if isinstance(payload, dict) else payload
+
+
+def _unavailable_from_stage(riders: dict[str, dict[str, Any]]) -> dict[str, int]:
+    """Map a rider slug to the first stage the rider can no longer score in.
+
+    The PCS start list stays provisional all race, so abandons are only visible in
+    the live Scorito market. A rider who abandons during stage N still raced it.
+    """
+    market = _market_content(_load_json(MARKET_RIDERS_PATH, required=False))
+    if not isinstance(market, list) or not market:
+        return {}
+    slug_by_key = {_name_key(row["rider"]): slug for slug, row in riders.items()}
+
+    rounds = _market_content(_load_json(ROUND_STAGE_PATH, required=False))
+    stage_order = (
+        {int(row["StageId"]): int(row["StageOrder"]) for row in rounds}
+        if isinstance(rounds, list)
+        else {}
+    )
+
+    drops = _market_content(_load_json(DROPOUTS_PATH, required=False))
+    dropped_from: dict[int, int] = {}
+    if isinstance(drops, list):
+        for row in drops:
+            abandoned_on = stage_order.get(int(row.get("StageId") or 0), 0)
+            dropped_from[int(row["RiderId"])] = abandoned_on + 1
+
+    unavailable: dict[str, int] = {}
+    for row in market:
+        name = f"{row.get('FirstName', '')} {row.get('LastName', '')}".strip()
+        slug = slug_by_key.get(_name_key(name))
+        if slug is None:
+            continue
+        rider_id = int(row["RiderId"])
+        if rider_id in dropped_from:
+            unavailable[slug] = dropped_from[rider_id]
+        elif int(row.get("Status", 1) or 0) != 1:
+            unavailable[slug] = 1
+    return unavailable
 
 
 def _projection_slugs(projection: dict[str, Any]) -> set[str]:
@@ -689,6 +736,7 @@ def build_stage_top20(
         rider["_forum_opinion"] = forum_riders.get(slug, {})
     if len(riders) != len(participants):
         raise RuntimeError("projection contains duplicate rider slugs")
+    unavailable_from = _unavailable_from_stage(riders)
 
     stages = {int(row["stage_no"]): row for row in projection.get("stages", [])}
     rankings = projection.get("stage_rankings", {})
@@ -739,6 +787,8 @@ def build_stage_top20(
         scored = []
         for row in rows:
             slug = str(row["rider_slug"])
+            if stage_no >= unavailable_from.get(slug, 22):
+                continue
             pcs_score = normalized_base[slug]
             outcome_score = outcome_scores[slug] / maximum_outcome
             expert_score = expert_scores[slug] / maximum_expert
@@ -750,11 +800,13 @@ def build_stage_top20(
                 + expert_weight * expert_score
             )
             survival = survival_scores[slug]
-            survival_factor = _survival_factor(selectivity, survival)
+            gc_credibility = gc_bunch_credibility(stage, riders[slug])
+            effective_survival = max(survival, gc_credibility)
+            survival_factor = _survival_factor(selectivity, effective_survival)
             mountain_factor, mountain_credibility = _mountain_finish_factor(
                 stage, riders[slug]
             )
-            hilly_attrition_factor = _hilly_attrition_factor(stage, notes, survival)
+            hilly_attrition_factor = _hilly_attrition_factor(stage, notes, effective_survival)
             stage_expert_signal = float(
                 notes.get("rider_signals", {}).get(slug, 0.0) or 0.0
             )
@@ -804,6 +856,7 @@ def build_stage_top20(
                     row,
                     news_row,
                     survival,
+                    gc_credibility,
                     survival_factor,
                     mountain_credibility,
                     mountain_factor,
@@ -826,6 +879,7 @@ def build_stage_top20(
             row,
             news_row,
             survival,
+            gc_credibility,
             survival_factor,
             mountain_credibility,
             mountain_factor,
@@ -856,6 +910,7 @@ def build_stage_top20(
                     "selective_result_score": _selective_result_score(riders[slug]),
                     "fast_finish_score": _fast_finish_score(stage, riders[slug]),
                     "sprint_survival_factor": round(survival_factor, 4),
+                    "gc_bunch_credibility": gc_credibility,
                     "mountain_credibility": mountain_credibility,
                     "mountain_finish_factor": mountain_factor,
                     "hilly_attrition_factor": hilly_attrition_factor,
@@ -917,6 +972,7 @@ def build_stage_top20(
         "generated_at": datetime.now(UTC).isoformat(),
         "race": "Vuelta a Espana 2026",
         "known_pcs_participants": len(riders),
+        "unavailable_riders_excluded": len(unavailable_from),
         "prediction_count_per_stage": TOP_N,
         "stage_points_by_finish": SCORITO_STAGE_POINTS,
         "method": (
@@ -929,6 +985,18 @@ def build_stage_top20(
             "lineup and captain, but only when the preview predates the stage and the "
             "bootstrap slope stays positive; the weight is derived from measured skill "
             "on stages with credited Scorito points, never set by hand. "
+            "Riders the live Scorito market reports as abandoned or non-starting are "
+            "dropped from every stage after the one they left, because the PCS start "
+            "list stays provisional and never records an in-race abandon. "
+            "On a hilly, uphill finish below a 6.0%/km final-km gradient "
+            "and within a 1200-3500m vertical band, a rider whose PCS GC/climb "
+            "ranking or recent hilly-profile strength is stronger than their own "
+            "sprint-survival score is scored with that stronger value instead, "
+            "because pure sprint-survival evidence has no path for a GC leader "
+            "contesting a reduced bunch for bonus seconds; grounded in "
+            "data/historical/gt_hilly_bunch_mingling_labels.csv (53 real "
+            "2024-2026 Grand Tour stages), where stages at or above that "
+            "gradient never kept a front group of 10+ finishers. "
             "Scorito rider ratings are excluded from ordering."
         ),
         "uncertainty": (
@@ -952,6 +1020,8 @@ def build_stage_top20(
                 "expert": _sha256(EXPERT_PATH),
                 "news": _sha256(NEWS_PATH),
                 "forum_opinion": _sha256(FORUM_OPINION_PATH),
+                "dropouts": _sha256(DROPOUTS_PATH),
+                "market_riders": _sha256(MARKET_RIDERS_PATH),
             },
         },
         "stages": output_stages,
@@ -1022,12 +1092,22 @@ def refresh(*, check_pcs: bool, force_model_refresh: bool) -> dict[str, Any]:
         live_startlist = parse_startlist(
             fetch_race_startlist("vuelta-a-espana", 2026, cache=False)
         )
+        from scripts.project_vuelta import completed_stage_numbers
+
         added, removed = _startlist_change(projection, live_startlist)
-        if added or removed or force_model_refresh:
-            print(
-                f"PCS startlist changed: {len(added)} added, {len(removed)} removed; "
-                "rebuilding the full projection"
+        built_with = projection.get("completed_stages_at_build")
+        new_results = (
+            set(completed_stage_numbers()) - set(built_with)
+            if isinstance(built_with, list) else set()
+        )
+        stale_build = built_with is None or bool(new_results)
+        if added or removed or force_model_refresh or stale_build:
+            reason = (
+                f"PCS startlist changed: {len(added)} added, {len(removed)} removed"
+                if added or removed
+                else f"new stage results since build: {sorted(new_results) or 'unknown'}"
             )
+            print(f"{reason}; rebuilding the full projection")
             from scripts.project_vuelta import main as rebuild_projection
 
             rebuild_projection()

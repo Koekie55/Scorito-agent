@@ -63,6 +63,7 @@ def _parse_riders(raw: list[dict]) -> list[Rider]:
                 nationality=r.get("NationalityCode", "") or "",
                 age=r.get("Age"),
                 qualities=qualities,
+                status=int(r.get("Status", 1) or 0),
             )
         )
     return riders

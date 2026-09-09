@@ -1,0 +1,81 @@
+Vuelta 2026 model prediction analysis - all 21 stages
+
+Model: pcs-scorito-evidence-v5 | projection built 2026-08-27T07:01:12Z
+Completed stages: 1, 2, 3, 4, 5
+Analysis generated: 2026-08-27T07:17:00Z
+
+HEADLINE ACCURACY
+  Audited pre-stage predictions (stages 3, 4): mean predictability 28.82%, mean top-20 overlap 6.5/20
+  All scored stages (2, 3, 4): mean predictability 32.42%, mean overlap 7.33/20
+  Formula: 50% top-20 overlap + 50% rank accuracy; unmatched riders score zero.
+
+PER-STAGE DETAIL (completed)
+  Stage 1 (2026-08-22, itt/tt):
+    NO immutable pre-stage archive exists; this stage cannot be scored.
+
+  Stage 2 (2026-08-23, hilly/uphill):
+    predictability 39.61% | overlap 9/20 | rank accuracy 34.21%
+    archive status: NOT AUDITED - archive created after stage start (archived 2026-08-24T14:11:48)
+    predicted but missed top 20: Kaden Groves (pred #2), Andreas Leknessund (pred #7), Christophe Laporte (pred #8), Ben Turner (pred #9), Fredrik Dversnes Lavik (pred #11), Wout van Aert (pred #12)
+    finished top 20 unpredicted: Pau Miquel (#2), Tadej Pogačar (#3), Hugo Hofstetter (#5), Tobias Halland Johannessen (#6), Finn Fisher-Black (#7), Oscar Onley (#9)
+
+  Stage 3 (2026-08-24, mountain/summit):
+    predictability 17.11% | overlap 4/20 | rank accuracy 14.21%
+    archive status: AUDITED pre-stage archive (archived 2026-08-23T21:34:39)
+    predicted but missed top 20: GALL Felix (pred #2), CARAPAZ Richard (pred #3), JOHANNESSEN Tobias Halland (pred #4), KUSS Sepp (pred #5), SKJELMOSE Mattias (pred #6), RICCITELLO Matthew (pred #8)
+    finished top 20 unpredicted: Finn Fisher-Black (#2), Jordi Meeus (#3), Gianni Moscon (#4), Callum Thornley (#5), Luke Tuckwell (#6), Gianni Vermeersch (#7)
+
+  Stage 4 (2026-08-25, mountain/flat):
+    predictability 40.53% | overlap 9/20 | rank accuracy 36.05%
+    archive status: AUDITED pre-stage archive (archived 2026-08-24T13:11:57)
+    predicted but missed top 20: JOHANNESSEN Tobias Halland (pred #4), ALMEIDA João (pred #7), RICCITELLO Matthew (pred #8), FORTUNATO Lorenzo (pred #11), PARET-PEINTRE Valentin (pred #12), CASTRILLO Pablo (pred #13)
+    finished top 20 unpredicted: Jarno Widar (#2), Gregor Mühlberger (#10), Jay Vine (#11), Ramses Debruyne (#12), Pablo Torres (#14), Marco Brenner (#15)
+
+  Stage 5 (2026-08-26, hilly/flat):
+    NO immutable pre-stage archive exists; this stage cannot be scored.
+
+FORWARD PREDICTIONS (remaining stages)
+  Stage 6 (2026-08-27, hilly/flat) [pre-stage archive locked]: POGAČAR Tadej, CARAPAZ Richard, GALL Felix, PEDERSEN Mads, TULETT Ben
+  Stage 7 (2026-08-28, mountain/summit): POGAČAR Tadej, GALL Felix, CARAPAZ Richard, JOHANNESSEN Tobias Halland, KUSS Sepp
+  Stage 8 (2026-08-29, hilly/flat): PEDERSEN Mads, BRENNAN Matthew, TULETT Ben, LEKNESSUND Andreas, GARCÍA PIERNA Raúl
+  Stage 9 (2026-08-30, mountain/summit): POGAČAR Tadej, GALL Felix, CARAPAZ Richard, JOHANNESSEN Tobias Halland, KUSS Sepp
+  Stage 10 (2026-09-01, hilly/uphill): PEDERSEN Mads, BRENNAN Matthew, TULETT Ben, GARCÍA PIERNA Raúl, LEKNESSUND Andreas
+  Stage 11 (2026-09-02, hilly/flat): PEDERSEN Mads, BRENNAN Matthew, TULETT Ben, LEKNESSUND Andreas, GARCÍA PIERNA Raúl
+  Stage 12 (2026-09-03, mountain/summit): POGAČAR Tadej, GALL Felix, CARAPAZ Richard, JOHANNESSEN Tobias Halland, KUSS Sepp
+  Stage 13 (2026-09-04, hilly/flat): POGAČAR Tadej, CARAPAZ Richard, GALL Felix, JOHANNESSEN Tobias Halland, TULETT Ben
+  Stage 14 (2026-09-05, mountain/summit): POGAČAR Tadej, GALL Felix, CARAPAZ Richard, JOHANNESSEN Tobias Halland, KUSS Sepp
+  Stage 15 (2026-09-06, hilly/flat): PEDERSEN Mads, BRENNAN Matthew, TULETT Ben, LEKNESSUND Andreas, GARCÍA PIERNA Raúl
+  Stage 16 (2026-09-08, flat/sprint): MEEUS Jordi, VAN AERT Wout, PEDERSEN Mads, POGAČAR Tadej, BRENNAN Matthew
+  Stage 17 (2026-09-09, flat/sprint): MEEUS Jordi, VAN AERT Wout, PEDERSEN Mads, POGAČAR Tadej, BRENNAN Matthew
+  Stage 18 (2026-09-10, itt/tt): POGAČAR Tadej, TARLING Joshua, HAYTER Ethan, FISHER-BLACK Finn, OLIVEIRA Ivo
+  Stage 19 (2026-09-11, hilly/uphill): POGAČAR Tadej, CARAPAZ Richard, GALL Felix, JOHANNESSEN Tobias Halland, TULETT Ben
+  Stage 20 (2026-09-12, mountain/summit): POGAČAR Tadej, GALL Felix, CARAPAZ Richard, JOHANNESSEN Tobias Halland, KUSS Sepp
+  Stage 21 (2026-09-13, hilly/flat): PEDERSEN Mads, BRENNAN Matthew, TULETT Ben, GARCÍA PIERNA Raúl, LEKNESSUND Andreas
+
+MODEL CHANGES THIS WEEK AND THEIR VALIDATION
+  1. Hilly specialty reweighted: classic 0.39->0.30, climb 0.23->0.32.
+  2. Declared team roles now override the inferred within-team hierarchy.
+  3. PCS-unranked riders receive an evidence-backed specialty floor (0.18 x profile strength)
+     instead of scoring zero when absent from PCS ranking pages.
+  4. The projection now rebuilds when new stage results arrive, not only on startlist changes.
+  Validation on stage 5 (Romele and Gonzalez, both declared lead sprinters):
+     Gonzalez: raw model rank 51 -> 32; predicted 18th; ACTUAL FINISH 9th.
+     Romele:   raw model rank 78 -> 42; still outside top 20; ACTUAL FINISH 4th.
+     The changes are directionally correct but still under-rate PCS-unranked sprinters.
+
+DATA INTEGRITY AND GAPS
+  - Stages 1 and 5 have NO immutable pre-stage archive, so they cannot be scored.
+    Stage 5 was generated after its 11:34 start, so archiving was correctly refused.
+  - The stage 2 archive was created 2026-08-24 14:11, about 28 hours AFTER that stage
+    started, and carries no source-prediction timestamp. Its 39.61% is therefore not a
+    clean pre-stage measure and is excluded from the audited average.
+  - Stage 6 has a valid locked archive and will be scored once results are published.
+    That archive was locked from the 2026-08-26 build, so it will be scored against the
+    pre-correction model. It holds the same 20 riders as the current build, in a slightly
+    different order.
+  - Sample is small (2 audited stages); treat the averages as provisional.
+
+UNCERTAINTY
+  Predicted places are model estimates. Breakaways, tactics, weather, crashes and team
+  orders can change them. This analysis is reporting only; no Scorito team or stage
+  enrollment was edited or submitted.

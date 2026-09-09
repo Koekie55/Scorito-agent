@@ -190,10 +190,12 @@ def score_saved_squads(
         for stage, rank_by_key, ideal_total, expected_team_points in stage_rows:
             candidates = []
             for saved_name, key in zip(squad["riders"], keys, strict=True):
+                rider = live_riders.get(key)
+                if rider is not None and getattr(rider, "status", 1) != 1:
+                    continue
                 rank = rank_by_key.get(key)
                 individual_points = _rank_points(rank)
                 canonical = projection_riders.get(key, {}).get("rider", saved_name)
-                rider = live_riders.get(key)
                 team_points = (
                     expected_team_points[rider.rider_id]
                     if rider is not None

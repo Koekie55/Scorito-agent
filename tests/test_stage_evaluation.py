@@ -4,12 +4,34 @@ from datetime import datetime
 import pytest
 
 from scorito_agent.stage_evaluation import (
+    _compound_name_matches,
     archive_pre_stage_prediction,
     calculate_predictability,
     evaluate_stage_archive,
     stage_on_date,
     write_evaluation_once,
 )
+
+
+def test_compound_surname_resolves_when_only_one_market_rider_fits() -> None:
+    """PCS writes "DVERSNES LAVIK Fredrik" where Scorito has "Fredrik Dversnes"."""
+    tokens_by_id = {
+        7670: frozenset({"fredrik", "dversnes"}),
+        7671: frozenset({"ben", "turner"}),
+        7672: frozenset({"ben", "tulett"}),
+    }
+
+    assert _compound_name_matches("dversnes fredrik lavik", tokens_by_id) == [7670]
+    assert _compound_name_matches("ben turner", tokens_by_id) == [7671]
+
+
+def test_compound_surname_stays_ambiguous_when_several_riders_fit() -> None:
+    tokens_by_id = {
+        1: frozenset({"garcia", "raul"}),
+        2: frozenset({"garcia", "raul", "pierna"}),
+    }
+
+    assert len(_compound_name_matches("garcia pierna raul", tokens_by_id)) == 2
 
 
 def _write(path, payload) -> None:

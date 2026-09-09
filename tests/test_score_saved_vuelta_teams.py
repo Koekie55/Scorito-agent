@@ -171,3 +171,53 @@ def test_expected_team_points_can_replace_bottom_two_lineup_riders(monkeypatch) 
     assert [replacement["out"]["rider"] for replacement in lineup["team_point_replacements"]] == [
         "Rider 9", "Rider 8",
     ]
+
+
+def test_saved_team_scoring_excludes_unavailable_riders_from_lineups(monkeypatch) -> None:
+    riders = [
+        SimpleNamespace(
+            rider_id=index,
+            name=f"Rider {index}",
+            price=1_000_000,
+            team_id=index,
+            status=0 if index == 10 else 1,
+        )
+        for index in range(1, 21)
+    ]
+    snapshot = SimpleNamespace(
+        riders=riders,
+        budget=48_000_000,
+        captain_factor=2,
+        market_id=310,
+    )
+    predictions = {
+        "stages": [{
+            "stage_no": 13,
+            "profile_type": "hilly",
+            "top_20": [
+                {"rider": f"Rider {index}", "predicted_finish": index}
+                for index in range(1, 21)
+            ],
+        }],
+    }
+    projection = {"riders": [{"rider": rider.name} for rider in riders], "decision_review": []}
+    monkeypatch.setattr(
+        "scripts.score_saved_vuelta_teams.expected_team_points_by_rider",
+        lambda snapshot, **kwargs: {
+            rider.rider_id: TeamPointProjection(
+                classification_points=100.0 if rider.rider_id == 10 else 0.0
+            )
+            for rider in snapshot.riders
+        },
+    )
+
+    report = score_saved_squads(
+        predictions,
+        projection,
+        [{"team": "test", "sources": ["test"], "riders": [rider.name for rider in riders]}],
+        snapshot,
+    )
+
+    lineup = report["teams"][0]["lineups"][0]
+    assert "Rider 10" not in lineup["lineup"]
+    assert "Rider 10" not in [rider["rider"] for rider in lineup["reserves"]]

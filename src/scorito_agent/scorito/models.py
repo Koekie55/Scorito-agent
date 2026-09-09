@@ -67,6 +67,7 @@ class Rider:
     nationality: str
     age: int | None
     qualities: dict[int, int] = field(default_factory=dict)
+    status: int = 1
 
     def quality(self, qtype: int) -> int:
         """Rating (0 if the rider has no such quality)."""

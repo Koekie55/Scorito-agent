@@ -1,3 +1,5 @@
+import json
+
 from scripts.refresh_vuelta_stage_predictions import (
     TOP_N,
     _conversion_factor,
@@ -8,6 +10,7 @@ from scripts.refresh_vuelta_stage_predictions import (
     _sprint_survival_score,
     _survival_factor,
     build_stage_top20,
+    gc_bunch_credibility,
 )
 
 
@@ -183,6 +186,52 @@ def test_chat_adjustment_cannot_change_objective_order(monkeypatch) -> None:
     assert first["adjusted_score"] < second["adjusted_score"]
 
 
+def test_abandoned_rider_is_dropped_from_every_later_stage(monkeypatch) -> None:
+    """A rider who abandons during stage 8 raced it, but cannot score in 9-21."""
+    monkeypatch.setitem(
+        build_stage_top20.__globals__,
+        "_unavailable_from_stage",
+        lambda _riders: {"rider-1": 9},
+    )
+
+    report = build_stage_top20(_projection(), {"stage_breakdown": {}}, {})
+
+    assert report["unavailable_riders_excluded"] == 1
+    for stage in report["stages"]:
+        slugs = {row["rider_slug"] for row in stage["top_20"]}
+        assert len(stage["top_20"]) == TOP_N
+        if stage["stage_no"] < 9:
+            assert "rider-1" in slugs
+        else:
+            assert "rider-1" not in slugs
+
+
+def test_unavailable_from_stage_reads_dropouts_and_non_starters(monkeypatch, tmp_path) -> None:
+    module_globals = build_stage_top20.__globals__
+    files = {
+        "MARKET_RIDERS_PATH": [
+            {"RiderId": 1, "FirstName": "Tadej", "LastName": "Pogacar", "Status": 1},
+            {"RiderId": 2, "FirstName": "Nairo", "LastName": "Quintana", "Status": 2},
+            {"RiderId": 3, "FirstName": "Mads", "LastName": "Pedersen", "Status": 1},
+        ],
+        "DROPOUTS_PATH": [{"RiderId": 1, "StageId": 2827}],
+        "ROUND_STAGE_PATH": [{"StageId": 2827, "StageOrder": 8}],
+    }
+    for name, payload in files.items():
+        path = tmp_path / f"{name}.json"
+        path.write_text(json.dumps({"Content": payload}), encoding="utf-8")
+        monkeypatch.setitem(module_globals, name, path)
+
+    riders = {
+        "pogacar": {"rider": "POGACAR Tadej"},
+        "quintana": {"rider": "QUINTANA Nairo"},
+        "pedersen": {"rider": "PEDERSEN Mads"},
+    }
+    unavailable = module_globals["_unavailable_from_stage"](riders)
+
+    assert unavailable == {"pogacar": 9, "quintana": 1}
+
+
 def test_selective_hilly_stage_rewards_durable_sprinter() -> None:
     stage = {
         "profile_type": "hilly",
@@ -307,6 +356,49 @@ def _reduced_sprint_stage() -> dict:
 
 def _reduced_sprint_notes() -> dict:
     return {"type": "Sprint / Hilly", "rider_signals": {}}
+
+
+def test_gc_leader_survives_the_stage_that_motivated_this_gate() -> None:
+    """Vuelta 2026 stage 2: hilly/uphill, top 25 tied on time, Pogacar 3rd.
+
+    A GC leader with no sprint-survival evidence of their own must clear the
+    stage's survival penalty on gc_bunch_credibility alone, exactly as a real
+    sprint survivor would -- and must not get any such help on a genuine
+    mountain summit or ITT, where the mechanism is not eligible.
+    """
+    stage = _reduced_sprint_stage()
+    gc_leader = {
+        "signals": {"gc": 0.0, "climb": 0.0},
+        "recent_evidence": {"profile_strength": {"hilly": 1.6116}},
+    }
+    selectivity = _stage_selectivity(stage, _reduced_sprint_notes())
+    own_survival = _sprint_survival_score(gc_leader)
+    credibility = gc_bunch_credibility(stage, gc_leader)
+    effective_survival = max(own_survival, credibility)
+
+    assert own_survival < 0.30  # no sprint pedigree of their own
+    assert credibility == 1.0
+    assert _survival_factor(selectivity, effective_survival) == 1.0
+    assert _hilly_attrition_factor(stage, _reduced_sprint_notes(), effective_survival) == 1.0
+    # Without the gate, the same rider would have been suppressed like any sprinter.
+    assert _survival_factor(selectivity, own_survival) < 1.0
+
+
+def test_gc_bunch_credibility_does_not_help_on_a_mountain_summit_or_itt() -> None:
+    gc_leader = {
+        "signals": {"gc": 0.9, "climb": 0.9},
+        "recent_evidence": {"profile_strength": {"hilly": 1.6}},
+    }
+    mountain_summit = {
+        "profile_type": "mountain",
+        "finish_type": "summit",
+        "vertical_meters": 4500,
+        "gradient_final_km": 8.0,
+    }
+    itt = {"profile_type": "itt", "finish_type": "tt", "vertical_meters": 100, "gradient_final_km": 0.0}
+
+    assert gc_bunch_credibility(mountain_summit, gc_leader) == 0.0
+    assert gc_bunch_credibility(itt, gc_leader) == 0.0
 
 
 def test_conversion_factor_reports_reason_for_every_branch() -> None:
