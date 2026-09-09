@@ -1,4 +1,4 @@
-r"""Validate the PCS stage-similarity predictor by leave-one-out on the corpus.
+r"""Validate the PCS stage-similarity predictor by walk-forward testing.
 
 This is the Part-3 "does the similarity model actually predict?" check. It is
 the offline analogue of ``scripts/validate_predictor.py`` (Part 2), but instead
@@ -12,14 +12,13 @@ Corpus
 record per finished stage with ``profile_type`` / ``finish_type`` / ``startlist``
 and a ``results`` list (``rider_slug`` + realized Scorito ``points``, rank-sorted).
 
-Leave-one-out protocol
-----------------------
+Pre-race holdout protocol
+-------------------------
 For every stored stage that has results and a startlist:
 
-1. Build a training pool = every OTHER stored stage of the SAME race (so we
-   never leak the target stage's own results, and cross-race contamination is
-   avoided).  ``predict_finishers`` additionally skips no-results stages and
-   filters candidates to the target startlist, so the pool is self-cleaning.
+1. Build a training pool from every completed Grand Tour strictly before the
+    target race. No stage from the target race enters the pool because the
+    production projection forecasts the full race before its opening stage.
 2. Run ``predict_finishers(target, pool, top_n=200)`` to get a full predicted
    ranking of the target's participants.
 3. Ground truth = ``{rider_slug -> realized points}`` from the target's own
@@ -44,6 +43,7 @@ import json
 import math
 import sys
 from collections import defaultdict
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -54,10 +54,13 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from scorito_agent.pcs.predict import predict_finishers  # noqa: E402
-from scorito_agent.pcs.store import StageStore, stage_key  # noqa: E402
+from scorito_agent.pcs.store import StageStore  # noqa: E402
 
 TOP_N = 200  # predict a full ranking for Spearman coverage
 TOP_HIT = 10  # top-k hit-rate window
+PROTOCOL_VERSION = 2
+EVALUATION_MODE = "pre-race cross-race holdout"
+RACE_CALENDAR_ORDER = {"giro": 1, "tdf": 2, "tour": 2, "vuelta": 3}
 
 
 # ---------------------------------------------------------------------------
@@ -128,6 +131,60 @@ def _realized_top(stage: dict[str, Any], k: int) -> list[str]:
     return [slug for slug, _ in scoring[:k]]
 
 
+def _is_before_target(candidate: dict[str, Any], target: dict[str, Any]) -> bool:
+    """Return whether a same-race candidate is chronologically before target."""
+    try:
+        candidate_no = int(candidate.get("stage_no"))
+        target_no = int(target.get("stage_no"))
+    except (TypeError, ValueError):
+        candidate_no = target_no = None
+    if candidate_no is not None and target_no is not None:
+        return candidate_no < target_no
+
+    try:
+        candidate_date = date.fromisoformat(str(candidate.get("date")))
+        target_date = date.fromisoformat(str(target.get("date")))
+    except ValueError:
+        return False
+    return candidate_date < target_date
+
+
+def _race_family(stage: dict[str, Any]) -> str | None:
+    race = str(stage.get("race") or "").strip().lower()
+    return next(
+        (family for family in RACE_CALENDAR_ORDER if race.startswith(family)),
+        None,
+    )
+
+
+def _production_training_pool(
+    all_stages: list[dict[str, Any]], target: dict[str, Any]
+) -> list[dict[str, Any]]:
+    """Return the completed races available before a pre-race projection."""
+    target_family = _race_family(target)
+    try:
+        target_year = int(target.get("year"))
+    except (TypeError, ValueError):
+        return []
+    if target_family is None:
+        return []
+
+    target_key = (target_year, RACE_CALENDAR_ORDER[target_family])
+    pool: list[dict[str, Any]] = []
+    for candidate in all_stages:
+        candidate_family = _race_family(candidate)
+        try:
+            candidate_year = int(candidate.get("year"))
+        except (TypeError, ValueError):
+            continue
+        if candidate_family is None:
+            continue
+        candidate_key = (candidate_year, RACE_CALENDAR_ORDER[candidate_family])
+        if candidate_key < target_key and candidate.get("results"):
+            pool.append(candidate)
+    return pool
+
+
 # ---------------------------------------------------------------------------
 # main
 # ---------------------------------------------------------------------------
@@ -155,7 +212,7 @@ def main() -> int:
     if race_filter:
         print(f"Filtering to race = {race_filter!r}")
 
-    print("\nLeave-one-out per-stage correlation "
+    print("\nPre-race cross-race holdout correlation "
           "(predicted rank vs realized Scorito points)")
     print(f"{'race':>8}  {'st':>3}  {'profile':>8}  {'finish':>7}  "
           f"{'pred':>4}  {'rho':>7}  {'top10':>5}  note")
@@ -176,15 +233,14 @@ def main() -> int:
                 target.get("startlist") or target.get("participants")
             ):
                 continue
-            evaluated += 1
             stage_no = target.get("stage_no")
-            target_id = stage_key(target)
-
-            # leave-one-out pool: other same-race stages
-            pool = [s for s in stages if stage_key(s) != target_id]
+            pool = _production_training_pool(all_stages, target)
+            if not pool:
+                continue
 
             out = predict_finishers(target, pool, top_n=TOP_N)
             preds = out.get("predictions") or []
+            evaluated += 1
 
             pm = _points_map(target)
             skill: list[float] = []     # -predicted_rank (higher = predicted better)
@@ -219,7 +275,7 @@ def main() -> int:
                 if p.get("predicted_rank", 1e9) <= TOP_HIT and p.get("rider_slug")
             ]
             real_top = _realized_top(target, TOP_HIT)
-            if real_top:
+            if real_top and pred_top:
                 hits = len(set(pred_top) & set(real_top))
                 frac = hits / float(len(real_top))
                 top_hit_fracs.append(frac)
@@ -279,12 +335,21 @@ def main() -> int:
         "total_stages": len(all_stages),
         "stages_evaluated": evaluated,
         "stages_with_rho": len(per_stage_rho),
+        "stages_with_top10_prediction": len(top_hit_fracs),
         "macro_spearman": round(macro, 4) if macro is not None else None,
         "pooled_spearman": round(pooled, 4) if pooled is not None else None,
         "mean_top10_hit_rate": round(top_hit, 4) if top_hit is not None else None,
         "verdict": verdict,
-        "protocol": "same-race leave-one-out; exact rider_slug matching",
+        "protocol_version": PROTOCOL_VERSION,
+        "evaluation_mode": EVALUATION_MODE,
+        "protocol": (
+            "pre-race cross-race holdout; all completed prior Grand Tours; "
+            "exact rider_slug matching"
+        ),
     }
+    if race_filter:
+        print("\nFiltered diagnostic run; canonical validation artifact was not changed.")
+        return 0
     out_path = ROOT / "data" / "pcs" / "pcs_validation.json"
     out_path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"\nWrote {out_path.relative_to(ROOT)}")

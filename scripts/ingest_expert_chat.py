@@ -12,6 +12,7 @@ Examples::
 
 from __future__ import annotations
 
+from datetime import date
 import argparse
 import sys
 from pathlib import Path
@@ -32,6 +33,23 @@ def _read_export(path: str) -> str:
     if path == "-":
         return sys.stdin.read()
     return Path(path).read_text(encoding="utf-8-sig")
+
+def _iso_date(value: str) -> date:
+    try:
+        return date.fromisoformat(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(
+            f"expected an ISO date (YYYY-MM-DD), got {value!r}"
+        ) from exc
+
+
+def _within_dates(messages, *, from_date: date | None, through_date: date | None):
+    return [
+        message
+        for message in messages
+        if (from_date is None or message.timestamp.date() >= from_date)
+        and (through_date is None or message.timestamp.date() <= through_date)
+    ]
 
 
 def _rider_names(slug: str) -> list[str]:
@@ -110,16 +128,32 @@ def main() -> None:
         action="store_true",
         help="Replace the existing store from this export instead of merging it",
     )
+    parser.add_argument(
+        "--from-date",
+        type=_iso_date,
+        help="Include messages on or after this ISO date (YYYY-MM-DD)",
+    )
+    parser.add_argument(
+        "--through-date",
+        type=_iso_date,
+        help="Include messages on or before this ISO date (YYYY-MM-DD)",
+    )
     args = parser.parse_args()
+    if args.from_date and args.through_date and args.from_date > args.through_date:
+        parser.error("--from-date cannot be later than --through-date")
+
 
     store_dir = args.store_dir or (DEFAULT_ROOT / args.slug)
     digest_path = args.digest or (
         ROOT / "data" / "scorito" / args.slug / "expert_chat_intel.json"
     )
 
-    messages = parse_export(
+    parsed_messages = parse_export(
         _read_export(args.export),
         export_index=args.export_index,
+    )
+    messages = _within_dates(
+        parsed_messages, from_date=args.from_date, through_date=args.through_date
     )
     store = ExpertChatStore(store_dir)
     stats = store.import_messages(
@@ -134,7 +168,8 @@ def main() -> None:
     )
 
     print(
-        f"Parsed {len(messages)} messages; "
+        f"Parsed {len(parsed_messages)} messages; selected {len(messages)} and "
+        f"skipped {len(parsed_messages) - len(messages)} outside the date window; "
         f"{stats['messages_added']} new, "
         f"{stats['messages_seen'] - stats['messages_added']} duplicate."
     )

@@ -71,7 +71,13 @@ def pick_squad(
     excluded = excluded_rider_ids or set()
     coverage = list(coverage_constraints or [])
     riders = [r for r in snapshot.riders if r.price > 0 and r.rider_id not in excluded]
-    target_size = min(squad_size, len(riders))
+    if squad_size <= 0:
+        raise ValueError("squad_size must be positive")
+    if len(riders) < squad_size:
+        raise ValueError(
+            f"cannot select {squad_size} riders from {len(riders)} eligible riders"
+        )
+    target_size = squad_size
 
     chosen = _solve_scipy(
         riders, values, budget, target_size, max_riders_per_team, coverage
@@ -111,7 +117,7 @@ def _solve_scipy(
 
     n = len(riders)
     if n < squad_size:
-        return [r.rider_id for r in riders]
+        return None
 
     c = np.array([-values.get(r.rider_id, 0.0) for r in riders], dtype=float)
     price = np.array([r.price for r in riders], dtype=float)
@@ -309,6 +315,14 @@ def best_stage_lineup(
     captain_factor: int = 2,
 ) -> StageLineup:
     """Pick the best ``lineup_size`` of the squad + best captain for a stage."""
+    if lineup_size <= 0:
+        raise ValueError("lineup_size must be positive")
+    if len(set(squad_ids)) != len(squad_ids):
+        raise ValueError("squad_ids must contain unique riders")
+    if len(squad_ids) < lineup_size:
+        raise ValueError(
+            f"cannot select a {lineup_size}-rider lineup from {len(squad_ids)} squad riders"
+        )
     ranked = sorted(
         squad_ids, key=lambda rid: points_by_rider.get(rid, 0.0), reverse=True
     )
@@ -399,7 +413,8 @@ def joint_enrolled_squad(
     ``selection_values`` adds rider-level points that do not depend on stage
     enrolment, such as projected final-classification and jersey bonuses.
 
-    Only strictly-positive candidates enter the model. Returns a
+    Every eligible rider enters every stage so zero or negative projections do
+    not relax the exact lineup and captain cardinalities. Returns a
     :class:`SquadPlan` whose ``value`` is the summed enrolled score under the
     supplied points, or ``None`` if scipy is unavailable / the model is
     infeasible.
@@ -416,6 +431,8 @@ def joint_enrolled_squad(
     coverage = list(coverage_constraints or [])
     riders = [r for r in snapshot.riders if r.price > 0 and r.rider_id not in excluded]
     n = len(riders)
+    if squad_size <= 0 or lineup_size <= 0 or lineup_size > squad_size:
+        raise ValueError("require 0 < lineup_size <= squad_size")
     if n < squad_size:
         return None
     ridx = {r.rider_id: i for i, r in enumerate(riders)}
@@ -423,22 +440,18 @@ def joint_enrolled_squad(
 
     # Variable layout: [ y_0..y_{n-1} | x_0..x_{nx-1} | c_0..c_{nx-1} ]
     #   y_i = rider i in squad
-    #   x_k = candidate (rider, stage) enrolled   (only points_fn > 0)
-    #   c_k = candidate (rider, stage) is captain  (same candidate set)
+    #   x_k = candidate (rider, stage) enrolled
+    #   c_k = candidate (rider, stage) is captain
     y_off = 0
     x_meta: list[tuple[int, int, float]] = []  # (rider_index, stage_index, points)
     for si, st in enumerate(snapshot.stages):
         for r in riders:
             p = float(points_fn(r.rider_id, st))
-            if p > 0:
-                x_meta.append((ridx[r.rider_id], si, p))
+            x_meta.append((ridx[r.rider_id], si, p))
     x_off = n
     nx = len(x_meta)
     c_off = n + nx
     total_vars = n + nx + nx
-    if nx == 0:
-        return None
-
     # Objective (maximise -> minimise the negative): sum p*x + (cap-1)*p*c
     c_obj = np.zeros(total_vars)
     for i, rider in enumerate(riders):
@@ -494,13 +507,14 @@ def joint_enrolled_squad(
             np.inf,
         )
 
-    # per-stage: sum x <= lineup_size ; sum c <= 1
+    # per-stage: exactly lineup_size enrolled and exactly one captain
     stage_x: dict[int, list[int]] = defaultdict(list)
     for k, (_, si, _) in enumerate(x_meta):
         stage_x[si].append(k)
-    for _si, ks in stage_x.items():
-        add_row([(x_off + k, 1.0) for k in ks], -np.inf, float(lineup_size))
-        add_row([(c_off + k, 1.0) for k in ks], -np.inf, 1.0)
+    for si in range(len(snapshot.stages)):
+        ks = stage_x[si]
+        add_row([(x_off + k, 1.0) for k in ks], float(lineup_size), float(lineup_size))
+        add_row([(c_off + k, 1.0) for k in ks], 1.0, 1.0)
 
     # link x_k <= y_rider and c_k <= x_k
     for k, (ri, _, _) in enumerate(x_meta):

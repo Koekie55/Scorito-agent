@@ -1,436 +1,441 @@
 # Vuelta 2026 rider-news digest
 
-Generated: 2026-08-23T18:58:10.660245+00:00
-Watchlist: 204 riders; highlights: 50; new: 47
-Market snapshot: 2026-08-23T18:57:56.614022+00:00 (_manifest.json)
+Generated: 2026-09-09T06:51:15.992967+00:00
+Watchlist: 204 riders; highlights: 50; new: 0
+Market snapshot: 2026-09-09T06:50:42.001253+00:00 (_manifest.json)
 
 > Treat news as evidence, not a scoring guarantee. Reddit/community claims remain unverified until an independent source confirms them.
 
 ## Selection impacts
 
-- **Ethan Hayter**: review_selection_and_lineup (negative, corroborated_reports) - [Hayter lijkt plannen Van Aert en Visma | LaB te verpesten, maar dan is daar Brennan die in Vuelta etappe 2 wint](https://www.indeleiderstrui.nl/wielrennen/hayter-lijkt-plannen-van-aert-en-visma-lab-te-verpesten-maar-dan-is-daar-brennan-die-in-vuelta-etappe-2-wint)
-- **Tadej Pogacar**: review_selection_and_lineup (negative, corroborated_reports) - ["This route is tailor-made for him" - Footage shows Jonas Vingegaard complaining about Tadej Pogacar and Tour de France route design](https://cyclinguptodate.com/cycling/this-route-is-tailor-made-for-him-footage-shows-jonas-vingegaard-complaining-about-tadej-pogacar-and-tour-de-france-route-design)
-- **Cian Uijtdebroeks**: review_selection_and_lineup (negative, corroborated_reports) - [Vuelta 2026: Medisch bulletin en juryrapport – Cian Uijtdebroeks niet ongeschonden uit val - WielerFlits](https://news.google.com/rss/articles/CBMivwFBVV95cUxONnVVc1BSU0tkemZXRDNEUEJfeklLTVBkM01VdG00YTg3UVRvU0w1bjU0eXdZWVl2dVZKSG91RkJWNHBuNW15MzZuMnhxT3R5cDk4TDQzTXNNd0t1WGJZZHI3UEZjVTJ1OTNLQklGYVBPUDFIaUdhQlhicS1sS3cwYnRQNHlTbVhDdnV0NlpKMFJ1MHFDMTNzbnVHbDZKV1p1cmJwa0tadXRtdUh2bW9kRE1xQks1dnJsdEtlcWU0dw?oc=5)
-- **Wout van Aert**: lineup_context_only (positive, corroborated_reports) - [Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 - FloBikes](https://news.google.com/rss/articles/CBMirAFBVV95cUxOcXJERHNUNmtmeGs0UXNkMHlCVkEzdnJ4RlNXVVlMaE1ucUQ0QXRTT3BpU1lfbG56S1I5ckNJZkVBYU1MMWpRazRqRjFtU3JhVlRLSDU0anJVeVB0MGs3cjkwZG5fN01fQlVGQzVNTnFBWDNyRklmRVYwU3haWEJ1S3hydmlFM3dUTkdzR2d4ZWVJN0c0bzJDOUUtUmdYWFFHbTQtNTdIbXBlZ3hZ?oc=5)
-- **Matthew Brennan**: monitor_only_no_automatic_upgrade (positive, corroborated_reports) - [Vuelta a España: Powerful sprint nets Matthew Brennan stage 2 victory as Tadej Pogačar fends off attacks to keep leader's jersey](https://www.cyclingnews.com/pro-cycling/racing/vuelta-a-espana-powerful-sprint-nets-matthew-brennan-stage-2-victory-as-tadej-pogacar-fends-off-attacks-to-keep-leaders-jersey/)
+- **Matthew Brennan**: verify_before_downgrading (negative, single_source) - [Vuelta-peloton lijdt onder dominantie Visma | Lease a Bike: 'Brennan is een soort mini-Van Aert'](https://www.indeleiderstrui.nl/wielrennen/vuelta-peloton-lijdt-onder-dominantie-visma-lease-a-bike-brennan-is-een-soort-mini-van-aert)
+- **Wout van Aert**: verify_before_downgrading (negative, single_source) - ["I don’t think there will be two camps" - Wout Van Aert dismisses Belgian team split with Remco Evenepoel](https://cyclinguptodate.com/cycling/i-dont-think-there-will-be-two-camps-wout-van-aert-dismisses-belgian-team-split-with-remco-evenepoel)
+- **Magnus Cort**: verify_before_downgrading (negative, single_source) - [‘I don’t know why’ - Magnus Cort questions Vuelta decision after crash disrupts sprint](https://www.domestiquecycling.com/en/news/i-dont-know-why-magnus-cort-questions-vuelta-decision-after-crash-disrupts-sprint/)
+- **Tadej Pogacar**: verify_before_downgrading (negative, single_source) - [UCI World Tour Teams Ranking Update - UAE tighten grip despite Pogacar crash as Visma close gap on Red Bull while Pidcock's Pinarello Q36.5 boosted](https://cyclinguptodate.com/cycling/uci-world-tour-teams-ranking-update-uae-tighten-grip-despite-pogacar-crash-as-visma-close-gap-on-red-bull-while-pidcocks-pinarello-q365-boosted)
+- **Mads Pedersen**: review_selection_and_lineup (negative, corroborated_reports) - ["He also needs to get going soon" - Clock is ticking for Mads Pedersen's World Championships dream after he recovers from illness - CyclingUpToDate.com](https://news.google.com/rss/articles/CBMi8gFBVV95cUxNQm44Sy1VRUlPdWwtb094UXZjTDZ3Q080ejJZMjJPbmpzVWltMmRsOFlEbnR6bFJmUVNoTXJVUzlCc2pFX2JPSEJXT0Y4VHhNRUlRd2NuQ1V5dnFFbFc5UnM1ZjJJbldZZVp4eEJsX2ZZVHlxNFh5TFRBX3QwYnJ6cE9TR3hfbjI3bnlLbWRpLUFFMkhjdW1OVm1fV0o5a3hjTWtBUjVWeFR3RF80emNOT1Jvd1hHb0N6SWkzbk1uZWdvUFhlQ2ZYekptbUFiN2liN1VXcHBtTXBpOHFrdkF4dFljcFFuVTZFRVQ0M01EWTVwUQ?oc=5)
+- **Bryan Coquard**: lineup_context_only (positive, corroborated_reports) - ['It's not like we can block him off with one kilometre to go' - Runner-up Bryan Coquard recognises Matthew Brennan poses major challenge in Vuelta a España sprints](https://www.cyclingnews.com/pro-cycling/teams-riders/its-not-like-we-can-block-him-off-with-one-kilometre-to-go-runner-up-bryan-coquard-recognises-matthew-brennan-poses-major-challenge-in-vuelta-a-espana-sprints/)
+- **Thibau Nys**: verify_before_downgrading (negative, single_source) - [Thibau Nys had nacht voor rustdag last van koorts: “Maar hij is niet ziek” - WielerFlits](https://news.google.com/rss/articles/CBMiqgFBVV95cUxPUmQzNE54UW5MeGY1QWlTUGpCZ2l4ODJTQ2dEXzcxUVJPZUN3WHB1amhBUlA4UnZKOWx1VmlmLWhxbWNPRUFCR0wtWGpBS0lmMUhwVi1XMzZGWUdaTzNvWHFBeVRYcUZ2V0NrVGpPV2diLWhCdUVVYVgtMi00Z2ktMXRPZjgwZzRqdlBUYjZDcm1kSVZNV291WGotVVhiVW5Xci1fOGMyQ0pKQQ?oc=5)
+- **Primoz Roglic**: monitor_only_no_automatic_upgrade (contextual, single_source) - ['I never expected to be going this well' – Primož Roglič says 'anything could happen' in Vuelta a España GC battle with Enric Mas and Felix Gall](https://www.cyclingnews.com/pro-cycling/teams-riders/i-never-expected-to-be-going-this-well-primoz-roglic-says-anything-could-happen-in-vuelta-a-espana-gc-battle-with-enric-mas-and-felix-gall/)
+- **Kevin Vermaerke**: lineup_context_only (contextual, single_source) - [🎥 UAE Emirates-XRG blijft maar vallen in Vuelta a España en ziet fan ook nog bijna bidon jatten](https://www.indeleiderstrui.nl/wielrennen/uae-emirates-xrg-blijft-maar-vallen-in-vuelta-a-espana-en-ziet-fan-ook-nog-bijna-bidon-jatten)
+- **Enric Mas**: lineup_context_only (positive, single_source) - ['Another day less' - No crosswind scare for Mas as Vuelta crunch looms](https://www.domestiquecycling.com/en/news/another-day-less-no-crosswind-scare-for-mas-as-vuelta-crunch-looms/)
 
 ## Highlights
 
-### [Hayter lijkt plannen Van Aert en Visma \| LaB te verpesten, maar dan is daar Brennan die in Vuelta etappe 2 wint](https://www.indeleiderstrui.nl/wielrennen/hayter-lijkt-plannen-van-aert-en-visma-lab-te-verpesten-maar-dan-is-daar-brennan-die-in-vuelta-etappe-2-wint)
-- Riders: Ethan Hayter
+### [Vuelta-peloton lijdt onder dominantie Visma \| Lease a Bike: 'Brennan is een soort mini-Van Aert'](https://www.indeleiderstrui.nl/wielrennen/vuelta-peloton-lijdt-onder-dominantie-visma-lease-a-bike-brennan-is-een-soort-mini-van-aert)
+- Riders: Matthew Brennan
 - Source: In de Leiderstrui (tier 2)
-- Published: 2026-08-23T15:15:00+00:00
-- Signals: availability, role_selection, tactics; impact: negative
-- Verification: corroborated_reports; selection use: review_selection_and_lineup
-- Evidence: ...brengen. De grote ronde debutant van Visma | Lease a Bike won met overmacht. Ethan Hayter leek na een sluwe dag in de vlucht de rode trui over.... 👋 Goodbye Monaco! Thank you for the warm welcome ❤️ ¡Gracias por todo, Mónaco! 🥰🇲🇨 📸 @cxclin...
+- Published: 2026-09-09T05:20:00+00:00
+- Signals: availability, role_selection; impact: negative
+- Verification: single_source; selection use: verify_before_downgrading
+- Evidence: ...n drie in deze ronde het hoogst haalbare. Bryan Coquard won één keer omdat Matthew Brennan door een crash werd opgehouden, maar in de andere vier kansen voor rappe mannen was de Brit van Visma | Lease a Bike meedogenloos. Samen m.... 🚴🇪🇸 |...
 
-### ["This route is tailor-made for him" - Footage shows Jonas Vingegaard complaining about Tadej Pogacar and Tour de France route design](https://cyclinguptodate.com/cycling/this-route-is-tailor-made-for-him-footage-shows-jonas-vingegaard-complaining-about-tadej-pogacar-and-tour-de-france-route-design)
+### ["I don’t think there will be two camps" - Wout Van Aert dismisses Belgian team split with Remco Evenepoel](https://cyclinguptodate.com/cycling/i-dont-think-there-will-be-two-camps-wout-van-aert-dismisses-belgian-team-split-with-remco-evenepoel)
+- Riders: Wout van Aert
+- Source: CyclingUpToDate (tier 3)
+- Published: 2026-09-09T00:15:00+00:00
+- Signals: availability; impact: negative
+- Verification: single_source; selection use: verify_before_downgrading
+- Evidence: "I don’t think there will be two camps" - Wout Van Aert dismisses Belgian team split with Remco Evenepoel. The 2026 World Championships looked to be a race between Tadej Pogacar and whomever would be able to challenge the reigning champion,...
+
+### ['This is a big stepping stone' - Matthew Brennan eyes Great Britain start of 2027 Tour de France after racking up fourth Vuelta a España success](https://www.cyclingnews.com/pro-cycling/teams-riders/this-is-a-big-stepping-stone-matthew-brennan-eyes-great-britain-start-of-2027-tour-de-france-after-racking-up-fourth-vuelta-a-espana-success/)
+- Riders: Matthew Brennan
+- Source: Cyclingnews (tier 2)
+- Published: 2026-09-08T18:29:38+00:00
+- Signals: availability, ambition, form, interview; impact: positive
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: 'This is a big stepping stone' - Matthew Brennan eyes Great Britain start of 2027 Tour de France after racking up fourth Vuelta a España success. The Vuelta a España is often seen as a springboard for greater things in Grand Tour racing, an...
+
+### [‘I don’t know why’ - Magnus Cort questions Vuelta decision after crash disrupts sprint](https://www.domestiquecycling.com/en/news/i-dont-know-why-magnus-cort-questions-vuelta-decision-after-crash-disrupts-sprint/)
+- Riders: Magnus Cort
+- Source: Domestique Cycling (tier 2)
+- Published: 2026-09-08T17:50:00+00:00
+- Signals: availability; impact: negative
+- Verification: single_source; selection use: verify_before_downgrading
+- Evidence: ‘I don’t know why’ - Magnus Cort questions Vuelta decision after crash disrupts sprint. Magnus Cort was left questioning the decision to keep the team cars behind after a late crash forced Uno-X Mobility into a costly chase on stage 16 of t...
+
+### ["Ga weg": UAE-renners hebben aanvaring met toeschouwers, die iets te gretig te hulp schieten na val](https://sporza.be/nl/2026/09/08/ga-weg-uae-renners-hebben-aanvaring-met-toeschouwers-die-iet~1788879079222/)
+- Riders: Tadej Pogacar
+- Source: Sporza Wielrennen (tier 2)
+- Published: 2026-09-08T15:19:54.090000+00:00
+- Signals: availability; impact: contextual
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: ...a val. Het zit niet mee voor UAE in deze Ronde van Spanje. Het verloor al leider Tadej Pogacar en in de jacht op ritzeges kent het weinig succes. Vandaag zag het ook nog Ivo Oliveira vallen, wat dan weer tot een akkefietje leidde. Een toesc...
+
+### [Wout van Aert vergelijkt Vuelta met wonder-Tour Visma \| Lease a Bike: 'Dat is het beste wat er is'](https://www.indeleiderstrui.nl/wielrennen/wout-van-aert-vergelijkt-vuelta-met-wonder-tour-visma-lease-a-bike-dat-is-het-beste-wat-er-is)
+- Riders: Wout van Aert
+- Source: In de Leiderstrui (tier 2)
+- Published: 2026-09-09T05:30:00+00:00
+- Signals: role_selection; impact: contextual
+- Verification: corroborated_reports; selection use: lineup_context_only
+- Evidence: Wout van Aert vergelijkt Vuelta met wonder-Tour Visma | Lease a Bike: 'Dat is het beste wat er is'. Wout van Aert geniet met volle teugen van deze Vuelta a España. De Belg van Visma | Lease a Bike won zelf al twee etappes en draagt al lang...
+
+### [Brennan, Vingegaard and Visma's luxury Tour de France selection dilemma](https://www.domestiquecycling.com/en/news/brennan-vingegaard-and-vismas-luxury-tour-de-france-selection-dilemma/)
+- Riders: Matthew Brennan
+- Source: Domestique Cycling (tier 2)
+- Published: 2026-09-09T05:30:00+00:00
+- Signals: role_selection; impact: positive
+- Verification: corroborated_reports; selection use: lineup_context_only
+- Evidence: ...ction dilemma. After notching up a fourth stage victory on the Vuelta a España, Matthew Brennan signalled his ambition to claim the first yellow jersey of next year's Tour de France. Visma | Lease a Bike's Tour squad will likely be built ar...
+
+### [UCI World Tour Teams Ranking Update - UAE tighten grip despite Pogacar crash as Visma close gap on Red Bull while Pidcock's Pinarello Q36.5 boosted](https://cyclinguptodate.com/cycling/uci-world-tour-teams-ranking-update-uae-tighten-grip-despite-pogacar-crash-as-visma-close-gap-on-red-bull-while-pidcocks-pinarello-q365-boosted)
 - Riders: Tadej Pogacar
 - Source: CyclingUpToDate (tier 3)
-- Published: 2026-08-23T10:55:00+00:00
+- Published: 2026-09-08T12:15:00+00:00
+- Signals: availability; impact: negative
+- Verification: single_source; selection use: verify_before_downgrading
+- Evidence: UCI World Tour Teams Ranking Update - UAE tighten grip despite Pogacar crash as Visma close gap on Red Bull while Pidcock's Pinarello Q36.5 boosted. The first season of the 2026–2028 triennium is entering its final stretch. In the middle of...
+
+### [Will Enric Mas hold his nerve? Five questions for the final week of the Vuelta](https://www.domestiquecycling.com/en/news/will-enric-mas-hold-his-nerve-five-questions-for-the-final-week-of-the-vuelta/)
+- Riders: Enric Mas
+- Source: Domestique Cycling (tier 2)
+- Published: 2026-09-08T05:30:00+00:00
+- Signals: availability, ambition; impact: contextual
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: Will Enric Mas hold his nerve? Five questions for the final week of the Vuelta. This was supposed to be the Tadej Pogacar Vuelta a España, but the world champion's abandon has led to the most open and unpredictable Grand Tour of the season....
+
+### ["He also needs to get going soon" - Clock is ticking for Mads Pedersen's World Championships dream after he recovers from illness - CyclingUpToDate.com](https://news.google.com/rss/articles/CBMi8gFBVV95cUxNQm44Sy1VRUlPdWwtb094UXZjTDZ3Q080ejJZMjJPbmpzVWltMmRsOFlEbnR6bFJmUVNoTXJVUzlCc2pFX2JPSEJXT0Y4VHhNRUlRd2NuQ1V5dnFFbFc5UnM1ZjJJbldZZVp4eEJsX2ZZVHlxNFh5TFRBX3QwYnJ6cE9TR3hfbjI3bnlLbWRpLUFFMkhjdW1OVm1fV0o5a3hjTWtBUjVWeFR3RF80emNOT1Jvd1hHb0N6SWkzbk1uZWdvUFhlQ2ZYekptbUFiN2liN1VXcHBtTXBpOHFrdkF4dFljcFFuVTZFRVQ0M01EWTVwUQ?oc=5)
+- Riders: Mads Pedersen
+- Source: CyclingUpToDate.com (tier 3)
+- Published: 2026-09-08T10:31:42+00:00
 - Signals: availability; impact: negative
 - Verification: corroborated_reports; selection use: review_selection_and_lineup
-- Evidence: ...route is tailor-made for him" - Footage shows Jonas Vingegaard complaining about Tadej Pogacar and Tour de France route design. Jonas Vingegaard did everything in his power to try and dethrone Tadej Pogacar in the 2026 Tour de France. The...
+- Evidence: "He also needs to get going soon" - Clock is ticking for Mads Pedersen's World Championships dream after he recovers from illness - CyclingUpToDate.com. "He also needs to get going soon" - Clock is ticking for Mads Pedersen's World Champion...
 
-### [Dominant Brennan caps strong team effort with Vuelta a España stage win - Team Visma](https://news.google.com/rss/articles/CBMiwwFBVV95cUxOdzFlRlExeDN3RmF4cURFRTNyTTE0bC1kUmJCekJqUnBtU3R1b2oxellTTXplZm5HemJkYk1UR2ItdC1PcFFib3h3OWFPbkdndzVVeDIyTTZnNnZScEJCYjduQVM2VUUyS3l3ekhwVE9xM0ZBNWs0dEp2ZWhvMnpULWV5dkRYTjRqV3ROMkZxSXVhSHNDaENISy1XS3RGQjEzZDR1Nkl2QzZyWGx1RFBLOXFqcjhJbjlwT1RiX3FHYzkzY3M?oc=5)
+### ["He also needs to get going soon" - Clock is ticking for Mads Pedersen's World Championships dream after he recovers from illness](https://cyclinguptodate.com/cycling/he-also-needs-to-get-going-soon-clock-is-ticking-for-mads-pedersens-world-championships-dream-after-he-recovers-from-illness)
+- Riders: Mads Pedersen
+- Source: CyclingUpToDate (tier 3)
+- Published: 2026-09-08T10:30:00+00:00
+- Signals: availability; impact: negative
+- Verification: corroborated_reports; selection use: review_selection_and_lineup
+- Evidence: "He also needs to get going soon" - Clock is ticking for Mads Pedersen's World Championships dream after he recovers from illness. The World Championships are fast approaching for some of the big contenders as a a new rainbow jersey is set...
+
+### [Perfect team performance earns Brennan fourth Vuelta a España stage victory - Team Visma](https://news.google.com/rss/articles/CBMizwFBVV95cUxPdW1oaWFqMGNBbmlQaHdLOW55S1pjTFhJX0xvdDBWX0dmeEY2WmF6VDBvTmI0QTk4RUdyMDc4M1VocVhFTkdKRU5aZm5pc2stMUliZnA2Skd4UkNPVjN0M2dSbjVrU0JCZWtLRGxJenVSTHFUblZlTGVqZlJsLXI5XzdwZDJ6OTJQcm16T0l5VlV6SW9Vbnh4TlpwbnYxYTJJWjhfZTM5bHphaVd5T0NCQnJMd1ZqajZjZmdXLWV3TmxMZzNJTEg5Q21OdFdIY2c?oc=5)
 - Riders: Matthew Brennan
 - Source: Team Visma (tier 1)
-- Published: 2026-08-23T18:11:13+00:00
-- Signals: ambition; impact: contextual
-- Verification: official_source; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Dominant Brennan caps strong team effort with Vuelta a España stage win - Team Visma. Dominant Brennan caps strong team effort with Vuelta a España stage win Team Visma.
-
-### [Vuelta 2026: Medisch bulletin en juryrapport – Cian Uijtdebroeks niet ongeschonden uit val - WielerFlits](https://news.google.com/rss/articles/CBMivwFBVV95cUxONnVVc1BSU0tkemZXRDNEUEJfeklLTVBkM01VdG00YTg3UVRvU0w1bjU0eXdZWVl2dVZKSG91RkJWNHBuNW15MzZuMnhxT3R5cDk4TDQzTXNNd0t1WGJZZHI3UEZjVTJ1OTNLQklGYVBPUDFIaUdhQlhicS1sS3cwYnRQNHlTbVhDdnV0NlpKMFJ1MHFDMTNzbnVHbDZKV1p1cmJwa0tadXRtdUh2bW9kRE1xQks1dnJsdEtlcWU0dw?oc=5)
-- Riders: Cian Uijtdebroeks
-- Source: WielerFlits (tier 2)
-- Published: 2026-08-23T17:45:00+00:00
-- Signals: availability; impact: negative
-- Verification: corroborated_reports; selection use: review_selection_and_lineup
-- Evidence: Vuelta 2026: Medisch bulletin en juryrapport – Cian Uijtdebroeks niet ongeschonden uit val - WielerFlits. Vuelta 2026: Medisch bulletin en juryrapport – Cian Uijtdebroeks niet ongeschonden uit val WielerFlits.
-
-### [Hayter explains why he cut his green shorts during Vuelta breakaway](https://www.domestiquecycling.com/en/news/hayter-reveals-why-he-cut-his-green-jersey-shorts-during-vuelta-breakaway/)
-- Riders: Ethan Hayter
-- Source: Domestique Cycling (tier 2)
-- Published: 2026-08-23T18:15:00+00:00
-- Signals: tactics; impact: contextual
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: Hayter explains why he cut his green shorts during Vuelta breakaway. The Briton was spotted with cut shorts during his breakaway bid for the red jersey..
-
-### ['I didn't really have much left for such a hard finish' – Ethan Hayter misses out on red jersey again at Vuelta a España despite gutsy breakaway ride in ripped shorts](https://www.cyclingnews.com/pro-cycling/racing/i-didnt-really-have-much-left-for-such-a-hard-finish-ethan-hayter-misses-out-on-red-jersey-again-at-vuelta-a-espana-despite-gutsy-breakaway-ride-in-ripped-shorts/)
-- Riders: Ethan Hayter
-- Source: Cyclingnews (tier 2)
-- Published: 2026-08-23T18:12:37+00:00
-- Signals: tactics, ambition; impact: negative
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: 'I didn't really have much left for such a hard finish' – Ethan Hayter misses out on red jersey again at Vuelta a España despite gutsy breakaway ride in ripped shorts. Ethan Hayter narrowly missed out on the leader's red jersey at the Vuelt...
-
-### ['You pull with everyone except for me': Van Aert's joke to Pogacar ends with unexpected gift](https://www.domestiquecycling.com/en/news/you-pull-with-everyone-except-for-me-van-aerts-joke-to-pogacar-ends-with-unexpected-gift/)
-- Riders: Wout van Aert
-- Source: Domestique Cycling (tier 2)
-- Published: 2026-08-23T17:20:00+00:00
-- Signals: tactics; impact: contextual
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: ...for me': Van Aert's joke to Pogacar ends with unexpected gift. Tadej Pogacar and Wout van Aert shared a lighthearted exchange after stage 2 of the Vuelta a España, joking about the Slovenian refusing to take a turn during Van Aert’s late a...
-
-### [Van Aert maakt grappend klein verwijt richting Pogacar, die sorry zegt en bril aan Georges geeft](https://www.indeleiderstrui.nl/wielrennen/van-aert-maakt-grappend-klein-verwijt-richting-pogacar-die-sorry-zegt-en-bril-aan-georges-geeft)
-- Riders: Wout van Aert
-- Source: In de Leiderstrui (tier 2)
-- Published: 2026-08-23T17:15:00+00:00
-- Signals: tactics; impact: contextual
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: ...ppend klein verwijt richting Pogacar, die sorry zegt en bril aan Georges geeft. Wout van Aert was zondag onderdeel van een uitgekiend plan van Visma | Lease a Bike, dat etappe 2 in de Vuelta a España domineerde in de finale en uiteindelijk...
-
-### [Pogacar caught off guard by Van Aert attack but keeps red in Manosque](https://www.domestiquecycling.com/en/news/pogacar-caught-out-by-van-aert-attack-but-keeps-red-in-manosque/)
-- Riders: Tadej Pogacar
-- Source: Domestique Cycling (tier 2)
-- Published: 2026-08-23T17:05:00+00:00
-- Signals: tactics; impact: contextual
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: Pogacar caught off guard by Van Aert attack but keeps red in Manosque. The Slovenian finished third on stage 2 and said he did not know whether to commit once he had closed the gap..
-
-### [La Vuelta 2026 - Tadej Pogacar : "Wout Van Aert's attack ? I had a lot of lactate in the legs..."](https://www.youtube.com/watch?v=gCIVIl9oV30)
-- Riders: Tadej Pogacar, Wout van Aert
-- Source: Cyclism'Actu TV (tier 2)
-- Published: 2026-08-23T16:47:46+00:00
-- Signals: tactics; impact: contextual
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: La Vuelta 2026 - Tadej Pogacar : "Wout Van Aert's attack ? I had a lot of lactate in the legs..."..
-
-### [Nederlandse ritwinnaar in Tour de l'Avenir, 'toptalent Finn maakt stap naar profs en treft Pogacar en Evenepoel al op WK en EK'](https://www.indeleiderstrui.nl/wielrennen/nederlandse-ritwinnaar-in-tour-de-lavenir-toptalent-finn-maakt-stap-naar-profs-en-treft-pogacar-en-evenepoel-al-op-wk-en-ek)
-- Riders: Tadej Pogacar
-- Source: In de Leiderstrui (tier 2)
-- Published: 2026-08-22T12:20:00+00:00
-- Signals: availability; impact: negative
-- Verification: corroborated_reports; selection use: review_selection_and_lineup
-- Evidence: ...in de Tour de l'Avenir te winnen. De etappe werd opgeschrikt door een grote val en daaropvolgende neutralisatie, maar uiteindelijk kwam het alsnog tot een sprint. Daarin was Solen, tevens een goede veldrijder, afgetekend.... Nouvelle victoi...
-
-### [Medical Reports & Withdrawals Vuelta a Espana 2026 stage 2 - Uijtdebroeks crashes and the race loses its first rider](https://cyclinguptodate.com/cycling/medical-reports-withdrawals-vuelta-a-espana-2026-stage-2-uijtdebroeks-crashes-and-the-race-loses-its-first-rider)
-- Riders: Cian Uijtdebroeks
-- Source: CyclingUpToDate (tier 3)
-- Published: 2026-08-23T17:25:00+00:00
-- Signals: availability; impact: negative
-- Verification: corroborated_reports; selection use: review_selection_and_lineup
-- Evidence: ...elta a Espana peloton, with some riders abandoning during a stage and others only ruled out after further assessment once the racing has finished. This live 2026 Vuelta a España Medical Reports and Withdrawals hub will be updated throughout...
-
-### [Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 - FloBikes](https://news.google.com/rss/articles/CBMirAFBVV95cUxOcXJERHNUNmtmeGs0UXNkMHlCVkEzdnJ4RlNXVVlMaE1ucUQ0QXRTT3BpU1lfbG56S1I5ckNJZkVBYU1MMWpRazRqRjFtU3JhVlRLSDU0anJVeVB0MGs3cjkwZG5fN01fQlVGQzVNTnFBWDNyRklmRVYwU3haWEJ1S3hydmlFM3dUTkdzR2d4ZWVJN0c0bzJDOUUtUmdYWFFHbTQtNTdIbXBlZ3hZ?oc=5)
-- Riders: Wout van Aert
-- Source: FloBikes (tier 3)
-- Published: 2026-08-23T18:06:30+00:00
-- Signals: tactics, form; impact: positive
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 - FloBikes. Wout Van Aert Attack Sets Up Victory In Vuelta a España 2026 Stage 2 FloBikes.
-
-### ["Wout van Aert's attack? It was really difficult" - Tadej Pogacar on explosive Vuelta finale - CyclingUpToDate.com](https://news.google.com/rss/articles/CBMivwFBVV95cUxQaExqMWF4OEhJUzNFSndSLWVDcm1lVkhsV0p1TGdLbVhjekQ5OWdTUDd6OWxVMjliSDBCRDVTZ0thQTZDUVpjT3EzS0kwV3h2ZTBDMTlNNUFIZ1JkVDhGSjB0NW1Wb1A5N0x1REQ4VFVFUXhYcVR1MlY1U1dmRktwcXF4M21VbHB4NDZwM3JxMWtVWjh0X2dTRWxsUGN0aWdpbm1fRDY0NVVyN2M3VEMzbkN2MTZUNmFVVFJjSUNvMA?oc=5)
-- Riders: Wout van Aert
-- Source: CyclingUpToDate.com (tier 3)
-- Published: 2026-08-23T17:48:34+00:00
-- Signals: tactics; impact: contextual
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: "Wout van Aert's attack? It was really difficult" - Tadej Pogacar on explosive Vuelta finale - CyclingUpToDate.com. "Wout van Aert's attack? It was really difficult" - Tadej Pogacar on explosive Vuelta finale CyclingUpToDate.com.
-
-### ["Wout van Aert's attack? It was really difficult" - Tadej Pogacar on explosive Vuelta finale](https://cyclinguptodate.com/cycling/wout-van-aerts-attack-it-was-really-difficult-tadej-pogacar-on-explosive-vuelta-finale)
-- Riders: Wout van Aert
-- Source: CyclingUpToDate (tier 3)
-- Published: 2026-08-23T17:47:00+00:00
-- Signals: tactics; impact: contextual
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: "Wout van Aert's attack? It was really difficult" - Tadej Pogacar on explosive Vuelta finale. Tadej Pogacar has begun stage 2 of the Vuelta a España at home in Monaco, and had a day that was, in its majority, calm. But the UAE Team Emirates...
-
-### [Vuelta 2026: Cian Uijtdebroeks komt al vroeg ten val in tweede rit naar Manosque - WielerFlits](https://news.google.com/rss/articles/CBMitAFBVV95cUxQSFJ3ZHFzdGxnaU5nUnByRmpySVRvQ3pOSDZuSmtac0ZKT0xyTE52ZGNFbmMxZUg1MjNBWEZ4MDVSeG4zcURJSFktMkxUbXlhbEFSQXlMX3l4dnd1QkZDazNmTS1oQ1lXYjk0Yk9Uc3hLa09CNnMtMHdFX1NOOGRJbEpmNkd2UmFyaTFBcUdoOHZUblRqdWEyakRHc09wVDlRUkFpLUZTZGxqYmVQbEtKOE5VX18?oc=5)
-- Riders: Cian Uijtdebroeks
-- Source: WielerFlits (tier 2)
-- Published: 2026-08-23T12:18:00+00:00
-- Signals: availability; impact: negative
-- Verification: corroborated_reports; selection use: review_selection_and_lineup
-- Evidence: Vuelta 2026: Cian Uijtdebroeks komt al vroeg ten val in tweede rit naar Manosque - WielerFlits. Vuelta 2026: Cian Uijtdebroeks komt al vroeg ten val in tweede rit naar Manosque WielerFlits.
-
-### ["Wout was really keen to kind of do that" - Van Aert set up perfect Visma tactic for Matthew Brenna's first Grand Tour win](https://cyclinguptodate.com/cycling/wout-was-really-keen-to-kind-of-do-that-van-aert-set-up-perfect-visma-tactic-for-matthew-brennas-first-grand-tour-win)
-- Riders: Wout van Aert
-- Source: CyclingUpToDate (tier 3)
-- Published: 2026-08-23T17:22:00+00:00
-- Signals: tactics; impact: contextual
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: ...o so on the very first road stage that he has competed in. The merit comes from Wout Van Aert's late attack, but above all the Briton's ability to clim.... Winning a stage in a Grand Tour is already something that not many pro riders manage...
-
-### [Vuelta 2026: preview stage 3 - Chance for breakaways or day for GC guys?](https://cyclingflash.com/news/vuelta-2026-preview-stage-3-chance-for-breakaways-or-day-for-gc-guys)
-- Riders: Tadej Pogacar
-- Source: CyclingFlash (tier 3)
-- Published: 2026-08-23T17:00:00+00:00
-- Signals: tactics; impact: contextual
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: Vuelta 2026: preview stage 3 - Chance for breakaways or day for GC guys?. Explore Vuelta 2026 Stage 3 with tough climbs and breakaway chances. Will Pogacar attack or will breakaway specialists seize the win? Get our full preview now!.
-
-### [Vuelta 2026: Ethan Hayter goes for red but comes up empty-handed](https://cyclingflash.com/news/vuelta-2026-ethan-hayter-goes-for-red-but-comes-up-empty-handed)
-- Riders: Ethan Hayter
-- Source: CyclingFlash (tier 3)
-- Published: 2026-08-23T16:20:00+00:00
-- Signals: tactics; impact: contextual
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: Vuelta 2026: Ethan Hayter goes for red but comes up empty-handed. Ethan Hayter's daring breakaway in Vuelta 2026's stage 2 fell short despite bonus seconds. Read his race insights and follow the latest updates now..
-
-### ["It was my plan to attack there" - Only Pogacar comes in the way of Wout Van Aert's red jersey plans](https://cyclinguptodate.com/cycling/it-was-my-plan-to-attack-there-only-pogacar-comes-in-the-way-of-wout-van-aerts-red-jersey-plans)
-- Riders: Tadej Pogacar
-- Source: CyclingUpToDate (tier 3)
-- Published: 2026-08-23T16:19:00+00:00
-- Signals: tactics, ambition; impact: contextual
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: ...Van Aert aimed to get in the red jersey, but his late attack was chased down by Tadej Pogacar himself. Visma had a double plan for stage 2.... The second day of the Vuelta a España delivered a lot of action in the finale, with a fresh pelot...
-
-### [Uijtdebroeks reveals 40°C fever after team played down Tour illness](https://www.domestiquecycling.com/en/news/uijtdebroeks-reveals-40-c-fever-after-team-played-down-tour-illness/)
-- Riders: Cian Uijtdebroeks
-- Source: Domestique Cycling (tier 2)
-- Published: 2026-08-23T10:30:00+00:00
-- Signals: availability; impact: negative
-- Verification: corroborated_reports; selection use: review_selection_and_lineup
-- Evidence: Uijtdebroeks reveals 40°C fever after team played down Tour illness. Cian Uijtdebroeks has shed new light on the illness that ended his Tour de France, revealing that his fever reached 40°C and that he underwent repeated hospital checks dur...
-
-### [Late attack of Wout van Aert was not spontaneous: "This was really planned"](https://cyclingflash.com/news/late-attackl-of-wout-van-aert-was-not-spontaneous-this-was-really-planned)
-- Riders: Wout van Aert
-- Source: CyclingFlash (tier 3)
-- Published: 2026-08-23T16:02:00+00:00
-- Signals: tactics; impact: contextual
-- Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: Late attack of Wout van Aert was not spontaneous: "This was really planned". Discover how Wout van Aert's well-planned late attack set up teammate Matthew Brennan's stunning Vuelta a España stage 2 win. Read more now!.
-
-### [Vuelta 2026: Impressive Matthew Brennan strikes in Manosque after Van Aert's surprise attack](https://cyclingflash.com/news/vuelta-2026-impressive-matthew-brennan-strikes-in-manosque-after-van-aerts-surprise-attack)
-- Riders: Matthew Brennan
-- Source: CyclingFlash (tier 3)
-- Published: 2026-08-23T15:39:00+00:00
-- Signals: tactics; impact: positive
-- Verification: single_source; selection use: lineup_context_only
-- Evidence: Vuelta 2026: Impressive Matthew Brennan strikes in Manosque after Van Aert's surprise attack. Discover how Matthew Brennan claimed a stunning victory in Vuelta 2026 Stage 2 after Van Aert's surprise attack. Read the thrilling race recap now...
-
-### [Van Aert plays his part as Visma's plan delivers Brennan Vuelta victory](https://www.domestiquecycling.com/en/news/van-aert-plays-his-part-as-vismas-plan-delivers-brennan-vuelta-victory/)
-- Riders: Wout van Aert
-- Source: Domestique Cycling (tier 2)
-- Published: 2026-08-23T16:10:00+00:00
-- Signals: form; impact: positive
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Van Aert plays his part as Visma's plan delivers Brennan Vuelta victory. Wout van Aert was happy to play a decoy role in the finale of stage 2 of the Vuelta a España in Manosque, where his Visma | Lease a Bike teammate Matthew Brennan scorc...
-
-### [Vuelta a España: Powerful sprint nets Matthew Brennan stage 2 victory as Tadej Pogačar fends off attacks to keep leader's jersey](https://www.cyclingnews.com/pro-cycling/racing/vuelta-a-espana-powerful-sprint-nets-matthew-brennan-stage-2-victory-as-tadej-pogacar-fends-off-attacks-to-keep-leaders-jersey/)
-- Riders: Matthew Brennan
-- Source: Cyclingnews (tier 2)
-- Published: 2026-08-23T15:52:02+00:00
-- Signals: form; impact: positive
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Vuelta a España: Powerful sprint nets Matthew Brennan stage 2 victory as Tadej Pogačar fends off attacks to keep leader's jersey. Grand Tour debutant Matthew Brennan (Visma-Lease a Bike) stormed to a dominant sprint victory on stage 2 of th...
-
-### [Brennan rises to emphatic maiden Vuelta victory on stage 2](https://www.domestiquecycling.com/en/news/brennan-rises-to-emphatic-maiden-vuelta-victory-on-stage-2/)
-- Riders: Matthew Brennan
-- Source: Domestique Cycling (tier 2)
-- Published: 2026-08-23T15:45:00+00:00
-- Signals: form; impact: positive
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Brennan rises to emphatic maiden Vuelta victory on stage 2. The Visma | Lease a Bike rider delivered a devastating finish to claim his first Grand Tour stage win..
-
-### ["They tell you it’s safe to start and there are no associated risks, then you simply start" - Cian Uijtdebroeks opens up on his Tour de France illness - CyclingUpToDate.com](https://news.google.com/rss/articles/CBMiugFBVV95cUxPLUY5T2RvN2xNSXlQSW9rN1ZIWXE1N3Z3SW9scWUtUElNVExrb0dNQWJpeW5qNU5ob0hNb2JvbUF4dk9TcU05NG1QSU5nZ1Joc1BEckFOTGdJOEZaVG1fV001RWhteXJmRzVfa2JRWUpkN29BdFFZV0Vud0dwQVlOZUJBM1ZEMEtpaGtGUXU4SEVudzdQM0gxVXlIaTFaRWk4RGR0c09TU1JZaDZXMGxHbW9KRG9yRTNRVlE?oc=5)
-- Riders: Cian Uijtdebroeks
-- Source: CyclingUpToDate.com (tier 3)
-- Published: 2026-08-23T12:33:27+00:00
-- Signals: availability; impact: negative
-- Verification: corroborated_reports; selection use: review_selection_and_lineup
-- Evidence: ...ou it’s safe to start and there are no associated risks, then you simply start" - Cian Uijtdebroeks opens up on his Tour de France illness - CyclingUpToDate.com. "They tell you it’s safe to start and there are no associated risks, then you...
-
-### ["They tell you it’s safe to start and there are no associated risks, then you simply start" - Cian Uijtdebroeks opens up on his Tour de France illness](https://cyclinguptodate.com/cycling/uijtdebroeks-opens-up-on-his-tour-ordeal-i-was-really-ill-and-couldnt-eat-or-drink)
-- Riders: Cian Uijtdebroeks
-- Source: CyclingUpToDate (tier 3)
-- Published: 2026-08-23T12:30:00+00:00
-- Signals: availability; impact: negative
-- Verification: corroborated_reports; selection use: review_selection_and_lineup
-- Evidence: ...you it’s safe to start and there are no associated risks, then you simply start" - Cian Uijtdebroeks opens up on his Tour de France illness. Cian Uijtdebroeks lines up at the Vuelta a España after a difficult summer, marked by the illness t...
-
-### [Tadej Pogačar takes thrilling stage 1 victory at the Vuelta a España](https://www.uaeteamemirates.com/tadej-pogacar-takes-thrilling-stage-1-victory-vuelta-espana/)
-- Riders: Tadej Pogacar
-- Source: UAE Team Emirates official (tier 1)
-- Published: 2026-08-22T18:50:01+00:00
+- Published: 2026-09-08T16:56:34+00:00
 - Signals: form; impact: positive
 - Verification: official_source; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Tadej Pogačar takes thrilling stage 1 victory at the Vuelta a España. The post Tadej Pogačar takes thrilling stage 1 victory at the Vuelta a España appeared first on UAE team Emirates.. The first UAE World Tour cycling team Pogačar begins V...
+- Evidence: Perfect team performance earns Brennan fourth Vuelta a España stage victory - Team Visma. Perfect team performance earns Brennan fourth Vuelta a España stage victory Team Visma.
 
-### [Brennan completes team effort perfectly: “Hopefully this is not the last”](https://cyclingflash.com/news/brennan-completes-team-effort-perfectly-hopefully-this-is-not-the-last)
+### ['It's not like we can block him off with one kilometre to go' - Runner-up Bryan Coquard recognises Matthew Brennan poses major challenge in Vuelta a España sprints](https://www.cyclingnews.com/pro-cycling/teams-riders/its-not-like-we-can-block-him-off-with-one-kilometre-to-go-runner-up-bryan-coquard-recognises-matthew-brennan-poses-major-challenge-in-vuelta-a-espana-sprints/)
+- Riders: Bryan Coquard
+- Source: Cyclingnews (tier 2)
+- Published: 2026-09-08T19:31:21+00:00
+- Signals: role_selection, form; impact: positive
+- Verification: corroborated_reports; selection use: lineup_context_only
+- Evidence: 'It's not like we can block him off with one kilometre to go' - Runner-up Bryan Coquard recognises Matthew Brennan poses major challenge in Vuelta a España sprints. Bryan Coquard has 56 wins in his palmares and at 34, the experienced French...
+
+### [Vuelta a España stage 17 preview: Can Brennan claim win number five and make Visma history?](https://www.domestiquecycling.com/en/news/vuelta-a-espana-stage-17-preview-can-anyone-stop-brennan-from-taking-win-number-five/)
 - Riders: Matthew Brennan
-- Source: CyclingFlash (tier 3)
-- Published: 2026-08-23T16:16:00+00:00
-- Signals: form; impact: positive
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: ...completes team effort perfectly: “Hopefully this is not the last”. Discover how Matthew Brennan secured his maiden Grand Tour stage victory with Visma | Lease a Bike's strong team strategy. Read more about this thrilling win!.
-
-### [Vuelta a España: Powerful sprint nets Matthew Brennan stage 2 victory as Tadej Pogačar fends off attacks to keep leader's jersey - Cyclingnews](https://news.google.com/rss/articles/CBMihAJBVV95cUxQanBQYlhMallmS1lKT2hCdDMxT2Q5ZDI1a0VEbmdrTHBwNkd6ZFpFZXlKVXdNb0I1UmFYVnpuMDlfODdLVktnM1hocGtNU21yREpuMzM5THdRVThQWTl1aFlMaXI1TllMMnh4aDJDQ2VWTEpwNmVEWlN1MnE4dDVlTktfUWRlNk9udkZyQVdVYU11RVBJa3NkNHF1Q0lwdWpVVzktdnVjTlZOWVVuN3BCSEloMXFPVHI0NENuNmszRGZmbHRZSmtDMktMZTZQZEJJTm42dFlFOXJKakYwbTY1RlIwaFR4WUlSeWtPQlJhczNhdjQta1hqV2dnSEI1R1NKeXctdg?oc=5)
-- Riders: Matthew Brennan
-- Source: Cyclingnews (tier 3)
-- Published: 2026-08-23T15:52:02+00:00
-- Signals: form; impact: positive
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Vuelta a España: Powerful sprint nets Matthew Brennan stage 2 victory as Tadej Pogačar fends off attacks to keep leader's jersey - Cyclingnews. Vuelta a España: Powerful sprint nets Matthew Brennan stage 2 victory as Tadej Pogačar fends off...
-
-### [Results Vuelta a España 2026 stage 2 - Brennan wins uphill sprint in Manosque as Van Aert attacks and Pogacar defends](https://cyclinguptodate.com/cycling/results-vuelta-a-espana-2026-stage-2-brennan-wins-uphill-sprint-in-manosque-as-van-aert-attacks-and-pogacar-defends)
-- Riders: Matthew Brennan
-- Source: CyclingUpToDate (tier 3)
-- Published: 2026-08-23T15:43:00+00:00
-- Signals: form; impact: positive
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: ...on the bike, with an incredibly fast finale. The uphill sprint to Manosque saw Matthew Brennan take the win after Wout Van Aert attacked followed by Tadej Pogacar. The UAE Team Emirates - XRG rider maintained the red jersey, despite provisi...
-
-### [Actie van de dag kwam van Ethan Hayter, en dan hebben we het niet over zijn jacht op rood](https://www.indeleiderstrui.nl/wielrennen/actie-van-de-dag-kwam-van-ethan-hayter-en-dan-hebben-we-het-niet-over-zijn-jacht-op-rood)
-- Riders: Ethan Hayter
-- Source: In de Leiderstrui (tier 2)
-- Published: 2026-08-23T17:55:00+00:00
-- Signals: ambition; impact: positive
+- Source: Domestique Cycling (tier 2)
+- Published: 2026-09-09T05:45:00+00:00
+- Signals: form; impact: contextual
 - Verification: single_source; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Actie van de dag kwam van Ethan Hayter, en dan hebben we het niet over zijn jacht op rood. Ethan Hayter speelde zondag in etappe 2 van de Vuelta a España alles of niets, en het werd uiteindelijk niets. De Brit van Soudal Quick-Step miste de...
+- Evidence: ...istory?. The flattest day of the race and likely the sprinters’ last clear shot. Fatigue in week three can make organisation fragile, but Sevilla usually rewards the fastest finisher..
 
-### [Brennan doet na Vuelta-zege uit de doeken wat het Visma \|LaB-plan was: 'Van Aert had daar veel zin in'](https://www.indeleiderstrui.nl/wielrennen/brennan-doet-na-vuelta-zege-uit-de-doeken-wat-het-visma-lab-plan-was-van-aert-had-daar-veel-zin-in)
-- Riders: Matthew Brennan
-- Source: In de Leiderstrui (tier 2)
-- Published: 2026-08-23T16:40:00+00:00
-- Signals: ambition; impact: contextual
+### [Mads Pedersen handed major World Championships boost after Vuelta illness](https://www.domestiquecycling.com/en/news/mads-pedersen-handed-major-world-championships-boost-after-vuelta-illness/)
+- Riders: Mads Pedersen
+- Source: Domestique Cycling (tier 2)
+- Published: 2026-09-07T17:30:00+00:00
+- Signals: availability; impact: negative
+- Verification: corroborated_reports; selection use: review_selection_and_lineup
+- Evidence: Mads Pedersen handed major World Championships boost after Vuelta illness. Mads Pedersen has been cleared to step up his training again after recovering from the illness that forced him out of the Vuelta a España, giving the Lidl-Trek leade...
+
+### [33 years on from Lance Armstrong, no Tadej Pogačar at World Championships 'gives the US probably our best shot at a win since Lance in '93', says Vermaerke](https://www.cyclingnews.com/pro-cycling/teams-riders/33-years-on-from-lance-armstrong-no-tadej-pogacar-at-world-championships-gives-the-us-probably-our-best-shot-at-a-win-since-lance-in-93-says-vermaerke/)
+- Riders: Tadej Pogacar
+- Source: Cyclingnews (tier 2)
+- Published: 2026-09-07T17:16:16+00:00
+- Signals: availability, form; impact: contextual
 - Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: ...n uiteindelijk sterke Tadej Pogacar mislukte dat, maar tot slot was daar plots Matthew Brennan die de etappe wist.... Wout van Aert in het rood krijgen: met dat doel leek Visma | Lease a Bike heel duidelijk aan de tweede etappe van de Vuelt...
+- Evidence: 33 years on from Lance Armstrong, no Tadej Pogačar at World Championships 'gives the US probably our best shot at a win since Lance in '93', says Vermaerke. Since Lance Armstrong brought the United States their last elite men's road race ti...
 
-### [La Vuelta 2026 - Matthew Brennan : "We started with the ambition of getting Wout Van Aert in red"](https://www.youtube.com/watch?v=3YrwmTH-aUM)
-- Riders: Matthew Brennan
-- Source: Cyclism'Actu TV (tier 2)
-- Published: 2026-08-23T16:39:52+00:00
-- Signals: ambition; impact: contextual
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: La Vuelta 2026 - Matthew Brennan : "We started with the ambition of getting Wout Van Aert in red"..
+### ["Ik moet het altijd alleen oplossen": Wout van Aert dolt als "oneerlijk goede" lead-out over 4-2-achterstand op Brennan](https://sporza.be/nl/2026/09/08/-ik-moet-het-altijd-alleen-oplossen-wout-van-aert-dolt-als-oneerlijk-goede-lead-out-over-4-2-achterstand-op-brennan~1788882674558/)
+- Riders: Wout van Aert
+- Source: Sporza Wielrennen (tier 2)
+- Published: 2026-09-08T16:18:35.431000+00:00
+- Signals: role_selection; impact: positive
+- Verification: corroborated_reports; selection use: lineup_context_only
+- Evidence: "Ik moet het altijd alleen oplossen": Wout van Aert dolt als "oneerlijk goede" lead-out over 4-2-achterstand op Brennan. De tandem Wout van Aert-Matthew Brennan heeft voor de zesde keer deze Vuelta een ritzege opgeleverd voor Visma-Lease a...
 
-### [Brennan reveals how Visma's red ambitions helped him claim first Vuelta stage win](https://www.domestiquecycling.com/en/news/brennan-reveals-how-vismas-red-ambitions-helped-him-claim-first-vuelta-stage-win/)
+### ['I don't fear the time trial' - Mas bullish ahead of final Vuelta push](https://www.domestiquecycling.com/en/news/i-dont-fear-the-time-trial-mas-bullish-ahead-of-final-vuelta-push/)
+- Riders: Enric Mas
+- Source: Domestique Cycling (tier 2)
+- Published: 2026-09-07T12:25:00+00:00
+- Signals: availability; impact: contextual
+- Verification: single_source; selection use: monitor_only_no_automatic_upgrade
+- Evidence: ...don't fear the time trial' - Mas bullish ahead of final Vuelta push. Who can stop Enric Mas at the Vuelta a España? The Spaniard inherited the race lead when Tadej Pogacar crashed out on stage 8, but he has made it his own since, gaining t...
+
+### [Brennan cruises to fourth Vuelta win after Van Aert's perfect lead-out](https://www.domestiquecycling.com/en/news/brennan-cruises-to-fourth-vuelta-win-after-van-aerts-perfect-lead-out/)
 - Riders: Matthew Brennan
 - Source: Domestique Cycling (tier 2)
-- Published: 2026-08-23T16:35:00+00:00
-- Signals: ambition; impact: contextual
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Brennan reveals how Visma's red ambitions helped him claim first Vuelta stage win. Visma planned for Van Aert to attack in the finale, with Brennan ready to sprint if the race came back together.
-
-### ["Sorry, ik had moeten overnemen": schuldgevoel overheerst bij Pogacar, die fietsbril cadeau doet aan zoontje Van Aert](https://sporza.be/nl/2026/08/23/-sorry-ik-had-moeten-overnemen-schuldgevoel-overheerst-bij-pogacar-die-fietsbril-cadeau-doet-aan-zoontje-van-aert~1787500296281/)
-- Riders: Tadej Pogacar
-- Source: Sporza Wielrennen (tier 2)
-- Published: 2026-08-23T16:03:20.661000+00:00
-- Signals: ambition; impact: positive
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: ...naar een Vuelta-ritzege van Wout van Aert werd vandaag in de kiem gesmoord door Tadej Pogacar. De Sloveen weigerde mee te werken, maar hield daar duidelijk een schuldgevoel aan over. Hij deed prompt zijn fietsbril cadeau aan zoontje Georges...
-
-### [Matthew Brennan sprint overtuigend naar eerste ritzege in grote ronde](https://sporza.be/nl/2026/08/23/matthew-brennan-sprint-overtuigend-naar-eerste-ritzege-in-grote~1787500649813/)
-- Riders: Matthew Brennan
-- Source: Sporza Wielrennen (tier 2)
-- Published: 2026-08-23T15:58:18.201000+00:00
-- Signals: ambition; impact: positive
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Matthew Brennan sprint overtuigend naar eerste ritzege in grote ronde..
-
-### ['I know I lost time in the corners' - Wout van Aert's dream of returning to red in the opening Vuelta a España TT falls short](https://www.cyclingnews.com/pro-cycling/teams-riders/i-know-i-lost-time-in-the-corners-wout-van-aerts-dream-of-return-to-red-in-opening-vuelta-a-espana-tt-falls-short/)
-- Riders: Wout van Aert
-- Source: Cyclingnews (tier 2)
-- Published: 2026-08-22T19:08:55+00:00
-- Signals: role_selection, ambition, form; impact: positive
+- Published: 2026-09-08T15:20:00+00:00
+- Signals: role_selection; impact: contextual
 - Verification: corroborated_reports; selection use: lineup_context_only
-- Evidence: 'I know I lost time in the corners' - Wout van Aert's dream of returning to red in the opening Vuelta a España TT falls short. Wout van Aert's dream of an immediate return to the leader's red jersey in the Vuelta a España on his return to t...
+- Evidence: Brennan cruises to fourth Vuelta win after Van Aert's perfect lead-out. Matthew Brennan clocked up his fourth win of an astonishing Vuelta a España debut after another perfect lead-out from Wout van Aert on stage 16. Enric Mas remains the o...
 
-### [Dan toch feest bij Visma-Lease a Bike! Wout van Aert opent zinderende finale, Matthew Brennan knalt naar eerste ritzege](https://sporza.be/nl/matches/wielrennen/vuelta-a-espana/2026/vuelta-a-espana-2026-rit-2-dan-toch-feest-bij-visma-lease-a-bike-wout-van-aert-opent-zinderende-finale-matthew-brennan-knalt-naar-eerste-ritzege~1759432445359/)
-- Riders: Wout van Aert
-- Source: Sporza Wielrennen (tier 2)
-- Published: 2026-08-23T15:40:07.712000+00:00
-- Signals: ambition; impact: positive
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Dan toch feest bij Visma-Lease a Bike! Wout van Aert opent zinderende finale, Matthew Brennan knalt naar eerste ritzege. Gegokt en verloren, maar uiteindelijk tóch gewonnen. Wout van Aert opende op dag twee van de Vuelta een spetterende fin...
-
-### [As it happened: British sensation steals the show in first road stage at La Vuelta a España 2026](https://www.cyclingnews.com/pro-cycling/live/vuelta-a-espana-stage-2-live-a-difficult-first-road-stage-to-call-with-likely-sprint-into-manosque-on-the-cards/)
-- Riders: Tadej Pogacar
+### [Vuelta a España: Matthew Brennan makes it four with another scorching sprint to win stage 16](https://www.cyclingnews.com/pro-cycling/racing/vuelta-a-espana-matthew-brennan-makes-it-four-with-another-scorching-sprint-to-win-stage-16/)
+- Riders: Matthew Brennan
 - Source: Cyclingnews (tier 2)
-- Published: 2026-08-23T09:00:27+00:00
+- Published: 2026-09-08T15:19:51+00:00
+- Signals: role_selection, tactics, ambition; impact: contextual
+- Verification: corroborated_reports; selection use: lineup_context_only
+- Evidence: Vuelta a España: Matthew Brennan makes it four with another scorching sprint to win stage 16. Matthew Brennan used a picture-perfect lead-out by Visma-Lease a Bike teammate Wout van Aert to win stage 16 of the Vuelta a España, the British r...
+
+### [Vuelta 2026: Matthew Brennan vliegt naar vierde ritzege na perfecte lead-out Wout van Aert - WielerFlits](https://news.google.com/rss/articles/CBMiuwFBVV95cUxQVUtZTzJ2M2taR01KZlEyc2Izd0RLRXdJX1BlNGhMTWFqZVl0NElaTG51Q1ppU2JtdEFxZmpFSGdyMm01YVVucXhuUVpHbTVYVThfbGhjbFZ2NlBfd181OEd0cUdNSGwzRkJDTVY0cXoxdzVKQnU2VEdfaTVVd1hZemF0WVQ2VGJHbWJfZjFDVmZBcDBuREY4ME5WbFl6aERlNVVqNVBwaUlzY2IyeDZfdE1VdDZnOWNlS3Y4?oc=5)
+- Riders: Matthew Brennan
+- Source: WielerFlits (tier 2)
+- Published: 2026-09-08T15:14:00+00:00
+- Signals: role_selection, ambition; impact: positive
+- Verification: corroborated_reports; selection use: lineup_context_only
+- Evidence: Vuelta 2026: Matthew Brennan vliegt naar vierde ritzege na perfecte lead-out Wout van Aert - WielerFlits. Vuelta 2026: Matthew Brennan vliegt naar vierde ritzege na perfecte lead-out Wout van Aert WielerFlits.
+
+### ['Most important thing is they get along well now' – Wout van Aert and Remco Evenepoel lead Belgium at World Championships with communication the key for national coach](https://www.cyclingnews.com/pro-cycling/teams-riders/most-important-thing-is-they-get-along-well-now-wout-van-aert-and-remco-evenepoel-lead-belgium-at-world-championships-with-communication-the-key-for-national-coach/)
+- Riders: Wout van Aert
+- Source: Cyclingnews (tier 2)
+- Published: 2026-09-07T11:14:51+00:00
+- Signals: availability, tactics, form, interview; impact: contextual
+- Verification: corroborated_reports; selection use: lineup_context_only
+- Evidence: 'Most important thing is they get along well now' – Wout van Aert and Remco Evenepoel lead Belgium at World Championships with communication the key for national coach. Remco Evenepoel and Wout van Aert will lead Belgium's hopes at the upco...
+
+### [DISCUSSION Vuelta a España Stage 16: Do sprinters really need to have so many days? Would the final in Cortegana had been more exciting?](https://cyclinguptodate.com/cycling/discussion-vuelta-a-espana-stage-16-do-sprinters-really-need-to-have-so-many-days-would-the-final-in-cortegana-had-been-more-exciting)
+- Riders: Matthew Brennan
+- Source: CyclingUpToDate (tier 3)
+- Published: 2026-09-08T19:30:00+00:00
+- Signals: role_selection, form; impact: positive
+- Verification: corroborated_reports; selection use: lineup_context_only
+- Evidence: ...Cortegana had been more exciting?. Stage 16 of the Vuelta a Espana was won by Matthew Brennan, who claimed his fourth victory of the race. Team Visma | Lease a Bike continued their impressive winning streak, once again making the differenc...
+
+### ['Denk niet dat er 2 kampen zullen zijn'; Van Aert, Nys en Vermeersch over WK-balans met Evenepoel](https://www.indeleiderstrui.nl/wielrennen/denk-niet-dat-er-2-kampen-zullen-zijn-van-aert-nys-en-vermeersch-over-wk-balans-met-evenepoel)
+- Riders: Wout van Aert
+- Source: In de Leiderstrui (tier 2)
+- Published: 2026-09-08T13:30:00+00:00
+- Signals: role_selection, ambition; impact: positive
+- Verification: corroborated_reports; selection use: lineup_context_only
+- Evidence: ...2 kampen zullen zijn'; Van Aert, Nys en Vermeersch over WK-balans met Evenepoel. Wout van Aert schittert momenteel in de Vuelta a España, maar het echt grote doel ligt later in september. De Belg van Visma | Lease a Bike gaat vol voor de w...
+
+### [Favorieten etappe 17 Vuelta a Espana 2026 \| De enige kans om Matthew Brennan te kloppen](https://www.indeleiderstrui.nl/wielrennen/favorieten-etappe-17-vuelta-a-espana-2026-de-enige-kans-om-matthew-brennan-te-kloppen)
+- Riders: Matthew Brennan
+- Source: In de Leiderstrui (tier 2)
+- Published: 2026-09-09T05:10:00+00:00
+- Signals: stage_conditions; impact: contextual
+- Verification: corroborated_reports; selection use: lineup_context_only
+- Evidence: Favorieten etappe 17 Vuelta a Espana 2026 | De enige kans om Matthew Brennan te kloppen. De derde week als zwaarste week van een grote ronde? Niet in deze Vuelta a España. Na al dat klimwerk en al dat geweld in de hitte in de eerste twee we...
+
+### [Thibau Nys had nacht voor rustdag last van koorts: “Maar hij is niet ziek” - WielerFlits](https://news.google.com/rss/articles/CBMiqgFBVV95cUxPUmQzNE54UW5MeGY1QWlTUGpCZ2l4ODJTQ2dEXzcxUVJPZUN3WHB1amhBUlA4UnZKOWx1VmlmLWhxbWNPRUFCR0wtWGpBS0lmMUhwVi1XMzZGWUdaTzNvWHFBeVRYcUZ2V0NrVGpPV2diLWhCdUVVYVgtMi00Z2ktMXRPZjgwZzRqdlBUYjZDcm1kSVZNV291WGotVVhiVW5Xci1fOGMyQ0pKQQ?oc=5)
+- Riders: Thibau Nys
+- Source: WielerFlits (tier 2)
+- Published: 2026-09-08T17:35:00+00:00
+- Signals: availability; impact: negative
+- Verification: single_source; selection use: verify_before_downgrading
+- Evidence: Thibau Nys had nacht voor rustdag last van koorts: “Maar hij is niet ziek” - WielerFlits. Thibau Nys had nacht voor rustdag last van koorts: “Maar hij is niet ziek” WielerFlits.
+
+### [Wout van Aert shines again as lead-out man: "That’s the great thing about a grand tour"](https://cyclingflash.com/news/wout-van-aert-shines-again-as-lead-out-man-thats-the-great-thing-about-a-grand-tour)
+- Riders: Wout van Aert
+- Source: CyclingFlash (tier 3)
+- Published: 2026-09-08T16:18:00+00:00
+- Signals: role_selection; impact: contextual
+- Verification: corroborated_reports; selection use: lineup_context_only
+- Evidence: Wout van Aert shines again as lead-out man: "That’s the great thing about a grand tour". Discover how Wout van Aert's lead-out helped Matthew Brennan win stage 16 at Vuelta a España. Explore team spirit and young talent in this thrilling Gr...
+
+### [Vuelta a Espana 2026 Classifications Update Stage 16 - Van Aert and Buitrago look set for victory, Enric Mas retains red as the peloton enters the final week - CyclingUpToDate.com](https://news.google.com/rss/articles/CBMimgJBVV95cUxPd2UtZUZtNlBqRzZaaUdWUEtIbVdkSng4ck1uWE50SUp3YUtDY1ZoaHhvLXFFNnYxTy1ZYkV1b0ZnUkNGSnBLTDFVVDNuVDRtTlNCRzFWSktHd0R4Z3A2dzVneThxTk5VRHlLYmx2VEdYRU5UQXc0Z3ZnVlN6dWFlRnBBS3VhS2xpSHlyUTZfcmZqeHpKalNtMHZxcmdVTkhTbHVhOXpSOUJacGxMY1J6WmItMG50X2Z2akd3cjRMOTFrOVBCTGN5cUdzU2FZdUZraldqWTdOcEtUT3ZJUTl6SzRMSVg4SG10MU8zT0JDRlBpc296c0RGUlpZNlhZZXNlVUtXVHZCZW4wNU5iQV9NekVjQzlQWHBZUGc?oc=5)
+- Riders: Wout van Aert
+- Source: CyclingUpToDate.com (tier 3)
+- Published: 2026-09-09T03:37:45+00:00
+- Signals: form; impact: positive
+- Verification: single_source; selection use: monitor_only_no_automatic_upgrade
+- Evidence: ...spana 2026 Classifications Update Stage 16 - Van Aert and Buitrago look set for victory, Enric Mas retains red as the peloton enters the final week - CyclingUpToDate.com. Vuelta a Espana 2026 Classifications Update Stage 16 - Van Aert and B...
+
+### ["It was Pogacar’s best year on a human level since I’ve known him" - Matxin on UAE leader's 2026 and post-crash Vuelta situation](https://cyclinguptodate.com/cycling/it-was-pogacars-best-year-on-a-human-level-since-ive-known-him-matxin-on-uae-leaders-2026-and-post-crash-vuelta-situation)
+- Riders: Tadej Pogacar
+- Source: CyclingUpToDate (tier 3)
+- Published: 2026-09-07T11:45:00+00:00
+- Signals: availability; impact: negative
+- Verification: single_source; selection use: verify_before_downgrading
+- Evidence: ...ce I’ve known him" - Matxin on UAE leader's 2026 and post-crash Vuelta situation. Tadej Pogacar’s crash has completely reshaped UAE Team Emirates XRG’s scenario at the Vuelta a España. The team that started the race in full control is now d...
+
+### [Vuelta 2026: Matthew Brennan flies to fourth stage win after perfect lead-out from Van Aert](https://cyclingflash.com/news/vuelta-2026-matthew-brennan-flies-to-fourth-stage-win-after-perfect-lead-out-from-van-aert)
+- Riders: Matthew Brennan
+- Source: CyclingFlash (tier 3)
+- Published: 2026-09-08T15:14:00+00:00
+- Signals: role_selection, ambition; impact: contextual
+- Verification: corroborated_reports; selection use: lineup_context_only
+- Evidence: Vuelta 2026: Matthew Brennan flies to fourth stage win after perfect lead-out from Van Aert. Discover how Matthew Brennan secured his fourth Vuelta 2026 stage win thanks to Wout van Aert's perfect lead-out. Relive the thrilling sprint finis...
+
+### [Matthew Brennan Wins Vuelta a España Stage 16, Wout van Aert Leads Out: 23 outlets compared - NewsCord](https://news.google.com/rss/articles/CBMi2gFBVV95cUxOeXRZQlQ1Q3c1SjlGTXNfWFNpWk51ZTkydGdpRUo4MS04SUgydF91NHROaTRaeGp2ZzBUenNEVkhXNTB2V21YV1BEdHdZU0ZCZXJJckJ4UkxpSGZ5bWtkTTYwbHpLa3l1dVdfbnhXeGgyM1RZUGQzZmhvY2VNR2VIeU5qa1l0eDJIVUdkbmxKd2xUWHp0WnRkY0V1M29pRkk4NldGZkFXd0FtQ084OExURkNsRm1fb24wckxqLWhtZTlDcU04UktZcGdTYmI4VzFoUmJFYTlGd2xUQQ?oc=5)
+- Riders: Matthew Brennan
+- Source: NewsCord (tier 3)
+- Published: 2026-09-09T02:20:55+00:00
+- Signals: form; impact: positive
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: Matthew Brennan Wins Vuelta a España Stage 16, Wout van Aert Leads Out: 23 outlets compared - NewsCord. Matthew Brennan Wins Vuelta a España Stage 16, Wout van Aert Leads Out: 23 outlets compared NewsCord.
+
+### [“There are at least fifteen riders who can win”: Bernard Hinault sees wide-open World Championships after Pogacar’s absence](https://cyclinguptodate.com/cycling/there-are-at-least-fifteen-riders-who-can-win-bernard-hinault-sees-wide-open-world-championships-after-pogacars-absence)
+- Riders: Tadej Pogacar
+- Source: CyclingUpToDate (tier 3)
+- Published: 2026-09-07T08:01:00+00:00
+- Signals: availability; impact: negative
+- Verification: single_source; selection use: verify_before_downgrading
+- Evidence: ...win”: Bernard Hinault sees wide-open World Championships after Pogacar’s absence. Tadej Pogacar’s season-ending injury has transformed the World Championships from a race with a clear favourite into one of the most unpredictable events on t...
+
+### [Enric Mas had slechte benen na de rustdag: “Beetje geblokkeerd” - WielerFlits](https://news.google.com/rss/articles/CBMimwFBVV95cUxOUWhrS3I1UFJ4ejB1NmtVWE1GS18tZzlkUlVPX1NySmlLeDR5dTZkVzl5QmJpR1kzNTZnQkg4U2p2LXZMaUF0RnpySmlqNDBvQS1DamtEaEl4LWxWWWg4SFNDcHdwdEV6WDFKaEpoYTliemJHRUJCSTB4cmVuQVBzQzhyUFRFei1xMVo4OGNZYzkxU3hsRk9tTG5qSQ?oc=5)
+- Riders: Enric Mas
+- Source: WielerFlits (tier 2)
+- Published: 2026-09-08T18:09:00+00:00
+- Signals: form; impact: contextual
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: Enric Mas had slechte benen na de rustdag: “Beetje geblokkeerd” - WielerFlits. Enric Mas had slechte benen na de rustdag: “Beetje geblokkeerd” WielerFlits.
+
+### ['I never expected to be going this well' – Primož Roglič says 'anything could happen' in Vuelta a España GC battle with Enric Mas and Felix Gall](https://www.cyclingnews.com/pro-cycling/teams-riders/i-never-expected-to-be-going-this-well-primoz-roglic-says-anything-could-happen-in-vuelta-a-espana-gc-battle-with-enric-mas-and-felix-gall/)
+- Riders: Primoz Roglic
+- Source: Cyclingnews (tier 2)
+- Published: 2026-09-08T09:28:41+00:00
+- Signals: availability, form, interview; impact: contextual
+- Verification: single_source; selection use: monitor_only_no_automatic_upgrade
+- Evidence: 'I never expected to be going this well' – Primož Roglič says 'anything could happen' in Vuelta a España GC battle with Enric Mas and Felix Gall. Primož Roglič has made it clear that he is not throwing in the towel in the GC battle for the...
+
+### [“The legs are there and we will continue to try our luck”: Bryan Coquard encouraged by another close Vuelta finish](https://cyclinguptodate.com/cycling/the-legs-are-there-and-we-will-continue-to-try-our-luck-bryan-coquard-encouraged-by-another-close-vuelta-finish)
+- Riders: Bryan Coquard
+- Source: CyclingUpToDate (tier 3)
+- Published: 2026-09-08T21:00:00+00:00
 - Signals: ambition, form; impact: positive
 - Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: ...t 23, 2026 – 5:02 AM It wasn't a huge surprise to anyone last night that Tadej Pogačar (UAE Team Emirates-XRG) took the win, but the margin of victory was incredible. Just 0.09 of a second split the five time Tour de France victor and the B...
+- Evidence: “The legs are there and we will continue to try our luck”: Bryan Coquard encouraged by another close Vuelta finish. Bryan Coquard came close to adding another Vuelta a España stage victory to his palmarès on Tuesday, while Vito Braet produc...
 
-### [‘Not worthy of a Grand Tour’: Visma backs Van Aert’s criticism of Vuelta opener](https://www.domestiquecycling.com/en/news/not-worthy-of-a-grand-tour-visma-backs-van-aerts-criticism-of-vuelta-opener/)
-- Riders: Wout van Aert
+### [Brennan wants Tour de France yellow on home roads after fourth Vuelta win](https://www.domestiquecycling.com/en/news/brennan-wants-tour-de-france-yellow-on-home-roads-after-fourth-vuelta-win/)
+- Riders: Matthew Brennan
 - Source: Domestique Cycling (tier 2)
-- Published: 2026-08-23T09:00:00+00:00
+- Published: 2026-09-08T15:45:00+00:00
 - Signals: form; impact: positive
 - Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: ...’: Visma backs Van Aert’s criticism of Vuelta opener. Mathieu Heijboer has backed Wout van Aert’s criticism of the technical opening time trial in Monaco, with the Visma | Lease a Bike Head of Performance arguing the course was not suitable...
+- Evidence: Brennan wants Tour de France yellow on home roads after fourth Vuelta win. Matthew Brennan is already turning his thoughts towards the British Grand Départ of next year’s Tour de France after racking up the fourth stage victory of his spark...
 
-### [Ethan Hayter’s heartbreak caught on camera after Pogacar wins by 0.09 seconds](https://www.domestiquecycling.com/en/news/ethan-hayters-heartbreak-caught-on-camera-after-pogacar-wins-by-0-09-seconds/)
-- Riders: Ethan Hayter
-- Source: Domestique Cycling (tier 2)
-- Published: 2026-08-23T07:55:00+00:00
+### [Matthew Brennan sprints to fourth stage victory on Vuelta as Enric Mas maintains lead - Irish Independent](https://news.google.com/rss/articles/CBMi7AFBVV95cUxPMXpaX0U0Y0UyR2tUQnk2NUVxSDUzZjNza0ZyWUQyU2dpRHlJaHpyaUNPQjE3ZnExRlRYT21CX3dJbUt3NTB3ZEJCRTcxZEVScFhybklUUWZHdWNMYVliX0dHTUt5cllzWTRsRmxFVG5MdU5KbXRwX1lTVENDS2hKbk4xTU9hU1l2NTdKa05GS3lHQndxU3l1TWNJM3lsbXY0b0hCcklUUUxDNW5jTGdaX3Y1dGtqOUpBSm1Udi1iVFRSbFE4Y1lvUEZfdzZDci1CRS11N1FFOGhlV3JudU12NDBIVmVWbW9kOVZTUw?oc=5)
+- Riders: Matthew Brennan
+- Source: Irish Independent (tier 3)
+- Published: 2026-09-08T18:51:00+00:00
+- Signals: form; impact: positive
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: Matthew Brennan sprints to fourth stage victory on Vuelta as Enric Mas maintains lead - Irish Independent. Matthew Brennan sprints to fourth stage victory on Vuelta as Enric Mas maintains lead Irish Independent.
+
+### [🎥 UAE Emirates-XRG blijft maar vallen in Vuelta a España en ziet fan ook nog bijna bidon jatten](https://www.indeleiderstrui.nl/wielrennen/uae-emirates-xrg-blijft-maar-vallen-in-vuelta-a-espana-en-ziet-fan-ook-nog-bijna-bidon-jatten)
+- Riders: Kevin Vermaerke
+- Source: In de Leiderstrui (tier 2)
+- Published: 2026-09-09T06:00:00+00:00
+- Signals: tactics; impact: contextual
+- Verification: single_source; selection use: lineup_context_only
+- Evidence: ...ee zat in de vlucht, lag er ook in.... Another stellar breakaway effort from Kevin Vermaerke 🔥 Chancing his arm once more, Kevin spent most of stage 16 at the head of the race. His efforts earned him the day’s combativity award 👊🏻 #WeAreUAE...
+
+### [“Spanish cycling has an opportunity and we have to take advantage of it”: Former Spanish pro backs Enric Mas to finish La Vuelta in red](https://cyclinguptodate.com/cycling/spanish-cycling-has-an-opportunity-and-we-have-to-take-advantage-of-it-former-spanish-pro-backs-enric-mas-to-finish-la-vuelta-in-red)
+- Riders: Enric Mas
+- Source: CyclingUpToDate (tier 3)
+- Published: 2026-09-09T01:00:00+00:00
+- Signals: ambition; impact: contextual
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: ...has an opportunity and we have to take advantage of it”: Former Spanish pro backs Enric Mas to finish La Vuelta in red. Enric Mas enters the final stages of the Vuelta a España with the red jersey still firmly on his shoulders, and former S...
+
+### [Vuelta a Espana: Matthew Brennan wins his fourth stage of 2026 race - BBC](https://news.google.com/rss/articles/CBMiZkFVX3lxTE5CSVNwd1BUTVc2YUtBcVJvZ1R4N0xwc1RJbTFOdnFTSkxQUEhTbGFvRGo4VkpTaFdia2tmN0pLQ2lEakRfSGF4Ykt4bWlzbTFoNXQxR1l3S0RyUXlGWVBpdVUyMG5EUQ?oc=5)
+- Riders: Matthew Brennan
+- Source: BBC (tier 3)
+- Published: 2026-09-08T17:40:39+00:00
+- Signals: form; impact: positive
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: Vuelta a Espana: Matthew Brennan wins his fourth stage of 2026 race - BBC. Vuelta a Espana: Matthew Brennan wins his fourth stage of 2026 race BBC.
+
+### [Matthew Brennan takes fourth 2026 Vuelta a Espana stage victory - The New York Times](https://news.google.com/rss/articles/CBMilwFBVV95cUxNU1lqOEJSeEZUNGdOWTFLSFk1ZWZqOVFPUzIycnpwaF91SWdOenJYVnluYngyQk4yVUVFdTZaSGcwQUJGT2xnbTY2LTZJQmY0M2VXM2RTV0gxSFNYUHpfR3A2Z1FydWN2SVlGczlCTXY2NHNDX2dCdDBXSGszQnpFMHVBMWo0SHhLMzFtbWU0Z2JocWxOcGhn?oc=5)
+- Riders: Matthew Brennan
+- Source: The New York Times (tier 3)
+- Published: 2026-09-08T16:26:00+00:00
+- Signals: form; impact: positive
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: Matthew Brennan takes fourth 2026 Vuelta a Espana stage victory - The New York Times. Matthew Brennan takes fourth 2026 Vuelta a Espana stage victory The New York Times.
+
+### [After fourth Vuelta victory, British Tour de France start is Matthew Brennan's big goal - "It would be fantastic to take the yellow jersey on the opening day there" - CyclingUpToDate.com](https://news.google.com/rss/articles/CBMinwJBVV95cUxOQWh2bE1pc21vaUZGSHZTZElNRUhwcVAwR01odXMzUFlJR1MzcXBZNFMzalljMjJreXR0dC1UMU5IS0p6RndqeF9UMjAzekk5N1FHQ1U5Z2J2QmZSWW14MXB0RkstMElZOFhGUEVtR3NtZFdUZkRYNVk5d0tmRTFYdFRuUXU2WnF5cXNtM2dhbmVpZ1lkN1lNbzhzMzVqVGJWTkRnSHpQbmFaQzBidW9fQTNDNGhkczN0dDI1X1MyNHpva1EyVFpVWFNCYnVtcmFrSW1DRU96dWJQbHJ5MVNtSEdjWDVnOGt0YmpDc3pBc19mWHlCRF90a1RZWVFvZTdtX0JWc3pBbTZPR2hIaTY0Ukp6eVFLdHQ3bGtpeXI3cw?oc=5)
+- Riders: Matthew Brennan
+- Source: CyclingUpToDate.com (tier 3)
+- Published: 2026-09-08T16:07:05+00:00
+- Signals: form; impact: positive
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: After fourth Vuelta victory, British Tour de France start is Matthew Brennan's big goal - "It would be fantastic to take the yellow jersey on the opening day there" - CyclingUpToDate.com. After fourth Vuelta victory, British Tour de France...
+
+### [After fourth Vuelta victory, British Tour de France start is Matthew Brennan's big goal - "It would be fantastic to take the yellow jersey on the opening day there"](https://cyclinguptodate.com/cycling/after-fourth-vuelta-victory-british-tour-de-france-start-is-matthew-brennans-big-goal-it-would-be-fantastic-to-take-the-yellow-jersey-on-the-opening-day-there)
+- Riders: Matthew Brennan
+- Source: CyclingUpToDate (tier 3)
+- Published: 2026-09-08T16:03:00+00:00
+- Signals: form; impact: positive
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: After fourth Vuelta victory, British Tour de France start is Matthew Brennan's big goal - "It would be fantastic to take the yellow jersey on the opening day there". Matthew Brennan is in his Grand Tour debut, but has already won on four di...
+
+### [Vuelta a Espana 2026 Classifications Update Stage 16 - Van Aert and Buitrago look set for victory, Enric Mas retains red as the peloton enters the final week](https://cyclinguptodate.com/cycling/vuelta-a-espana-2026-classifications-update-stage-16-van-aert-and-buitrago-look-set-for-victory-enric-mas-retains-red-as-the-peloton-enters-the-final-week)
+- Riders: Wout van Aert
+- Source: CyclingUpToDate (tier 3)
+- Published: 2026-09-08T15:34:00+00:00
 - Signals: form; impact: positive
 - Verification: single_source; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Ethan Hayter’s heartbreak caught on camera after Pogacar wins by 0.09 seconds. His time of 10:57 had held up against one rider after another in the opening time trial of the Vuelta a España, and with only a handful of contenders still on th...
+- Evidence: ...Espana 2026 Classifications Update Stage 16 - Van Aert and Buitrago look set for victory, Enric Mas retains red as the peloton enters the final week. The first red jersey of the 2026 Vuelta a Espana will be decided immediately in Monaco, wh...
 
-### [Britain’s Matt Brennan beats leader Tadej Pogacar to Vuelta a Espana second-stage win - The Independent](https://news.google.com/rss/articles/CBMiowFBVV95cUxOek1xVTEzZmpWR1k2SDNVQkJiZ0tyYld6bHFkSllJVlRzMnJPUlUteExqYTNqS0NmTGpmWjAyWFpWQUZhV3ptcm9acUdVX1RYWk5IWUczM0lrSnJDeFJiQnhEOTN3WkdJVnBEN1pqM0NUakxmMGFSMk5JQ2xXdWFOOHY1NlYtV0xuVjRZRUc2aUtYWWhGX0x2ZjZyeURNd1ZuR1Nr?oc=5)
+### [Matthew Brennan delivers another sprint victory at the Vuelta a España - Canadian Cycling Magazine](https://news.google.com/rss/articles/CBMisgFBVV95cUxPTXF0ZFJqckw0QWMwcXRLMm1lY2EyNE9GR1F3QTdrWWhIdHVZd2dYYlhKYWNoU3huYTY2SWNCLUxuak5DUEdHbTVnQkxFb3ItSTVQUV8xZGFUYzhJeW1PSjdKTFhQYXRGeHY1UjN2VUpUV1Q3a3pwckw1V2xwbGkweF9Gb3g3WDR5NElWR0JFc052Nk9tTkhYamtGZElqdjh2YzZYb0RUXzk1RU1iNDJidkhn?oc=5)
 - Riders: Matthew Brennan
-- Source: The Independent (tier 3)
-- Published: 2026-08-23T17:30:00+00:00
-- Signals: ambition; impact: contextual
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Britain’s Matt Brennan beats leader Tadej Pogacar to Vuelta a Espana second-stage win - The Independent. Britain’s Matt Brennan beats leader Tadej Pogacar to Vuelta a Espana second-stage win The Independent.
-
-### [Vuelta a Espana 2026 classifications stage 2 - Tadej Pogacar keeps red jersey under the most unlikely circumstances - CyclingUpToDate.com](https://news.google.com/rss/articles/CBMi4wFBVV95cUxNWnFPUnloaDNiN2tnajJVVWU5TFZzNkw2WlJTMlRrR01ocmoyMGVMLTR1OHFpRFB3aGgxZ0h2Zm90a3E5dGdNV0FKOV9WSi1sZEd3M2xEd1dFR2NfODBCcFZGVFpZUTFiMjR6elRfeE85YmZnSlI5WG5BeHZoMDRfRkRtU0ZMTzhNQ0F0VWd6TkJuaEY3QUszakJtWnZIRzB0M3RMVTB4bXYwRFlSNmZJckk0UXR2QV9MSkNMLWU3aWxTa0k2UmJPWC1ZWkRFN1VHOUo3VVFPaFZqTHJWY1Fqd0ZRVQ?oc=5)
-- Riders: Tadej Pogacar
-- Source: CyclingUpToDate.com (tier 3)
-- Published: 2026-08-23T16:54:58+00:00
-- Signals: ambition; impact: contextual
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Vuelta a Espana 2026 classifications stage 2 - Tadej Pogacar keeps red jersey under the most unlikely circumstances - CyclingUpToDate.com. Vuelta a Espana 2026 classifications stage 2 - Tadej Pogacar keeps red jersey under the most unlikely...
-
-### [Vuelta a Espana 2026 classifications stage 2 - Tadej Pogacar keeps red jersey under the most unlikely circumstances](https://cyclinguptodate.com/cycling/vuelta-a-espana-2026-classifications-stage-2-tadej-pogacar-keeps-red-jersey-under-the-most-unlikely-circumstances)
-- Riders: Tadej Pogacar
-- Source: CyclingUpToDate (tier 3)
-- Published: 2026-08-23T16:51:00+00:00
-- Signals: ambition; impact: contextual
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: Vuelta a Espana 2026 classifications stage 2 - Tadej Pogacar keeps red jersey under the most unlikely circumstances. The first red jersey of the 2026 Vuelta a Espana will be decided immediately in Monaco, where a 9.4-kilometre individual ti...
-
-### [Vuelta a Espana 2026 and stage 3 preview, profiles, favourites & predictions - Will Pogacar give away the red jersey on the race's first summit finish? - CyclingUpToDate.com](https://news.google.com/rss/articles/CBMiiwJBVV95cUxPcEN2akZCdW9jc3FwejVyVG5pQVRybTR6MENvLUlma0NhckJqbUZfbDdleU1aX0g0T0s0dVV3VER6eTkxYlEwRFYyMm45d2ZpazM2ZkJyQmVtMmtaWnJNazZZODY5SVVRYmZEWE95U0p4aFk4dUZjV2JkZkdITmhHaGVGeG1nZTVlNFpCNkkyVlUtOEo3cGdvVjNvdWVoR1lIS3BzenFjMXR3LVNQRE1SUUVLcDh6WXpuTm1mQmNkRVczcHpxX056SldtWC1CN0M2OUNrMHFSUjdXaXEtNnR5OV9DQ24xZzU4N1BYWFdlVmtSOFRkaEZWSS1ubHplM18ybnA4OFNMdUVnb0k?oc=5)
-- Riders: Tadej Pogacar
-- Source: CyclingUpToDate.com (tier 3)
-- Published: 2026-08-23T16:47:38+00:00
-- Signals: ambition; impact: contextual
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: ...stage 3 preview, profiles, favourites & predictions - Will Pogacar give away the red jersey on the race's first summit finish? - CyclingUpToDate.com. Vuelta a Espana 2026 and stage 3 preview, profiles, favourites & predictions - Will Pogaca...
-
-### ["I didn't have much left" - In ripped shorts, Ethan Hayter races into red jersey ahead of Pogacar, and loses it back](https://cyclinguptodate.com/cycling/i-didnt-have-much-left-in-ripped-shorts-ethan-hayter-races-into-red-jersey-ahead-of-pogacar-and-loses-it-back)
-- Riders: Ethan Hayter
-- Source: CyclingUpToDate (tier 3)
-- Published: 2026-08-23T16:37:00+00:00
-- Signals: ambition; impact: contextual
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: "I didn't have much left" - In ripped shorts, Ethan Hayter races into red jersey ahead of Pogacar, and loses it back. The second stage of the Vuelta a España was an absolute roller-coaster for Ethan Hayter. The Soudal - Quick-Step rider wen...
-
-### [Pogacar joins another exclusive club after completing Grand Tour leader’s jersey set](https://www.domestiquecycling.com/en/news/pogacar-joins-another-exclusive-club-after-completing-grand-tour-leaders-jersey-set/)
-- Riders: Tadej Pogacar
-- Source: Domestique Cycling (tier 2)
-- Published: 2026-08-23T13:00:00+00:00
-- Signals: ambition; impact: contextual
-- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: ...r joins another exclusive club after completing Grand Tour leader’s jersey set. Tadej Pogacar has added another distinction to an already extraordinary career. By taking the red jersey on the opening day of the 2026 Vuelta a España, the Slo...
-
-### ["How can a Tadej Pogacar victory be a surprise?” - Unique win for UAE leader at Vuelta a España as analyst sends stark warning - CyclingUpToDate.com](https://news.google.com/rss/articles/CBMipgFBVV95cUxPUlE2NDNxNFRNS2Y3dkdHRzJ3aTI0aUxLamZzMENYV1hNUXkyVDk0a1dMdXJpaXctR2s2X1RVWnUyc05LT3B2WnYxRkxicC03ME45eTQzOWQ2UnFDNklrYVotN29oYmJteUpMcWZnLThNYlFvQW1QUDM3MFBRMVZoOC1Bd01zdUJ1SlI3RjZQVEpxTWQzQS1wMm1SRjctZWhaRmFnTE9n?oc=5)
-- Riders: Tadej Pogacar
-- Source: CyclingUpToDate.com (tier 3)
-- Published: 2026-08-23T10:03:21+00:00
+- Source: Canadian Cycling Magazine (tier 3)
+- Published: 2026-09-08T15:31:15+00:00
 - Signals: form; impact: positive
 - Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
-- Evidence: "How can a Tadej Pogacar victory be a surprise?” - Unique win for UAE leader at Vuelta a España as analyst sends stark warning - CyclingUpToDate.com. "How can a Tadej Pogacar victory be a surprise?” - Unique win for UAE leader at Vuelta a E...
+- Evidence: Matthew Brennan delivers another sprint victory at the Vuelta a España - Canadian Cycling Magazine. Matthew Brennan delivers another sprint victory at the Vuelta a España Canadian Cycling Magazine.
+
+### ['Another day less' - No crosswind scare for Mas as Vuelta crunch looms](https://www.domestiquecycling.com/en/news/another-day-less-no-crosswind-scare-for-mas-as-vuelta-crunch-looms/)
+- Riders: Enric Mas
+- Source: Domestique Cycling (tier 2)
+- Published: 2026-09-08T16:15:00+00:00
+- Signals: stage_conditions; impact: positive
+- Verification: single_source; selection use: lineup_context_only
+- Evidence: ...nother day less' - No crosswind scare for Mas as Vuelta crunch looms. One day less. Enric Mas moved a step closer to overall victory at the Vuelta a España after he finished alongside his rivals on stage 16 to La Rábida on an afternoon when...
+
+### [Results Vuelta a España 2026 stage 16 - Victory number six for Visma as Matthew Brennan sprints to victory once again](https://cyclinguptodate.com/cycling/results-vuelta-a-espana-2026-stage-16-victory-number-six-for-visma-as-matthew-brennan-sprints-to-victory-once-again)
+- Riders: Matthew Brennan
+- Source: CyclingUpToDate (tier 3)
+- Published: 2026-09-08T15:15:00+00:00
+- Signals: form; impact: positive
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: Results Vuelta a España 2026 stage 16 - Victory number six for Visma as Matthew Brennan sprints to victory once again. Stage 16 of the Vuelta a Espana has been won by Matthew Brennan. Team Visma | Lease a Bike continue their winning streak...
+
+### [Vuelta a España 2026: Matthew Brennan claims historic fourth stage win, forging powerful partnership with points jersey leader Wout van Aert - olympics.com](https://news.google.com/rss/articles/CBMiygFBVV95cUxQMXI5TUpxZDlIckdtSG1FZ2FfQUp1U0tqU1N3RDVOZVlOQjVsQVlWMGZkTlRfZmhDQWFjTElPNzg4UTVRYkxjbXNRcGFXcVJ5eWozdTBxMGhQNWZCRWdUNU1adTdwNENkRzFselZTT01GOUV5LXlRWVpiRWRCTC1yeGZZWEZrbjFCb2h5dkVfWWx2VUw5NlE0c0g0eFdTekVpWkhjMktSWU5FU3JXbTRTM3BvcnZVZEpUenRTdE9aempHOU9DLVBmWkJR?oc=5)
+- Riders: Matthew Brennan
+- Source: olympics.com (tier 3)
+- Published: 2026-09-08T21:35:00+00:00
+- Signals: ambition; impact: contextual
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: Vuelta a España 2026: Matthew Brennan claims historic fourth stage win, forging powerful partnership with points jersey leader Wout van Aert - olympics.com. Vuelta a España 2026: Matthew Brennan claims historic fourth stage win, forging pow...
+
+### [Vuelta 2026: Voorbeschouwing etappe 17 – Wie houdt Matthew Brennan van vijfde ritzege? - WielerFlits](https://news.google.com/rss/articles/CBMiuwFBVV95cUxPU29iejQxTENmcDZmaUdiVUZOVzB2Ql90N3g0R0tfcnJCclVnYzJKLWdHUUJGc2pPQUFKdVBYejFhb0toaFFyTV9EZ25WWUE2aGg2TUhxaERnSmJVYXZabmJ3c19jYUtMS2dqSk9pM0NMWkJLM2w3OUNBaFlPUjFlNElrVko0OW1VTWcxcGZEbkU4U3VVM3BjU2lMZVBiaVZyMGwtQ05ibmNxbkZsbUlrU0hlSXR1RnVLYlFV?oc=5)
+- Riders: Matthew Brennan
+- Source: WielerFlits (tier 2)
+- Published: 2026-09-08T17:00:00+00:00
+- Signals: ambition, interview; impact: positive
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: Vuelta 2026: Voorbeschouwing etappe 17 – Wie houdt Matthew Brennan van vijfde ritzege? - WielerFlits. Vuelta 2026: Voorbeschouwing etappe 17 – Wie houdt Matthew Brennan van vijfde ritzege? WielerFlits.
+
+### [Rit 17 in de Vuelta - Vlakker wordt het niet in Spanje: sprinters krijgen in Sevilla uitgelezen kans op nieuwe massaspurt](https://sporza.be/nl/matches/wielrennen/vuelta-a-espana/2026/vuelta-a-espana-2026-rit-17-rit-17-in-de-vuelta-vlakker-wordt-het-niet-in-spanje-sprinters-krijgen-in-sevilla-uitgelezen-kans-op-nieuwe-massaspurt~1759432504454/)
+- Riders: Matthew Brennan
+- Source: Sporza Wielrennen (tier 2)
+- Published: 2026-09-08T16:55:59.109000+00:00
+- Signals: ambition; impact: positive
+- Verification: corroborated_reports; selection use: monitor_only_no_automatic_upgrade
+- Evidence: ...de pure sprinters niet snel vinden in de Ronde van Spanje. Richting Sevilla is Matthew Brennan opnieuw de topfavoriet, voor zijn 5e ritzege al. Volg alle actie hier vanaf 13.24 uur op de voet..
 
 ## Source health
 
 - La Vuelta official (Google News index): ok (60 entries)
 - UAE Team Emirates official: ok (10 entries)
 - Official team news (Google News index): ok (60 entries)
-- WielerFlits (Google News fallback): ok (180 entries)
-- WielerOrakel (Google News fallback): ok (180 entries)
-- Feltet.dk (Google News fallback): ok (2 entries)
+- WielerFlits (Google News fallback): ok (210 entries)
+- WielerOrakel (Google News fallback): ok (210 entries)
+- Feltet.dk (Google News fallback): ok (0 entries)
 - In de Leiderstrui: ok (80 entries)
 - Domestique Cycling: ok (60 entries)
 - Cyclingnews: ok (50 entries)
 - Sporza Wielrennen: ok (20 entries)
 - CyclingUpToDate: ok (80 entries)
 - CyclingFlash: ok (50 entries)
-- Cyclism'Actu TV: ok (15 entries)
-- Cycling Pro Net: ok (15 entries)
-- Global critical-rider search (Google News): ok (320 entries)
+- Cyclism'Actu TV: failed (0 entries); errors: batch 1: GET failed after 3 attempts: https://www.youtube.com/feeds/videos.xml?channel_id=UC3Q2ZsfV82zLFhsf28AeTjQ: HTTP Error 404: Not Found
+- Cycling Pro Net: failed (0 entries); errors: batch 1: GET failed after 3 attempts: https://www.youtube.com/feeds/videos.xml?channel_id=UCAKkRVGHv4uHTM5S2jSzLDQ: HTTP Error 404: Not Found
+- Global critical-rider search (Google News): ok (400 entries)
 - Reddit r/peloton: ok (25 entries)

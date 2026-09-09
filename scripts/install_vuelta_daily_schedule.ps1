@@ -24,8 +24,14 @@ if (-not (Test-Path $PythonPath)) {
 }
 
 $powerShellPath = (Get-Command powershell.exe -ErrorAction Stop).Source
-$arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$runner`" -ProjectRoot `"$ProjectRoot`" -PythonPath `"$PythonPath`""
-$action = New-ScheduledTaskAction -Execute $powerShellPath -Argument $arguments -WorkingDirectory $ProjectRoot
+$wscriptPath = (Get-Command wscript.exe -ErrorAction Stop).Source
+$hiddenLauncher = Join-Path $ProjectRoot "scripts\run-hidden.vbs"
+if (-not (Test-Path $hiddenLauncher)) {
+    throw "Hidden launcher not found: $hiddenLauncher"
+}
+$psCommand = "`"$powerShellPath`" -NoProfile -ExecutionPolicy Bypass -File `"$runner`" -ProjectRoot `"$ProjectRoot`" -PythonPath `"$PythonPath`""
+$arguments = "`"$hiddenLauncher`" $psCommand"
+$action = New-ScheduledTaskAction -Execute $wscriptPath -Argument $arguments -WorkingDirectory $ProjectRoot
 $trigger = New-ScheduledTaskTrigger -Daily -At "20:45"
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Hours 2) -RestartCount 4 -RestartInterval (New-TimeSpan -Minutes 15)
 $userId = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name

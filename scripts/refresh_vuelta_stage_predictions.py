@@ -30,14 +30,25 @@ from scorito_agent.forum_opinion import (  # noqa: E402
     forum_signal_for_stage,
     load_forum_opinion,
 )
+from scorito_agent.tv2_axelgaard import (  # noqa: E402
+    stage_star_signals,
+    validated_weight,
+)
+from scorito_agent.gc_bunch_mingling import gc_bunch_credibility  # noqa: E402
 from scripts.project_vuelta import _course_similarity  # noqa: E402
 
 DATA_DIR = ROOT / "data" / "scorito" / "vuelta2026"
 PROJECTION_PATH = DATA_DIR / "projected_recommendation.json"
+DROPOUTS_PATH = DATA_DIR / "dropouts.json"
+MARKET_RIDERS_PATH = DATA_DIR / "eventriderenriched.json"
+ROUND_STAGE_PATH = DATA_DIR / "marketroundstage.json"
 EXPERT_PATH = DATA_DIR / "qk_expert_opinion.json"
 NEWS_PATH = ROOT / "data" / "rider_news" / "vuelta2026" / "latest.json"
 EXPERT_CHAT_PATH = DATA_DIR / "expert_chat_intel.json"
 FORUM_OPINION_PATH = DATA_DIR / "wielerflits_forum_opinion.json"
+TV2_PREVIEW_DIR = ROOT / "data" / "tv2_axelgaard" / "vuelta2026"
+TV2_VALIDATION_PATH = DATA_DIR / "tv2_axelgaard_validation.json"
+TV2_MAX_STARS = 5.0
 OUTPUT_JSON = DATA_DIR / "stage_top20_predictions.json"
 OUTPUT_CSV = DATA_DIR / "stage_top20_predictions.csv"
 TOP_N = 20
@@ -85,6 +96,49 @@ def _sha256(path: Path) -> str | None:
     if not path.exists():
         return None
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _market_content(payload: Any) -> Any:
+    return payload.get("Content", payload) if isinstance(payload, dict) else payload
+
+
+def _unavailable_from_stage(riders: dict[str, dict[str, Any]]) -> dict[str, int]:
+    """Map a rider slug to the first stage the rider can no longer score in.
+
+    The PCS start list stays provisional all race, so abandons are only visible in
+    the live Scorito market. A rider who abandons during stage N still raced it.
+    """
+    market = _market_content(_load_json(MARKET_RIDERS_PATH, required=False))
+    if not isinstance(market, list) or not market:
+        return {}
+    slug_by_key = {_name_key(row["rider"]): slug for slug, row in riders.items()}
+
+    rounds = _market_content(_load_json(ROUND_STAGE_PATH, required=False))
+    stage_order = (
+        {int(row["StageId"]): int(row["StageOrder"]) for row in rounds}
+        if isinstance(rounds, list)
+        else {}
+    )
+
+    drops = _market_content(_load_json(DROPOUTS_PATH, required=False))
+    dropped_from: dict[int, int] = {}
+    if isinstance(drops, list):
+        for row in drops:
+            abandoned_on = stage_order.get(int(row.get("StageId") or 0), 0)
+            dropped_from[int(row["RiderId"])] = abandoned_on + 1
+
+    unavailable: dict[str, int] = {}
+    for row in market:
+        name = f"{row.get('FirstName', '')} {row.get('LastName', '')}".strip()
+        slug = slug_by_key.get(_name_key(name))
+        if slug is None:
+            continue
+        rider_id = int(row["RiderId"])
+        if rider_id in dropped_from:
+            unavailable[slug] = dropped_from[rider_id]
+        elif int(row.get("Status", 1) or 0) != 1:
+            unavailable[slug] = 1
+    return unavailable
 
 
 def _projection_slugs(projection: dict[str, Any]) -> set[str]:
@@ -284,6 +338,50 @@ def _comparable_performance(
         field = max(0.30, float(field))
         values.append(recency * placing * field * similarity)
     return round(min(1.0, sum(sorted(values, reverse=True)[:6]) / 1.35), 4)
+
+
+def _comparable_gt_stages(
+    stage: dict[str, Any], rider: dict[str, Any], notes: dict[str, Any], limit: int = 2
+) -> list[dict[str, Any]]:
+    grand_tours = ("Tour de France", "Giro d'Italia", "Vuelta a España", "Vuelta a Espana")
+    compatible_profiles = {
+        "mountain": {"mountain"},
+        "hilly": {"hilly", "mountain"},
+        "flat": {"flat", "hilly"},
+        "itt": {"itt"},
+    }
+    target_profile = str(stage.get("profile_type") or "unknown")
+    ranked = []
+    for result in _result_rows(rider, str(stage.get("profile_type") or "unknown"), notes):
+        event = str(result.get("event") or "")
+        rank = result.get("rank")
+        year = int(result.get("year") or 0)
+        if not event.startswith(grand_tours) or not isinstance(rank, int) or rank <= 0:
+            continue
+        if year not in {2024, 2025, 2026}:
+            continue
+        if str(result.get("profile_type") or "unknown") not in compatible_profiles.get(
+            target_profile, {target_profile}
+        ):
+            continue
+        context = result.get("course_context") or {}
+        similarity = _course_similarity(result, stage)
+        recency = {2026: 1.0, 2025: 0.58, 2024: 0.32}[year]
+        placing = 1.0 / rank**0.55
+        field = max(0.30, float(result.get("field_strength") or 0.30))
+        ranked.append((similarity * recency * placing * field, {
+            "year": year, "event": event, "stage": result.get("race"),
+            "result_rank": rank,
+            "distance_km": result.get("distance_km") or context.get("distance_km"),
+            "vertical_meters": context.get("vertical_meters"),
+            "profile_score": context.get("profile_score"),
+            "gradient_final_km": context.get("gradient_final_km"),
+            "field_strength": round(field, 4),
+            "course_similarity": round(similarity, 4),
+            "source_url": result.get("source_url"),
+        }))
+    ranked.sort(key=lambda item: item[0], reverse=True)
+    return [row for _, row in ranked[:limit]]
 
 
 def _selective_result_score(rider: dict[str, Any]) -> float:
@@ -631,11 +729,14 @@ def build_stage_top20(
     expert_chat = _expert_chat_by_key()
     forum_opinion = load_forum_opinion(FORUM_OPINION_PATH)
     forum_riders = forum_opinion.get("riders", {})
+    tv2_stars_by_stage = stage_star_signals(TV2_PREVIEW_DIR)
+    tv2_weight, tv2_status = validated_weight(TV2_VALIDATION_PATH)
     for slug, rider in riders.items():
         rider["_expert_chat"] = expert_chat.get(_name_key(rider["rider"]), {})
         rider["_forum_opinion"] = forum_riders.get(slug, {})
     if len(riders) != len(participants):
         raise RuntimeError("projection contains duplicate rider slugs")
+    unavailable_from = _unavailable_from_stage(riders)
 
     stages = {int(row["stage_no"]): row for row in projection.get("stages", [])}
     rankings = projection.get("stage_rankings", {})
@@ -655,6 +756,11 @@ def build_stage_top20(
 
         notes = notes_by_stage.get(str(stage_no), {})
         expert_weight, analysis_status = _stage_analysis_weight(stage, notes, expert_cap)
+        tv2_stars_by_key = tv2_stars_by_stage.get(stage_no, {})
+        tv2_stars_by_slug = {
+            slug: float(tv2_stars_by_key.get(_name_key(riders[slug]["rider"]), 0.0))
+            for slug in riders
+        }
         selectivity = _stage_selectivity(stage, notes)
         survival_scores = {
             slug: _sprint_survival_score(riders[slug]) for slug in riders
@@ -681,6 +787,8 @@ def build_stage_top20(
         scored = []
         for row in rows:
             slug = str(row["rider_slug"])
+            if stage_no >= unavailable_from.get(slug, 22):
+                continue
             pcs_score = normalized_base[slug]
             outcome_score = outcome_scores[slug] / maximum_outcome
             expert_score = expert_scores[slug] / maximum_expert
@@ -692,11 +800,13 @@ def build_stage_top20(
                 + expert_weight * expert_score
             )
             survival = survival_scores[slug]
-            survival_factor = _survival_factor(selectivity, survival)
+            gc_credibility = gc_bunch_credibility(stage, riders[slug])
+            effective_survival = max(survival, gc_credibility)
+            survival_factor = _survival_factor(selectivity, effective_survival)
             mountain_factor, mountain_credibility = _mountain_finish_factor(
                 stage, riders[slug]
             )
-            hilly_attrition_factor = _hilly_attrition_factor(stage, notes, survival)
+            hilly_attrition_factor = _hilly_attrition_factor(stage, notes, effective_survival)
             stage_expert_signal = float(
                 notes.get("rider_signals", {}).get(slug, 0.0) or 0.0
             )
@@ -727,6 +837,8 @@ def build_stage_top20(
                 in {"official_source", "direct_interview"}
             ):
                 news_multiplier = 0.10
+            tv2_stars = tv2_stars_by_slug.get(slug, 0.0)
+            tv2_multiplier = 1.0 + tv2_weight * (tv2_stars / TV2_MAX_STARS)
             objective_score = (
                 pre_survival_score
                 * survival_factor
@@ -734,6 +846,7 @@ def build_stage_top20(
                 * hilly_attrition_factor
                 * conversion_factor
                 * news_multiplier
+                * tv2_multiplier
             )
             adjusted_score = objective_score * chat_multiplier
             scored.append(
@@ -743,6 +856,7 @@ def build_stage_top20(
                     row,
                     news_row,
                     survival,
+                    gc_credibility,
                     survival_factor,
                     mountain_credibility,
                     mountain_factor,
@@ -765,6 +879,7 @@ def build_stage_top20(
             row,
             news_row,
             survival,
+            gc_credibility,
             survival_factor,
             mountain_credibility,
             mountain_factor,
@@ -795,6 +910,7 @@ def build_stage_top20(
                     "selective_result_score": _selective_result_score(riders[slug]),
                     "fast_finish_score": _fast_finish_score(stage, riders[slug]),
                     "sprint_survival_factor": round(survival_factor, 4),
+                    "gc_bunch_credibility": gc_credibility,
                     "mountain_credibility": mountain_credibility,
                     "mountain_finish_factor": mountain_factor,
                     "hilly_attrition_factor": hilly_attrition_factor,
@@ -814,12 +930,20 @@ def build_stage_top20(
                         1.0 + expert_weight * stage_expert_signal, 4
                     ),
                     "news_multiplier": news_multiplier,
+                    "tv2_axelgaard_stars": tv2_stars_by_slug.get(slug, 0.0),
+                    "tv2_axelgaard_weight": round(tv2_weight, 6),
+                    "tv2_axelgaard_multiplier": round(
+                        1.0 + tv2_weight * (tv2_stars_by_slug.get(slug, 0.0) / TV2_MAX_STARS), 6
+                    ),
                     "pcs_model_score": row.get("score"),
                     "expected_finish_band": row.get("expected_finish_band"),
                     "confidence": row.get("confidence"),
                     "uncertainty": row.get("uncertainty"),
                     "role_assumption": row.get("role_assumption"),
                     "evidence": row.get("evidence"),
+                    "pcs_comparable_gt_stages": _comparable_gt_stages(
+                        stage, riders[slug], notes
+                    ),
                     "news": {
                         key: news_row.get(key)
                         for key in ("impact", "verification", "decision_hint", "title", "url", "published_at")
@@ -836,6 +960,8 @@ def build_stage_top20(
                 "expert_weight": expert_weight,
                 "expert_status": analysis_status,
                 "stage_selectivity": selectivity,
+                "tv2_axelgaard_ranked_riders": int(sum(1 for v in tv2_stars_by_slug.values() if v)),
+                "tv2_axelgaard_status": tv2_status,
                 "top_20": predictions,
             }
         )
@@ -846,6 +972,7 @@ def build_stage_top20(
         "generated_at": datetime.now(UTC).isoformat(),
         "race": "Vuelta a Espana 2026",
         "known_pcs_participants": len(riders),
+        "unavailable_riders_excluded": len(unavailable_from),
         "prediction_count_per_stage": TOP_N,
         "stage_points_by_finish": SCORITO_STAGE_POINTS,
         "method": (
@@ -854,6 +981,22 @@ def build_stage_top20(
             "corrected handwritten analysis is bounded; expert chat and WielerFlits forum opinion are blended 70/30 into a separate 12% adjusted score "
             "that cannot change the objective rank, lineup, or captain; negative news "
             "from an official source or direct interview can reduce projections. "
+            "TV 2 Axelgaard star tiers scale the objective score, and so can move rank, "
+            "lineup and captain, but only when the preview predates the stage and the "
+            "bootstrap slope stays positive; the weight is derived from measured skill "
+            "on stages with credited Scorito points, never set by hand. "
+            "Riders the live Scorito market reports as abandoned or non-starting are "
+            "dropped from every stage after the one they left, because the PCS start "
+            "list stays provisional and never records an in-race abandon. "
+            "On a hilly, uphill finish below a 6.0%/km final-km gradient "
+            "and within a 1200-3500m vertical band, a rider whose PCS GC/climb "
+            "ranking or recent hilly-profile strength is stronger than their own "
+            "sprint-survival score is scored with that stronger value instead, "
+            "because pure sprint-survival evidence has no path for a GC leader "
+            "contesting a reduced bunch for bonus seconds; grounded in "
+            "data/historical/gt_hilly_bunch_mingling_labels.csv (53 real "
+            "2024-2026 Grand Tour stages), where stages at or above that "
+            "gradient never kept a front group of 10+ finishers. "
             "Scorito rider ratings are excluded from ordering."
         ),
         "uncertainty": (
@@ -877,6 +1020,8 @@ def build_stage_top20(
                 "expert": _sha256(EXPERT_PATH),
                 "news": _sha256(NEWS_PATH),
                 "forum_opinion": _sha256(FORUM_OPINION_PATH),
+                "dropouts": _sha256(DROPOUTS_PATH),
+                "market_riders": _sha256(MARKET_RIDERS_PATH),
             },
         },
         "stages": output_stages,
@@ -947,12 +1092,22 @@ def refresh(*, check_pcs: bool, force_model_refresh: bool) -> dict[str, Any]:
         live_startlist = parse_startlist(
             fetch_race_startlist("vuelta-a-espana", 2026, cache=False)
         )
+        from scripts.project_vuelta import completed_stage_numbers
+
         added, removed = _startlist_change(projection, live_startlist)
-        if added or removed or force_model_refresh:
-            print(
-                f"PCS startlist changed: {len(added)} added, {len(removed)} removed; "
-                "rebuilding the full projection"
+        built_with = projection.get("completed_stages_at_build")
+        new_results = (
+            set(completed_stage_numbers()) - set(built_with)
+            if isinstance(built_with, list) else set()
+        )
+        stale_build = built_with is None or bool(new_results)
+        if added or removed or force_model_refresh or stale_build:
+            reason = (
+                f"PCS startlist changed: {len(added)} added, {len(removed)} removed"
+                if added or removed
+                else f"new stage results since build: {sorted(new_results) or 'unknown'}"
             )
+            print(f"{reason}; rebuilding the full projection")
             from scripts.project_vuelta import main as rebuild_projection
 
             rebuild_projection()

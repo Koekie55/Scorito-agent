@@ -23,6 +23,104 @@ from scripts.project_vuelta import (
     _validation_summary,
 )
 
+# Breakaway permission gates on percentile rank, which is degenerate for a
+# one-rider population, so the target rider is placed among four peers.
+_SUMMIT_FIELD = {
+    "gc": (0.2, 0.5, 0.6, 0.7),
+    "climb": (0.8, 0.1, 0.2, 0.3),
+    "tt": (0.05, 0.05, 0.05, 0.05),
+}
+
+
+def _summit_signals(slug: str, gc: float, climb: float) -> dict[str, dict[str, float]]:
+    signals = {
+        key: {slug: value}
+        for key, value in {
+            "overall": 0.4,
+            "form": 0.5,
+            "gc": gc,
+            "climb": climb,
+            "sprint": 0.1,
+            "tt": 0.1,
+            "prologue": 0.1,
+            "classic": 0.2,
+            "previous_vuelta": 0.2,
+        }.items()
+    }
+    for key, values in _SUMMIT_FIELD.items():
+        for index, value in enumerate(values):
+            signals[key][f"field-{index}"] = value
+    return signals
+
+
+def test_stage_signal_suppresses_break_dependent_climber_on_early_unipuerto() -> None:
+    slug = "test-climber"
+    signals = _summit_signals(slug, gc=0.2, climb=0.8)
+    evidence = {
+        "profile_strength": {"mountain": 0.4},
+        "profile_confidence": {"mountain": 0.7},
+        "trajectory_factor": 1.0,
+    }
+    stage = {
+        "stage_no": 3,
+        "profile_type": "mountain",
+        "finish_type": "summit",
+        "vertical_meters": 2639,
+        "breakaway_survival_probability": 5 / 12,
+        "breakaway_history": {
+            "global_rate": 0.5,
+            "early_rate": 4 / 9,
+            "unipuerto_rate": 1 / 3,
+        },
+    }
+
+    components = project_vuelta._stage_signal_components(
+        stage, slug, signals, historical=0.4, evidence=evidence
+    )
+    neutral = project_vuelta._stage_signal_components(
+        {
+            **stage,
+            "breakaway_survival_probability": 0.5,
+            "breakaway_history": {"global_rate": 0.5},
+        },
+        slug,
+        signals,
+        historical=0.4,
+        evidence=evidence,
+    )
+    assert components["breakaway_survival_baseline_probability"] == 0.5
+    assert components["breakaway_survival_probability"] == pytest.approx(5 / 12)
+    assert components["breakaway_survival_probability_delta"] == pytest.approx(-1 / 12)
+    # The compressed early-unipuerto prior now actually suppresses the score.
+    assert components["breakaway_rider_factor"] == pytest.approx(0.89728, abs=1e-4)
+    assert components["score"] == pytest.approx(neutral["score"] * 0.89728, abs=1e-4)
+    assert components["score"] < neutral["score"]
+    # Both sides are reported: KOM entry raises attempts, marking lowers permission.
+    assert components["breakaway_kom_entry_factor"] > 1.0
+    assert components["breakaway_kom_marking_factor"] < 1.0
+
+
+def test_stage_signal_spares_gc_favourite_on_early_unipuerto() -> None:
+    slug = "test-gc"
+    signals = _summit_signals(slug, gc=0.85, climb=0.5)
+    evidence = {
+        "profile_strength": {"mountain": 0.4},
+        "profile_confidence": {"mountain": 0.7},
+        "trajectory_factor": 1.0,
+    }
+    stage = {
+        "stage_no": 3,
+        "profile_type": "mountain",
+        "finish_type": "summit",
+        "vertical_meters": 2639,
+        "breakaway_survival_probability": 5 / 12,
+        "breakaway_history": {"global_rate": 0.5},
+    }
+    components = project_vuelta._stage_signal_components(
+        stage, slug, signals, historical=0.4, evidence=evidence
+    )
+    assert components["breakaway_break_dependence"] == pytest.approx(0.0)
+    assert components["breakaway_rider_factor"] == pytest.approx(1.0)
 
 
 def test_validation_summary_rejects_filtered_artifact(
@@ -352,3 +450,117 @@ def test_live_and_model_qualities_blend_into_gradual_ratings() -> None:
     assert ratings["gc"] == 2.4
     assert any(value not in {0.0, 2.0, 4.0, 6.0, 8.0, 10.0} for value in ratings.values())
     assert _blended_quality_ratings(projected, {"Qualities": []}) == projected["model_qualities"]
+
+
+def _hilly_signals(slug: str, **overrides: float) -> dict[str, dict[str, float]]:
+    base = {
+        "overall": 0.0, "form": 0.0, "gc": 0.0, "climb": 0.0, "sprint": 0.0,
+        "tt": 0.0, "prologue": 0.0, "classic": 0.0, "previous_vuelta": 0.0,
+    }
+    base.update(overrides)
+    return {key: {slug: value} for key, value in base.items()}
+
+
+_HILLY_STAGE = {
+    "stage_no": 5,
+    "profile_type": "hilly",
+    "finish_type": "flat",
+    "gradient_final_km": 1.6,
+    "distance_km": 173.3,
+}
+
+
+def test_hilly_specialty_weights_climb_above_classic() -> None:
+    evidence = {"profile_strength": {"hilly": 0.0}, "trajectory_factor": 1.0}
+    climber = project_vuelta._stage_signal_components(
+        _HILLY_STAGE, "c", _hilly_signals("c", climb=1.0), historical=0.0, evidence=evidence
+    )
+    classics = project_vuelta._stage_signal_components(
+        _HILLY_STAGE, "k", _hilly_signals("k", classic=1.0), historical=0.0, evidence=evidence
+    )
+
+    assert climber["specialty"] == pytest.approx(0.32)
+    assert classics["specialty"] == pytest.approx(0.30)
+    assert climber["score"] > classics["score"]
+
+
+def test_pcs_unranked_rider_gets_evidence_backed_specialty_floor() -> None:
+    signals = _hilly_signals("u")
+    strong = project_vuelta._stage_signal_components(
+        _HILLY_STAGE, "u", signals, historical=0.0,
+        evidence={"profile_strength": {"hilly": 0.75}, "trajectory_factor": 1.0},
+    )
+    absent = project_vuelta._stage_signal_components(
+        _HILLY_STAGE, "u", signals, historical=0.0,
+        evidence={"profile_strength": {"hilly": 0.0}, "trajectory_factor": 1.0},
+    )
+
+    assert strong["specialty"] == pytest.approx(0.18 * 0.75)
+    assert absent["specialty"] == pytest.approx(0.0)
+    assert strong["score"] > absent["score"]
+
+
+def test_specialty_floor_never_applies_to_a_pcs_ranked_rider() -> None:
+    # The floor would be the larger value here, so equality proves it was skipped.
+    ranked = project_vuelta._stage_signal_components(
+        _HILLY_STAGE, "r", _hilly_signals("r", sprint=0.5), historical=0.0,
+        evidence={"profile_strength": {"hilly": 0.75}, "trajectory_factor": 1.0},
+    )
+
+    assert ranked["specialty"] == pytest.approx(0.25 * 0.5)
+    assert 0.25 * 0.5 < 0.18 * 0.75
+
+
+def test_specialty_floor_survives_a_form_only_ranking() -> None:
+    floored = project_vuelta._stage_signal_components(
+        _HILLY_STAGE, "f", _hilly_signals("f", form=0.1653), historical=0.0,
+        evidence={"profile_strength": {"hilly": 0.5254}, "trajectory_factor": 1.0},
+    )
+
+    assert floored["specialty"] == pytest.approx(0.18 * 0.5254)
+
+
+def test_declared_roles_ignores_unknown_role_labels(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    path = tmp_path / "vuelta2026_declared_roles.json"
+    path.write_text(
+        json.dumps({"riders": {
+            "lead": {"role": "lead_sprinter", "verification": "team_statement"},
+            "bogus": {"role": "super-domestique"},
+        }}),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(project_vuelta, "DECLARED_ROLES_PATH", path)
+
+    roles = project_vuelta.declared_roles()
+
+    assert set(roles) == {"lead"}
+    assert project_vuelta.DECLARED_ROLE_FACTORS[roles["lead"]["role"]] == 1.045
+
+
+def test_completed_stage_numbers_stops_at_first_unfinished_stage(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    data_dir = tmp_path / "data" / "scorito" / "vuelta2026"
+    data_dir.mkdir(parents=True)
+    (data_dir / "marketroundstage.json").write_text(
+        json.dumps({"Content": [
+            {"StageId": 10, "StageOrder": 1},
+            {"StageId": 11, "StageOrder": 2},
+            {"StageId": 12, "StageOrder": 3},
+        ]}),
+        encoding="utf-8",
+    )
+    (data_dir / "stageresult_rider_10.json").write_text(
+        json.dumps({"Content": [{"Rank": 1}]}), encoding="utf-8"
+    )
+    (data_dir / "stageresult_rider_11.json").write_text(
+        json.dumps({"Content": []}), encoding="utf-8"
+    )
+    (data_dir / "stageresult_rider_12.json").write_text(
+        json.dumps({"Content": [{"Rank": 1}]}), encoding="utf-8"
+    )
+    monkeypatch.setattr(project_vuelta, "ROOT", tmp_path)
+
+    assert project_vuelta.completed_stage_numbers() == [1]

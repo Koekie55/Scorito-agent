@@ -139,6 +139,48 @@ EVIDENCE_SCHEMA_VERSION = 2
 STARTLIST_CERTAINTY = 0.72
 MIN_PROVISIONAL_STARTERS = 70
 UNAVAILABLE_RIDERS: dict[str, dict[str, str]] = {}
+DECLARED_ROLES_PATH = ROOT / "config" / "vuelta2026_declared_roles.json"
+DECLARED_ROLE_FACTORS = {
+    "protected_leader": 1.045,
+    "lead_sprinter": 1.045,
+    "co_leader": 1.0,
+    "helper": 0.94,
+}
+# PCS startlist ranking pages list only the top riders per specialty, so an
+# unranked rider scores zero specialty however strong their recent results are.
+UNRANKED_SPECIALTY_EPSILON = 0.02
+UNRANKED_EVIDENCE_SPECIALTY_SHARE = 0.18
+
+
+def declared_roles() -> dict[str, dict[str, str]]:
+    if not DECLARED_ROLES_PATH.exists():
+        return {}
+    payload = json.loads(DECLARED_ROLES_PATH.read_text(encoding="utf-8-sig"))
+    return {
+        str(slug): row
+        for slug, row in (payload.get("riders") or {}).items()
+        if str(row.get("role") or "") in DECLARED_ROLE_FACTORS
+    }
+
+
+def completed_stage_numbers() -> list[int]:
+    data_dir = ROOT / "data" / "scorito" / "vuelta2026"
+    rounds_path = data_dir / "marketroundstage.json"
+    if not rounds_path.exists():
+        return []
+    payload = json.loads(rounds_path.read_text(encoding="utf-8-sig"))
+    rounds = payload.get("Content", payload)
+    completed: list[int] = []
+    for stage in sorted(rounds, key=lambda row: int(row["StageOrder"])):
+        result_path = data_dir / f"stageresult_rider_{int(stage['StageId'])}.json"
+        if not result_path.exists():
+            break
+        content = json.loads(result_path.read_text(encoding="utf-8-sig"))
+        if not (content.get("Content", content) if isinstance(content, dict) else content):
+            break
+        completed.append(int(stage["StageOrder"]))
+    return completed
+
 
 def _startlist_status(count: int, *, reused: bool = False) -> str:
     if count == 184:
@@ -884,11 +926,13 @@ def _stage_signal_components(
     elif profile == "hilly" and (finish == "uphill" or float(stage.get("gradient_final_km") or 0) >= 5):
         specialty = 0.39 * climb + 0.34 * classic + 0.19 * gc + 0.08 * sprint
     elif profile == "hilly":
-        specialty = 0.39 * classic + 0.23 * climb + 0.25 * sprint + 0.13 * previous
+        specialty = 0.30 * classic + 0.32 * climb + 0.25 * sprint + 0.13 * previous
     else:
         specialty = 0.68 * sprint + 0.20 * classic + 0.08 * tt + 0.04 * previous
     recent_profile = float(evidence.get("profile_strength", {}).get(profile, 0.0))
     recent_course = _recent_course_strength(evidence, stage)
+    if specialty <= UNRANKED_SPECIALTY_EPSILON:
+        specialty = max(specialty, UNRANKED_EVIDENCE_SPECIALTY_SHARE * recent_profile)
     ranking = 0.64 * specialty + 0.10 * overall + 0.08 * form
     raw = ranking + 0.16 * historical + 0.10 * recent_profile + 0.08 * recent_course
     base_score = raw * float(evidence.get("trajectory_factor", 1.0))
@@ -1256,8 +1300,8 @@ def build_projection() -> dict[str, Any]:
                 rider_evidence[slug],
             )
             candidates.append({"rider": rider, "source": source, "components": components})
-        # Infer tactical hierarchy only from this provisional team: leader/co-leader/
-        # helper.  This is deliberately modest because no declarations are available.
+        # Inferred hierarchy is provisional-team ordering; cited declarations override it.
+        declarations = declared_roles()
         by_team: dict[str, list[dict[str, Any]]] = {}
         for item in candidates:
             by_team.setdefault(item["source"].get("team") or "", []).append(item)
@@ -1265,13 +1309,20 @@ def build_projection() -> dict[str, Any]:
             team_rows.sort(key=lambda item: item["components"]["score"], reverse=True)
             for team_rank, item in enumerate(team_rows, start=1):
                 role_factor = 1.045 if team_rank == 1 else (1.0 if team_rank == 2 else 0.94)
-                item["components"]["role_factor"] = role_factor
-                item["components"]["score"] *= role_factor
                 item["role_assumption"] = (
                     "inferred protected option" if team_rank == 1 else
                     "inferred co-option" if team_rank == 2 else
                     "inferred helper; tactics unconfirmed"
                 )
+                declared = declarations.get(str(item["source"].get("rider_slug") or ""))
+                if declared:
+                    role_factor = DECLARED_ROLE_FACTORS[str(declared["role"])]
+                    item["role_assumption"] = (
+                        f"declared {declared['role']} "
+                        f"({declared.get('verification') or 'unverified'})"
+                    )
+                item["components"]["role_factor"] = role_factor
+                item["components"]["score"] *= role_factor
         candidates.sort(key=lambda item: item["components"]["score"], reverse=True)
         rows = []
         for rank, item in enumerate(candidates, start=1):
@@ -1536,7 +1587,7 @@ def build_projection() -> dict[str, Any]:
             "race_quality_fallback": RACE_QUALITY_WEIGHTS,
             "recency_weights": RECENCY_WEIGHTS,
             "age_trajectory": "modest continuous modifier; never a name or age exclusion",
-            "tactics": "provisional-team profile hierarchy only; no declarations available",
+            "tactics": "provisional-team profile hierarchy, overridden by cited declared roles when present",
             "availability": "no named exclusion; objective unavailable riders require cited evidence",
             "validation": _validation_summary(),
         },
@@ -1552,6 +1603,7 @@ def build_projection() -> dict[str, Any]:
             "historical_validation": str(ROOT / "data" / "pcs" / "pcs_validation.json"),
             "scorito_point_curves": ["tdf2026", "giro2026"],
         },
+        "completed_stages_at_build": completed_stage_numbers(),
         "startlist_count": len(startlist),
         "startlist_status": _startlist_status(len(startlist)),
         "stage_count": len(stages),

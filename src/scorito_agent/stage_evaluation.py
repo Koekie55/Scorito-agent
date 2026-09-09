@@ -124,19 +124,42 @@ def stage_on_date(data_dir: Path, target_date: date) -> dict[str, Any] | None:
     )
 
 
+def _compound_name_matches(
+    key: str, tokens_by_id: dict[int, frozenset[str]]
+) -> list[int]:
+    """Resolve a compound surname, but only when exactly one market rider fits.
+
+    PCS carries double surnames Scorito abbreviates, e.g. "DVERSNES LAVIK Fredrik"
+    against "Fredrik Dversnes". Anything ambiguous is left for the caller to reject.
+    """
+    wanted = frozenset(key.split())
+    if len(wanted) < 2:
+        return []
+    return [
+        rider_id
+        for rider_id, tokens in tokens_by_id.items()
+        if len(tokens) >= 2 and (tokens <= wanted or wanted <= tokens)
+    ]
+
+
 def _prediction_rider_ids(data_dir: Path, stage: dict[str, Any]) -> list[int]:
     market_riders = _content(_load_json(data_dir / "eventriderenriched.json"))
     ids_by_name: dict[str, list[int]] = {}
+    tokens_by_id: dict[int, frozenset[str]] = {}
     for rider in market_riders:
         name = f"{rider.get('FirstName') or ''} {rider.get('LastName') or ''}".strip()
         key = _normalise_name(name or str(rider.get("NameShort") or ""))
         if key:
             ids_by_name.setdefault(key, []).append(int(rider["RiderId"]))
+            tokens_by_id[int(rider["RiderId"])] = frozenset(key.split())
 
     rider_ids = []
     for row in stage["top_20"]:
         rider_name = str(row["rider"])
-        matches = ids_by_name.get(_normalise_name(rider_name), [])
+        key = _normalise_name(rider_name)
+        matches = ids_by_name.get(key, [])
+        if len(matches) != 1:
+            matches = _compound_name_matches(key, tokens_by_id)
         if len(matches) != 1:
             raise ValueError(
                 f"prediction rider {rider_name!r} resolves to {len(matches)} market riders"

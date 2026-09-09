@@ -191,8 +191,24 @@ def find_riders(
     return found
 
 
+def _is_scorito_share_url(url: str) -> bool:
+    parsed = urlparse(url)
+    domain = parsed.netloc.lower().split(":", 1)[0]
+    if domain.startswith("www."):
+        domain = domain[4:]
+    if domain != "scorito.com" and not domain.endswith(".scorito.com"):
+        return False
+    return (
+        "voucherid=" in parsed.query.lower()
+        or "/subleague/" in parsed.path.lower()
+    )
+
+
 def extract_urls(text: str) -> tuple[str, ...]:
-    return tuple(dict.fromkeys(url.rstrip(".,;") for url in _URL_RE.findall(str(text))))
+    urls = (url.rstrip(".,;") for url in _URL_RE.findall(str(text)))
+    return tuple(
+        dict.fromkeys(url for url in urls if not _is_scorito_share_url(url))
+    )
 
 
 def is_url_only_message(text: str) -> bool:
