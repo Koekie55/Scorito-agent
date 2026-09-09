@@ -50,13 +50,13 @@
 [13/08/2026, 19:57:55] BEEFTANK MB: Is er al een subleague?
 [13/08/2026, 20:00:12] david danser: Volgens mij niet
 [13/08/2026, 21:03:01] Quinten Koekenbier: David je verzaakt je taak
-[13/08/2026, 21:04:22] david danser: Mijn excuus 
+[13/08/2026, 21:04:22] david danser: Mijn excuus
 
 Doe ook mee met de Data vs Gevoel-subleague op Scorito en klik hier: https://www.scorito.com/subleague/1330717/vuelta-2026/data-vs-gevoel/581292a5-51a2-4294-9afd-9477e7ee7692?utm_source=whatsapp
 [13/08/2026, 21:14:19] Mark Pinckers: Voucher time
 https://mobile.scorito.com/gameinfo/310?voucherId=019fd872-5ec9-713d-a626-f49b26db03ab
 [13/08/2026, 21:14:56] Mark Pinckers: Wat zegt de data over Almeida? Is die weer fit of 6.5m weggegooid geld
-[13/08/2026, 21:15:03] david danser: Voucher 
+[13/08/2026, 21:15:03] david danser: Voucher
 
 Doe ook mee met España op Scorito en klik hier: https://mobile.scorito.com/gameinfo/310?voucherId=019fe7f2-a1b0-7211-97cb-d51badb40d41 ‎<This message was edited>
 [14/08/2026, 09:35:37] Frank Schouten: In welke etappe breekt Roglič zijn sleutelbeen?
@@ -161,7 +161,7 @@ Optimiser	Finds the best 20-rider squad under the budget
 Stage planner	Determines the optimal 9 riders + captain per stage
 Validation	Backtests the PCS predictor against historical actual results
 
-The architecture explicitly combines Scorito + CyclingOracle + PCS, with the goal of predicting stages and building the optimal Vuelta squad. 
+The architecture explicitly combines Scorito + CyclingOracle + PCS, with the goal of predicting stages and building the optimal Vuelta squad.
 
 The really interesting part
 
@@ -178,7 +178,7 @@ It doesn’t just rank riders. It builds projected points from multiple signals,
 * red-jersey/team effects
 * captain effects
 
-The code explicitly loads the expert-chat intelligence, forum opinion and rider-news datasets and combines them into the stage projections. 
+The code explicitly loads the expert-chat intelligence, forum opinion and rider-news datasets and combines them into the stage projections.
 
 That means we can ask it questions like:
 
@@ -190,7 +190,7 @@ It can also optimise the entire tournament
 
 This is probably the most valuable functionality for what you’ve been trying to do.
 
-The exact optimiser evaluates a fixed 20-rider squad across all stages, then determines the best 9 riders for each stage and captain. The code calculates stage points, team bonuses, red-jersey bonuses and captain bonuses separately. 
+The exact optimiser evaluates a fixed 20-rider squad across all stages, then determines the best 9 riders for each stage and captain. The code calculates stage points, team bonuses, red-jersey bonuses and captain bonuses separately.
 
 So conceptually:
 
@@ -207,13 +207,13 @@ The stage_study functionality calculates both total projected/realised points an
 * riders who are expensive but still worth it
 * riders who look attractive but don’t actually generate enough points
 
-It also analyses which rider archetypes perform best on different terrain types. 
+It also analyses which rider archetypes perform best on different terrain types.
 
 And importantly: it has a validation framework
 
 This is something I particularly like.
 
-The repository doesn’t simply claim that its predictor works. validate_pcs_predictor.py performs leave-one-stage-out validation, comparing predicted rider rankings with actual Scorito points and calculating rank correlation/top-10 hit rates. 
+The repository doesn’t simply claim that its predictor works. validate_pcs_predictor.py performs leave-one-stage-out validation, comparing predicted rider rankings with actual Scorito points and calculating rank correlation/top-10 hit rates.
 
 That gives us the possibility of asking:
 
@@ -252,10 +252,10 @@ This is exactly the sort of analysis you were asking for earlier.
 For all 21 Vuelta stages, we can generate:
 
 Stage	#1	#2	#3	…	#20
-1					
-2					
-…					
-21					
+1
+2
+…
+21
 
 But importantly, we can attach probabilities rather than pretending the ranking is certain.
 
@@ -286,7 +286,7 @@ subject to:
 * classification/jersey points
 * team bonuses
 
-The optimiser already has much of this machinery. 
+The optimiser already has much of this machinery.
 
 4. Live daily optimisation
 
@@ -310,7 +310,7 @@ Then calculate:
 
 “Who are my optimal 9 + captain TODAY?”
 
-The repo already contains scripts such as recommend_vuelta_live.py, recommend_enrolled.py, recommend_stage_plan.py, rider_news.py and refresh_vuelta_stage_predictions.py for essentially this workflow. 
+The repo already contains scripts such as recommend_vuelta_live.py, recommend_enrolled.py, recommend_stage_plan.py, rider_news.py and refresh_vuelta_stage_predictions.py for essentially this workflow.
 
 ⸻
 
@@ -318,7 +318,7 @@ One important limitation
 
 There is one major practical constraint: PCS is Cloudflare protected.
 
-The repository itself documents that PCS returns Cloudflare errors from datacentre IPs and therefore deliberately uses aggressive caching; the author expects deep scraping to run from a residential/home connection. 
+The repository itself documents that PCS returns Cloudflare errors from datacentre IPs and therefore deliberately uses aggressive caching; the author expects deep scraping to run from a residential/home connection.
 
 So I can inspect and reason over the repo/data available through GitHub, but I cannot simply execute its entire local PCS scraping environment inside this chat and pretend that I did.
 
@@ -349,7 +349,7 @@ Then we can answer the question you actually care about:
 
 That is far more powerful than simply asking “who will win Stage 8?”
 
-And the repo appears to already contain most of the building blocks for doing exactly that. 
+And the repo appears to already contain most of the building blocks for doing exactly that.
 
 If you want, the next thing I’d do is dissect the actual Vuelta 2026 data currently sitting in the repo—especially stage_top20_predictions, the PCS store, rider-news data and the expert/forum intelligence—and tell you exactly what information we can extract right now and how reliable each component is.
 [21/08/2026, 22:43:19] Quinten Koekenbier: Heb t nu werkend vanuit chatgpt na t installeren en approven van de connector tussen gpt en git
@@ -450,7 +450,7 @@ Dat is de vergelijking die ik voor je Scorito-team daadwerkelijk zou gebruiken.
 [22/08/2026, 14:57:15] Quinten Koekenbier: Pogi
 Almeida
 Pedersen
-Castrillo 
+Castrillo
 Leknessund
 Laporte
 Hayter
@@ -588,7 +588,7 @@ Sources
 [23/08/2026, 17:54:15] Quinten Koekenbier: Drie keer raden waar debruyne eindigde en waar het model voorspelde
 [23/08/2026, 18:27:06] Mark Pinckers: Ok verlos ons uit deze spanning svp
 [23/08/2026, 18:46:24] Quinten Koekenbier: 19 voorspeld 18 geindigd
-[23/08/2026, 21:59:57] Quinten Koekenbier: 2 pull requests reviewed en gemerged, ook 4 eigen commits naar de main branch afgewerkt. Model is geupdate en kan ook pull requests op model improvement voorstellen van jullie evalueren met een monte Carlo regressie analyse. 
+[23/08/2026, 21:59:57] Quinten Koekenbier: 2 pull requests reviewed en gemerged, ook 4 eigen commits naar de main branch afgewerkt. Model is geupdate en kan ook pull requests op model improvement voorstellen van jullie evalueren met een monte Carlo regressie analyse.
 Dus blijf gebruiken boys!!
 [23/08/2026, 22:57:28] Jesper Wijnen hiv: https://www.instagram.com/reel/DahS5XgCOLv/?igsi=MW4ydHJ0M3hvcHgzZA==
 [23/08/2026, 23:04:30] Quinten Koekenbier: Mijn pull requests krijgen ook een andere lading zo
