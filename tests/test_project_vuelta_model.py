@@ -23,8 +23,6 @@ from scripts.project_vuelta import (
     _validation_summary,
 )
 
-
-
 # Breakaway permission gates on percentile rank, which is degenerate for a
 # one-rider population, so the target rider is placed among four peers.
 _SUMMIT_FIELD = {
